@@ -22,6 +22,12 @@ CFG.BLACK_BORDER = {	--黑边，依据不同分辨率设置，保证width >= hei
 -----------------开发分辨率-----------------
 CFG.BILINEAR = false		--开启线性二次插值
 
+-----------------重启脚本及应用参数-----------------
+CFG.ALLOW_BREAKING_TASK = false		--是否允许中断任务
+CFG.ALLOW_RESTART = false			--是否允许重启脚本来解决异常
+CFG.APP_ID = "com.netease.pes"		--应用名称
+CFG.DEFAULT_APP_ID = "com.netease.pes"
+
 -----------------找色参数-----------------
 CFG.DEFAULT_FUZZY = 95		--默认颜色模糊相似度
 

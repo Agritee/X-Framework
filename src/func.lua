@@ -3,6 +3,16 @@
 -- Date: 2018-12-25
 -- Descrip: 功能函数
 
+--检测当前游戏应用是否还在前端运行中
+function isAppInFront()
+	local appName = runtime.getForegroundApp()
+	if appName == CFG.APP_ID then
+		return true
+	end
+	
+	return false
+end
+
 --万能输出
 function prt(...)
 	if CFG.LOG ~= true then

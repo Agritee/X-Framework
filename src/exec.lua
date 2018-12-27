@@ -125,8 +125,8 @@ function M.run(taskName, repeatTimes)
 		
 		local waitCheckSkipTime = 0
 		if i == 1 then		--第一次运行就快速检测是否可以跳过主界面
-			--waitCheckSipTime = 1
-			waitCheckSkipTime = CFG.WAIT_CHECK_SKIP
+			waitCheckSipTime = 1
+			--waitCheckSkipTime = CFG.WAIT_CHECK_SKIP
 		else
 			waitCheckSkipTime = CFG.WAIT_CHECK_SKIP
 		end
@@ -174,12 +174,12 @@ function M.run(taskName, repeatTimes)
 					Log("--------end execute process: "..v.tag)
 					break	--完成当前流程片
 				end
-				
+				--prt(v)
 				if v.waitFunc ~= nil then --等待期间执行的process的等待函数
 					v.waitFunc(k)
 				end
 				
-				Log("index:"..k.." -- wait current process has : "..(os.time() - startTime))
+				Log("process index:"..k.." ----wait current process has : "..(os.time() - startTime))
 				if os.time() - startTime > timeout then	--流程超时
 					catchError(ERR_TIMEOUT, "have waitting process: "..v.tag.." "..tostring(os.time() - startTime).."s yet, try end it")
 				end

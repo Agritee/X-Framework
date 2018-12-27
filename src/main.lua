@@ -11,8 +11,7 @@ require("task/rankSim")
 screen.init(1, 0)
 
 function main()
-	
+	exec.run("天梯", 2)
 end
 
-exec.run("天梯", 1)
-
+main()

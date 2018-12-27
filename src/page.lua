@@ -188,6 +188,60 @@ M.pageList = {
 			},
 		},
 	},
+	{
+		tag = "比赛中",
+		widgetList = {
+			{
+				tag = "比赛信息",
+				enable = true,
+				anchor = "LT",
+				srcPos = "39|64|0x1ce0dc-0x171f23,186|68|0x1ce0dc-0x171f23,223|83|0xf1fcf9-0x0c0306,237|84|0xf1fcf9-0x0c0306,275|65|0x1bd194-0x172e2a,420|67|0x1bd194-0x172e2a",
+				dstPos = "",
+				dstArea = Rect(0, 0, 0, 0)
+			},
+		},
+	},
+	{
+		tag = "全场统计",
+		widgetList = {
+			{
+				tag = "技术统计",
+				enable = true,
+				anchor = "B",
+				--包含了返回键的蓝色，中场统计的没有返回
+				srcPos = "533|632|0x16e9da-0x090a05,562|632|0x1f3237-0x080807,773|632|0x1f3237-0x080807,800|632|0x1feda8-0x141216,\
+				446|664|0x354c44-0x1f2322,886|664|0x354c44-0x1f2322,188|714|0x1270e3-0x13091a,1118|713|0x1270e3-0x13091a",
+				dstPos = "",
+				dstArea = Rect(0, 0, 0, 0)
+			},
+		},
+	},
+	{
+		tag = "终场比分",
+		widgetList = {
+			{
+				tag = "六子选项",
+				enable = true,
+				anchor = "A",
+				srcPos = "49|296|0xffffff,50|635|0xffffff,1277|625|0xffffff,1231|301|0xffffff,553|340|0x0079fd,956|543|0x12a42b,948|342|0x12a42b,513|545|0x12a42b",
+				dstPos = "",
+				dstArea = Rect(0, 0, 0, 0)
+			},
+		},
+	},
+	{
+		tag = "段位变化",
+		widgetList = {
+			{
+				tag = "3/5&下一步",
+				enable = true,
+				anchor = "B",
+				srcPos = "904|593|0xffffff,902|599|0x4c4c4b-0x4d4c4b,897|647|0xffffff,899|637|0x3d531c-0x080b05,1108|707|0x0079fd,1133|707|0x0079fd",
+				dstPos = "",
+				dstArea = Rect(0, 0, 0, 0)
+			},
+		},
+	},
 }
 
 --公共导航控件，如返回，下一步，确认，取消
@@ -196,7 +250,6 @@ M.navigationList = {
 		tag = "next",
 		enable = true,
 		anchor = "CRB",
-		--srcPos = "1130|732|0x0971eb-0x090812,1127|702|0x0971eb-0x090812,1102|703|0x0971eb-0x090812,1088|733|0x0971eb-0x090812",
 		srcPos = "1130|732|0x1270e3-0x13091a,1127|702|0x1270e3-0x13091a,1102|703|0x1270e3-0x13091a,1088|733|0x1270e3-0x13091a",
 		dstPos = "",
 		dstArea = Rect(
@@ -217,13 +270,13 @@ local function matchWidgets(widgetList)
 	for k, v in pairs(widgetList) do
 		matchFlag = true
 		if v.enable then
-			prt(v)
+			--prt(v)
 			local pos = screen.findColor(v.dstArea, v.dstPos, fuz)
 			if pos == Point.INVALID then
-				Log("cant match widget: "..v.tag)
+				--Log("cant match widget: "..v.tag)
 				return false
 			else
-				Log("matched widget: "..v.tag)
+				Log("----matched widget: "..v.tag)
 			end
 		end
 	end
@@ -233,14 +286,14 @@ end
 
 --匹配当前界面
 function M.matchPage(pageTag)
-	Log("tye matchPage : "..pageTag)
+	Log("try match page : "..pageTag)
 	for _, v in pairs(M.pageList) do
 		if v.tag == pageTag then
 			if matchWidgets(v.widgetList) then
-				Log("----matched page: "..pageTag)
+				Log("--------matched page: "..pageTag)
 				return true
 			else
-				--Log("cant match page: "..pageTag)
+				Log("cant match page: "..pageTag)
 			end
 			break
 		end
@@ -259,6 +312,24 @@ function M.getCurrentPage()
 		end
 	end
 	screen.keep(false)
+end
+
+--检测界面是否有下一步按钮
+function M.isExsitNext()
+	for _, v in pairs(M.navigationList) do
+		if v.tag == "next" then
+			Log("exsit next action")
+			--prt(v)
+			local pot = screen.findColor(v.dstArea, v.dstPos, CFG.DEFAULT_FUZZY)	--高分辨率下有偏色
+			if pot ~= Point.INVALID then
+				return true
+			else
+				return false
+			end
+		end
+	end
+	
+	catchError(ERR_PARAM, "cant find comm next action")	
 end
 
 function M.tapPageNext(pageTag)
