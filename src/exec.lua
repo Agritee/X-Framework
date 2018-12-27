@@ -141,6 +141,9 @@ function M.run(taskName, repeatTimes)
 				--Log("now wait process page: "..v.tag)
 				if v.skipStatus == true then	--跳过当前界面流程
 					Log("skip page: "..v.tag)
+					if waitCheckSkipTime ~= CFG.WAIT_CHECK_SKIP then
+						waitCheckSkipTime = CFG.WAIT_CHECK_SKIP --第一次进入skip的时候为1秒，在此处恢复
+					end
 					break
 				end
 				

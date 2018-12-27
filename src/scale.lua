@@ -204,18 +204,8 @@ function M.scalePot(pot)
 	
 	local x0, y0 = pot.x, pot.y
 	local x1, y1 = x0 * ratio, y0 * ratio
-	if x1 - math.floor(x1) <= 0.4 then	--取点四舍五入
-		x1 = math.floor(x1)
-	else
-		x1 = math.ceil(x1)
-	end
-	if y1 - math.floor(y1) <= 0.4 then
-		y1 = math.floor(y1)
-	else
-		y1 = math.ceil(y1)
-	end
 	
-	return Point(x1, y1)
+	return Point(math.floor(x1 + 0.5), math.floor(y1 + 0.5))
 end
 
 --缩放点集，颜色，pos为原点的值
@@ -241,16 +231,7 @@ function M.scalePos(pos)
 		pot = {}
 		local x0, y0, c0 = v[1], v[2], v[3]
 		local x1, y1 = x0 * ratio, y0 * ratio
-		if x1 - math.floor(x1) <= 0.4 then	--取点四舍五入
-			x1 = math.floor(x1)
-		else
-			x1 = math.ceil(x1)
-		end
-		if y1 - math.floor(y1) <= 0.4 then
-			y1 = math.floor(y1)
-		else
-			y1 = math.ceil(y1)
-		end
+		x1, y1 = math.floor(x1 + 0.5), math.floor(y1 + 0.5)
 
 		pot[1] = x1
 		pot[2] = y1

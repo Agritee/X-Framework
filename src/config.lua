@@ -8,18 +8,20 @@ CFG = {}
 CFG.LOG = true				--是否允许输出LOG信息
 CFG.WRITE_LOG = false		--是否将LOG写入log.txt文件, 不受CFG.LOG影响
 
------------------开发分辨率-----------------
---通常情况下请保证width >= height，最大支持分辨率以为着最大比例分辨率，反之亦然
-CFG.SUPPORT_RESOLUTION = {max = {width = 3360, height = 1440, tag = "21:9"}, min = {width = 600, height = 450, tag = "4:3"}}
-CFG.DEV_RESOLUTION = {width = 1334, height = 750}
-CFG.DST_RESOLUTION = {}
-CFG.SCALING_RATIO = 1
-CFG.EFFECTIVE_AREA = {}
-CFG.BLACK_BORDER = {	--黑边，依据不同分辨率设置，保证width >= height
-	{width = 2340, height = 1080, left = 210, right = 210, top = 0, bottom = 0},
+-----------------分辨率参数-----------------
+CFG.SUPPORT_RESOLUTION = {max = {width = 5040, height = 2160}, min = {width = 600, height = 450}}	--分辨率支持范围
+CFG.DEV_RESOLUTION = {width = 1334, height = 750}	--开发分辨率
+CFG.DST_RESOLUTION = {}		--运行设备分辨率，由init设置
+CFG.SCALING_RATIO = 0		--短边缩放比率，由init设置
+CFG.EFFECTIVE_AREA = {}		--界面有效区，由init设置
+CFG.BLACK_BORDER = {	--黑边
+	limitRatio = {leftRight = 16/9, topBottom = 4/3},	--出现规则黑边（上下左右相等）临界比例
+	borderList = {		--width >= height，此优先级大于由imitRatio生成的项
+		--{width = 2340, height = 1080, left = 210, right = 210, top = 0, bottom = 0}
+	},
 }
 
------------------开发分辨率-----------------
+-----------------线性插值取色-----------------
 CFG.BILINEAR = false		--开启线性二次插值
 
 -----------------重启脚本及应用参数-----------------
