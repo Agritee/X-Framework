@@ -2,9 +2,7 @@
 -- Author: cndy1860
 -- Date: 2018-12-24
 -- Descrip: 负责多分辨率适配的坐标转换
-require("config")
 require("math")
-require("func")
 
 local modName = "scale"
 local M = {}

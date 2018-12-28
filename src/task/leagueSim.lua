@@ -1,15 +1,15 @@
 -- randSim.lua
 -- Author: cndy1860
--- Date: 2018-12-26
--- Descrip: 自动刷天梯赛教练模式
+-- Date: 2018-12-28
+-- Descrip: 自动刷联赛赛教练模式
 
 local _task = {
-	tag = "天梯",
+	tag = "联赛",
 	processes = {
 		{tag = "其他", justFirstRun = true},
-		{tag = "比赛", nextTag = "线上对战", justFirstRun = true},
-		{tag = "线上对战", nextTag = "自动比赛", justFirstRun = true},
-		{tag = "天梯教练模式", nextTag = "next"},
+		{tag = "比赛", nextTag = "联赛", justFirstRun = true},
+		{tag = "联赛", nextTag = "自动比赛", justFirstRun = true},
+		{tag = "联赛教练模式", nextTag = "next"},
 		{tag = "匹配对手", nextTag = "next"},
 		{tag = "阵容展示", nextTag = "next"},
 		{tag = "比赛中"},

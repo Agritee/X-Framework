@@ -1,4 +1,4 @@
--- projectFunc.lua
+-- projFunc.lua
 -- Author: cndy1860
 -- Date: 2018-12-26
 -- Descrip: 任务相关函数

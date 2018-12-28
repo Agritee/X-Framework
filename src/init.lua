@@ -13,6 +13,14 @@ local function initDstResolution()
 	local size = screen.getSize()
 	CFG.DST_RESOLUTION.width = size.width > size.height and size.width or size.height
 	CFG.DST_RESOLUTION.height = size.width <= size.height and size.width or size.height
+	
+	if CFG.DST_RESOLUTION.width > CFG.SUPPORT_RESOLUTION.max.width
+		or CFG.DST_RESOLUTION.width < CFG.SUPPORT_RESOLUTION.min.width 
+		or CFG.DST_RESOLUTION.height > CFG.SUPPORT_RESOLUTION.max.height
+		or CFG.DST_RESOLUTION.height < CFG.SUPPORT_RESOLUTION.min.height then
+		dialog("分辨率不支持")
+		xmod.exit()
+	end	
 end
 
 --初始化黑边参数，根据黑边临界比例设置，左右相等，上下相等，优先级小于CFG.BLACK_BORDER.borderList预设值
@@ -28,11 +36,16 @@ function initBlackBorder()
 	
 	local ratioLR, ratioTB = CFG.BLACK_BORDER.limitRatio.leftRight, CFG.BLACK_BORDER.limitRatio.topBottom
 	local lr, tb = 0, 0
-	if w/h > ratioLR then	--超过水平黑边临界比例
-		lr = math.floor((w/h - ratioLR) * h / 2 + 0.5)
+	
+	if ratioLR ~= nil then
+		if w/h > ratioLR then	--超过水平黑边临界比例
+			lr = math.floor((w/h - ratioLR) * h / 2 + 0.5)
+		end
 	end
-	if w/h < ratioTB then	--小于竖直黑边临界比例
-		tb = math.floor((w/h - ratioTB) * h / 2)
+	if ratioTB ~= nil then
+		if w/h < ratioTB then	--小于竖直黑边临界比例
+			tb = math.floor((w/h - ratioTB) * h / 2)
+		end
 	end
 	
 	--添加至CFG.BLACK_BORDER.borderList
@@ -41,12 +54,6 @@ end
 
 --初始化有效区域
 local function initEffectiveArea()
-	--设置短边缩放比率
-	local devShort = CFG.DEV_RESOLUTION.height <= CFG.DEV_RESOLUTION.width and CFG.DEV_RESOLUTION.height or CFG.DEV_RESOLUTION.width
-	CFG.SCALING_RATIO = CFG.DST_RESOLUTION.height / devShort
-	--prt(CFG.SCALING_RATIO)
-	
-	--设置有效区域
 	local x0, y0, x1, y1 = 0, 0, CFG.DST_RESOLUTION.width, CFG.DST_RESOLUTION.height
 	for k, v in pairs(CFG.BLACK_BORDER.borderList) do
 		if v.width == CFG.DST_RESOLUTION.width and v.height == CFG.DST_RESOLUTION.height then	--有黑边参数
@@ -63,38 +70,21 @@ local function initEffectiveArea()
 	--prt(CFG.EFFECTIVE_AREA)
 end
 
---检测分辨率是否在支持范围
-local function isSupportResolution()
-	if CFG.DST_RESOLUTION.width > CFG.SUPPORT_RESOLUTION.max.width then
-		return false
-	end
-	
-	if CFG.DST_RESOLUTION.width < CFG.SUPPORT_RESOLUTION.min.width then
-		return false
-	end
-	
-	if CFG.DST_RESOLUTION.height > CFG.SUPPORT_RESOLUTION.max.height then
-		return false
-	end
-	
-	if CFG.DST_RESOLUTION.height < CFG.SUPPORT_RESOLUTION.min.height then
-		return false
-	end
-	
-	return true
+--初始化缩放比率
+local function initScalingRatio()
+	local devShort = CFG.DEV_RESOLUTION.height <= CFG.DEV_RESOLUTION.width and CFG.DEV_RESOLUTION.height or CFG.DEV_RESOLUTION.width
+	CFG.SCALING_RATIO = CFG.DST_RESOLUTION.height / devShort
+	--prt(CFG.SCALING_RATIO)
 end
 
-
-
-function initEnvironment()
+--初始话环境参数
+function initEnv()
+	screen.init(1, 0)
+	
 	initDstResolution()
-	if isSupportResolution() ~= true then
-		dialog("分辨率不支持，请返回作者!")
-		Log("分辨率不支持")
-	end	
-	initEffectiveArea()
+	initScalingRatio()
 	initBlackBorder()
-
+	initEffectiveArea()
 end
 
-initEnvironment()
+initEnv()

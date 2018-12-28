@@ -175,14 +175,13 @@ function tap(x, y, delay)
 	touch.up(1, x, y)
 end
 
---通过传入点的比例点击
+--点击，坐标按传入坐标在有效区所占位置比例缩放
 function ratioTap(x, y, delay)
 	local d = delay or CFG.DEFAULT_TAP_TIME
 	if x == nil or y == nil then
-		catchError(ERR_PARAM, "nil x y in proportionallyTap")
+		catchError(ERR_PARAM, "nil xy in proportionallyTap")
 	end
 	local x1, y1 = scale.getRatioPoint(x, y)
-	Log("````````"..x1.."  "..y1)
 	
 	touch.down(1, x1, y1)
 	sleep(d)

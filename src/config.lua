@@ -3,7 +3,8 @@
 -- Date: 2018-12-24
 -- Descrip: 参数配置表，注册在_G
 
-CFG = {}
+CFG = {}	--配置表
+
 -----------------调试参数-----------------
 CFG.LOG = true				--是否允许输出LOG信息
 CFG.WRITE_LOG = false		--是否将LOG写入log.txt文件, 不受CFG.LOG影响
@@ -15,8 +16,8 @@ CFG.DST_RESOLUTION = {}		--运行设备分辨率，由init设置
 CFG.SCALING_RATIO = 0		--短边缩放比率，由init设置
 CFG.EFFECTIVE_AREA = {}		--界面有效区，由init设置
 CFG.BLACK_BORDER = {	--黑边
-	limitRatio = {leftRight = 16/9, topBottom = 4/3},	--出现规则黑边（上下左右相等）临界比例
-	borderList = {		--width >= height，此优先级大于由imitRatio生成的项
+	limitRatio = {leftRight = 16/9, topBottom = 4/3},	--出现黑边的临界比例（仅限上下、左右分别相等的情况）
+	borderList = {		--width >= height，此处预设项优先级大于由imitRatio生成的项
 		--{width = 2340, height = 1080, left = 210, right = 210, top = 0, bottom = 0}
 	},
 }
@@ -37,10 +38,12 @@ CFG.DEFAULT_FUZZY = 95		--默认颜色模糊相似度
 CFG.DEFAULT_REPEAT_TIMES = 10		--任务默认运行次数
 
 -----------------文件-----------------
-CFG.LOG_FILE_NAME = "log.dat"
+CFG.LOG_FILE_NAME = "log.dat"	--Log文件名
 
-
+-----------------任务参数-----------------
 CFG.DEFAULT_REPEAT_TIMES = 999
+
+-----------------延时参数-----------------
 CFG.DEFAULT_TIMEOUT = 30
 
 CFG.WAIT_CHECK_SKIP = 5
