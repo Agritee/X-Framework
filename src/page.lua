@@ -17,6 +17,19 @@ M.navigationList = {}
 --公共导航控件优先级，由task/projPage插入，如下一步、返回、确认、取消、通知
 M.navigationPriorityList = {}
 
+--匹配单个控件，不受widget.enable值影响
+function M.matchWidget(widget)
+	--prt(v)
+	local pos = screen.findColor(widget.dstArea, widget.dstPos, CFG.DEFAULT_FUZZY)
+	if pos ~= Point.INVALID then
+		Log("match widget: ["..widget.tag.."] success!")
+		return true
+	else
+		Log("match widget: ["..widget.tag.."] fail!")
+		return false
+	end
+end
+
 --匹配控件列表
 local function matchWidgets(widgetList)
 	local fuz = CFG.DEFAULT_FUZZY
@@ -223,7 +236,7 @@ local function initWidgets()
 	
 	for k, v in pairs(M.pageList) do
 		for _k, _v in pairs(v.widgetList) do
-			if _v.enable and _v.srcPos ~= nil and string.len(_v.srcPos) > 0 then
+			if _v.srcPos ~= nil and string.len(_v.srcPos) > 0 then
 				if _v.dstPos == "" then
 					_v.dstPos = scale.scalePos(_v.srcPos)
 				end

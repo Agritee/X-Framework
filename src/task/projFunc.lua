@@ -1,7 +1,7 @@
 -- projFunc.lua
 -- Author: cndy1860
 -- Date: 2018-12-26
--- Descrip: 任务相关函数
+-- Descrip: 任务通用函数
 
 --在主界面4个子界面切换
 function switchMainPage(pageName)
@@ -268,6 +268,10 @@ function selectExpiredPlayer()
 		CFG.DEFAULT_FUZZY,
 		screen.PRIORITY_DEFAULT,
 		999)
+	if #posTb >= 999 then
+		catchError(ERR_PARAM, "more than 999 point, cant find all point")
+	end
+	
 	for _, v in pairs(posTb) do
 		local exsitFlag = false
 		for _, _v in pairs(expiredPlayerFirstHalf) do
@@ -310,5 +314,9 @@ function selectExpiredPlayer()
 		end
 		prt(expiredPlayerLatterHalf)
 	end
+end
+
+function skipLeftMatch()
+	page.tapWidget("联赛教练模式", "跳过余下比赛")
 end
 

@@ -7,6 +7,7 @@
 --所有dstArea只有在dstArea == Rect.ZERO时候才会在初始化时进行getAnchorArea，否则使用预设的数据
 --所有dstPos只有在dstPos == ""时候才会在初始化时进行scalePos，否则使用预设的数据
 --在执行点击widgetList或者进行navigation时，存在actionFunc的时候优先执行actionFunc，否则点击dstPos的第一个点
+--enable仅仅标识在matchPage/matchWidgets时，是否作为匹配项，其他操作不受影响，如Init时的缩放、matchWidget、tapWidget
 
 --界面
 local _pageList = {
@@ -285,6 +286,14 @@ local _pageList = {
 				dstPos = "",
 				dstArea = Rect.ZERO
 			},
+			{
+				tag = "跳过余下比赛",		--仅用于跳过余下比赛，enable == false，不参与matchPage/matchWidgets
+				enable = false,
+				anchor = "RB",
+				srcPos = "936|725|0xcaddf0,987|719|0xcaddf0,712|700|0xcaddf0,711|722|0xcaddf0",
+				dstPos = "",
+				dstArea = Rect.ZERO
+			},
 		},
 	},
 	{
@@ -320,7 +329,7 @@ local _navigationList = {
 	{
 		tag = "确定-合约过期",
 		enable = true,
-		anchor = "B",
+		anchor = "A",
 		srcPos = "608|584|0xcaddf0,399|545|0xcaddf0,855|584|0xcaddf0,665|240|0xffa0a9-0x000202,685|231|0xffffff,664|197|0xfe5343-0x010807",
 		dstPos = "",
 		dstArea = Rect.ZERO
@@ -366,16 +375,25 @@ local _navigationList = {
 		dstPos = "",
 		dstArea = Rect.ZERO
 	},
+	{
+		tag = "球员续约-已续约",
+		enable = true,
+		anchor = "A",
+		srcPos = "618|533|0xcaddf0,373|495|0xcaddf0,952|543|0xcaddf0,416|581|0xf5f5f5,664|240|0x21c43d-0x0d090c,666|320|0x70ef85-0x1a0617,386|182|0xf5f5f5,414|121|0x13304d",
+		dstPos = "",
+		dstArea = Rect.ZERO
+	},
 }
 
 --全局导航优先级，一般next在最后
 local _navigationPriorityList = {
-	"球员续约-球员列表", 
 	"确定-合约过期", 
+	"球员续约-球员列表", 
 	"球员续约-点击签约", 
 	"球员续约-续约", 
 	"球员续约-付款确认", 
 	"球员续约-支付确定", 
+	"球员续约-已续约",
 	"next",
 }
 

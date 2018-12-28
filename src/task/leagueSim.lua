@@ -43,14 +43,27 @@ local fn = function()
 end
 insertFunc("其他", fn)
 
+local fn = function()
+	for _, v in pairs(page.pageList) do
+		if v.tag == "联赛教练模式" then
+			for _, _v in pairs(v.widgetList) do
+				if _v.tag == "跳过余下比赛" then
+					if page.matchWidget(_v) then
+						skipLeftMatch()
+						return
+					end
+					break
+				end
+			end
+			break
+		end
+	end
+end
+insertFunc("联赛教练模式", fn)
+
 local lastPlayingPageTime = 0
 local lastProcessIndex = 0
 local wfn = function(processIndex)
-	--if processIndex == 15 then		--点球时不检测,不是playing界面
-	--	Log("on penaltyKick not execute waitFuncList!")
-	--	return
-	--end
-	
 	if processIndex ~= lastProcessIndex then	--当切换流程片时更新
 		lastPlayingPageTime = 0
 		lastProcessIndex = processIndex
