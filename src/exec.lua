@@ -94,131 +94,133 @@ function M.run(taskName, repeatTimes)
 			
 			sleep(200)
 		end
-	end]]
-	
-	M.setExecStatus("start")
-	
-	for i = 1, reTimes, 1 do
-		Log("-----------------------START RUN A ROUND OF TASK: "..taskName.."-----------------------")
-		for k, v in pairs(taskProcesses) do
-			if i == 1 then	--首次运行断点流程(断点未发生的情况下)均不跳过
-				if v.justBreakingRun == true then
-					if IS_BREAKING_TASK then
-						v.skipStatus = false
+		end]]
+		
+		M.setExecStatus("start")
+		
+		for i = 1, reTimes, 1 do
+			Log("-----------------------START RUN A ROUND OF TASK: "..taskName.."-----------------------")
+			for k, v in pairs(taskProcesses) do
+				if i == 1 then	--首次运行断点流程(断点未发生的情况下)均不跳过
+					if v.justBreakingRun == true then
+						if IS_BREAKING_TASK then
+							v.skipStatus = false
+						else
+							v.skipStatus = true
+						end
 					else
-						v.skipStatus = true
+						v.skipStatus = false
 					end
-				else
-					v.skipStatus = false
-				end
-			else	--非首次运行跳过仅首次运行和续接断点流程片的流程片
-				if v.justFirstRun or v.justBreakingRun then	--跳过只允许首次运行的流程片和断点流程片
-					v.skipStatus = true
-				else
-					v.skipStatus = false
+				else	--非首次运行跳过仅首次运行和续接断点流程片的流程片
+					if v.justFirstRun or v.justBreakingRun then	--跳过只允许首次运行的流程片和断点流程片
+						v.skipStatus = true
+					else
+						v.skipStatus = false
+					end
 				end
 			end
-		end
-		
-		local waitCheckSkipTime = 0
-		if i == 1 then		--第一次运行就快速检测是否可以跳过主界面
-			waitCheckSipTime = 1
-			--waitCheckSkipTime = CFG.WAIT_CHECK_SKIP
-		else
-			waitCheckSkipTime = CFG.WAIT_CHECK_SKIP
-		end
-		--prt(taskProcesses)
-		for k, v in pairs(taskProcesses) do
-			local checkInterval = v.checkInterval or CFG.DEFAULT_PAGE_CHECK_INTERVAL
-			local timeout = v.timeout or CFG.DEFAULT_TIMEOUT
-			local lastCheckSkipPage = PAGE_NONE
 			
-			local startTime = os.time()
-			while true do
-				--Log("now wait process page: "..v.tag)
-				if v.skipStatus == true then	--跳过当前界面流程
-					Log("skip page: "..v.tag)
-					if waitCheckSkipTime ~= CFG.WAIT_CHECK_SKIP then
-						waitCheckSkipTime = CFG.WAIT_CHECK_SKIP --第一次进入skip的时候为1秒，在此处恢复
-					end
-					break
-				end
+			local waitCheckSkipTime = 0
+			if i == 1 then		--第一次运行就快速检测是否可以跳过主界面
+				waitCheckSipTime = 1
+				--waitCheckSkipTime = CFG.WAIT_CHECK_SKIP
+			else
+				waitCheckSkipTime = CFG.WAIT_CHECK_SKIP
+			end
+			--prt(taskProcesses)
+			for k, v in pairs(taskProcesses) do
+				local checkInterval = v.checkInterval or CFG.DEFAULT_PAGE_CHECK_INTERVAL
+				local timeout = v.timeout or CFG.DEFAULT_TIMEOUT
 				
-				Log("now try match page: "..v.tag)
-				if page.matchPage(v.tag) then
-					Log("------start execute process: "..v.tag)
-					if v.actionFunc == nil then		--允许空载流程界面
-						catchError(ERR_WARNING, "process: "..v.tag.." have no actionFunc")
-					else
-						Log("start actionFunc")
-						v.actionFunc()	--执行
-						Log("end actionFunc")
+				local startTime = os.time()
+				while true do		--循环匹配当前流程片界面
+					if v.skipStatus == true then	--跳过当前界面流程
+						Log("skip process: "..v.tag)
+						if waitCheckSkipTime ~= CFG.WAIT_CHECK_SKIP then
+							waitCheckSkipTime = CFG.WAIT_CHECK_SKIP --第一次进入skip的时候为1秒，在此处恢复
+						end
+						break
 					end
 					
-					--下一步
-					if v.nextTag ~= nil then 	--有下一步事件
-						Log("start next at process page: "..v.tag)
+					screen.keep(true)		--为提高效率screen.keep(true)只在此处使用，其他地方慎用
+					local currentPage = page.getCurrentPage()
+					
+					--Log("try match process page: "..v.tag)
+					if currentPage == v.tag then
+						Log("------start execute process: "..v.tag)
 						
-						if v.nextTag == "pageNext" then		--页面专用next
-							page.tapPageNext(v.tag)
-						elseif v.nextTag == "next" then		--通用next
-							page.tapNext()
-						else		--点击某个控件作为下一步
-							page.tapWidget(v.tag, v.nextTag)	
+						--exec actionFunc
+						if v.actionFunc == nil then
+							Log("process: "..v.tag.." have no actionFunc")
+						else
+							Log("------>start actionFunc")
+							v.actionFunc()	--执行
+							Log("------>end actionFunc")
 						end
 						
-						startTime = os.time()	--重置startTime
-						Log("end next")
+						--exec next
+						if v.nextTag ~= nil then 	--有下一步事件
+							Log("start next at process page: "..v.tag)
+							
+							if v.nextTag == "pageNext" then		--页面专用next
+								page.tapPageNext(v.tag)
+							elseif v.nextTag == "next" then		--全局导航next
+								page.tapNext()
+							else						--点击某个控件作为next
+								page.tapWidget(v.tag, v.nextTag)
+							end
+							
+							Log("end next")
+						end
+						
+						Log("--------end execute process: "..v.tag)
+						break	--完成当前流程片
 					end
 					
-					Log("--------end execute process: "..v.tag)
-					break	--完成当前流程片
-				end
-				--prt(v)
-				if v.waitFunc ~= nil then --等待期间执行的process的等待函数
-					v.waitFunc(k)
-				end
-				
-				Log("process index:"..k.." ----wait current process has : "..(os.time() - startTime))
-				if os.time() - startTime > timeout then	--流程超时
-					catchError(ERR_TIMEOUT, "have waitting process: "..v.tag.." "..tostring(os.time() - startTime).."s yet, try end it")
-				end
-				
-				if os.time() - startTime > waitCheckSkipTime then	--跳过
-					local currentPage = page.getCurrentPage()
-					if currentPage ~= nil and currentPage ~= PAGE_NONE then
-						--保证至少是第二次出现当前界面，防止正好在此处（第一次）出现新界面，但还没有经过是否为当前流程界面
-						--的判定就直接进入skip了（因为可能存在刚好当前流程片和之后的某个流程片正好相同的情况，这样的话就会
-						--会直接skip掉当前流程片至后边的那个流程片之间的流程片）
-						if lastCheckSkipPage ~= currentPage then
-							lastCheckSkipPage = currentPage
-						else
-							local isProcessPage = false
-							local pageIndex = 0
-							for _k, _v in pairs(taskProcesses) do
-								if _k > k and _v.tag == currentPage then	--当前界面为其后的某个流程片中界面
-									Log("set it skip between current process page and a next process page")
-									for __k, __v  in pairs(taskProcesses) do
-										if __k >= k and __k < _k then
-											Log("set skipStatus true: "..__v.tag)
-											__v.skipStatus = true
-										end
+					--检测流程是否超时
+					Log("process index:"..k.." ----wait current process has : "..(os.time() - startTime))
+					if os.time() - startTime > timeout then	--流程超时
+						catchError(ERR_TIMEOUT, "have waitting process: "..v.tag.." "..tostring(os.time() - startTime).."s yet, try end it")
+					end
+					
+					--等待期间执行的process的等待函数
+					if v.waitFunc ~= nil then
+						v.waitFunc(k)
+					end
+					
+					--检测是否需要跳过当前流程片
+					if currentPage ~= nil and os.time() - startTime > waitCheckSkipTime then	--跳过
+						local isProcessPage = false
+						local pageIndex = 0
+						for _k, _v in pairs(taskProcesses) do
+							if _k > k and _v.tag == currentPage then	--当前界面为其后的某个流程片中界面
+								Log("set it skip between current process page and a next process page")
+								for __k, __v  in pairs(taskProcesses) do
+									if __k >= k and __k < _k then
+										Log("set skipStatus true: "..__v.tag)
+										__v.skipStatus = true
 									end
-									break	--必须跳出，不然后边的相同名称流程片也被skip了
 								end
+								break	--必须跳出，不然后边的相同名称流程片也被skip了
 							end
 						end
 					end
+					
+					if currentPage == nil and os.time() - startTime >= CFG.WAIT_CHECK_NAVIGATION then
+						if page.execNavigation() then
+							--Log("executed a navigation")
+						end
+					end
+					
+					sleep(checkInterval)
 				end
 				
-				sleep(checkInterval)
+				sleep(50)
 			end
-			
-			sleep(50)
+			Log("-------------------------END OF THIS ROUND TASK: "..taskName.."-----------------------")
 		end
-		Log("-------------------------END OF THIS ROUND TASK: "..taskName.."-----------------------")
+		
+		M.setExecStatus("end")
 	end
 	
-	M.setExecStatus("end")
-end
-
+	

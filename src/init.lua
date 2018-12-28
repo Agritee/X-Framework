@@ -24,7 +24,7 @@ local function initDstResolution()
 end
 
 --初始化黑边参数，根据黑边临界比例设置，左右相等，上下相等，优先级小于CFG.BLACK_BORDER.borderList预设值
-function initBlackBorder()
+local function initBlackBorder()
 	local w = CFG.DST_RESOLUTION.width
 	local h = CFG.DST_RESOLUTION.height
 	
@@ -78,7 +78,7 @@ local function initScalingRatio()
 end
 
 --初始话环境参数
-function initEnv()
+local function initEnv()
 	screen.init(1, 0)
 	
 	initDstResolution()

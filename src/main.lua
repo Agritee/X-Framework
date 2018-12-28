@@ -9,14 +9,15 @@ require("init")
 require("scale")
 require("page")
 require("exec")
-require("task/projPage")
 require("task/projFunc")
+require("task/projPage")
 require("task/rankSim")
 require("task/leagueSim")
 
 function main()
 
-	exec.run("天梯", 2)
+	exec.run("联赛", 9)
+	xmod.exit()
 end
-
+sleep(1000)
 main()

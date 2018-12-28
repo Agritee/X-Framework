@@ -6,11 +6,11 @@
 local _task = {
 	tag = "天梯",
 	processes = {
-		{tag = "其他", justFirstRun = true},
-		{tag = "比赛", nextTag = "线上对战", justFirstRun = true},
-		{tag = "线上对战", nextTag = "自动比赛", justFirstRun = true},
+		--{tag = "其他", justFirstRun = true},
+		--{tag = "比赛", nextTag = "线上对战", justFirstRun = true},
+		--{tag = "线上对战", nextTag = "自动比赛", justFirstRun = true},
 		{tag = "天梯教练模式", nextTag = "next"},
-		{tag = "匹配对手", nextTag = "next"},
+		{tag = "匹配天梯对手", nextTag = "next"},
 		{tag = "阵容展示", nextTag = "next"},
 		{tag = "比赛中"},
 		{tag = "终场统计", nextTag = "next", timeout = 1200},
@@ -66,20 +66,11 @@ local wfn = function(processIndex)
 	
 	local timeAfterLastPlayingPage = os.time() - lastPlayingPageTime	--距离最后一个playing界面的时间间隔
 	
-	if page.isExsitNext() then	--有下一步按钮点击下一步，是否可能跳过某些流程？
-		Log("find a next button an wait playing")
-		if page.getPage == nil then
-			page.tapNext()
-		else
-			Log("but next button in defined page, no try tapNext")
-		end
-	else
-		--跳过进球回放什么的,--游戏崩溃的情况下不点击
-		if timeAfterLastPlayingPage >= 3 and timeAfterLastPlayingPage <= 10 and isAppInFront() then
-			Log("skip replay")
-			tap(10, 60)
-			sleep(500)
-		end
+	--跳过进球回放什么的,--游戏崩溃的情况下不点击
+	if timeAfterLastPlayingPage >= 3 and timeAfterLastPlayingPage <= 10 and isAppInFront() then
+		Log("skip replay")
+		tap(10, 60)
+		sleep(500)
 	end
 	
 	if lastPlayingPageTime > 0 then Log("timeAfterLastPlayingPage = "..timeAfterLastPlayingPage.."s yet")	 end
@@ -89,10 +80,9 @@ local wfn = function(processIndex)
 		catchError(ERR_TIMEOUT, "cant check playing at wait PAGE_INTERVAL")
 	end
 end
-insertWaitFunc("全场统计", wfn)
+insertWaitFunc("终场统计", wfn)
 
 
 
-
---将任务添加至taskList
+--将任务添加至exec.taskList
 exec.insertTask(_task)

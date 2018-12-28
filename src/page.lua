@@ -11,8 +11,11 @@ package.loaded[modName] = M
 --页面列表，由task/projPage插入
 M.pageList = {}
 
---公共导航控件，由task/projPage插入，如返回，下一步，确认，取消
+--公共导航控件，由task/projPage插入，如下一步、返回、确认、取消、通知
 M.navigationList = {}
+
+--公共导航控件优先级，由task/projPage插入，如下一步、返回、确认、取消、通知
+M.navigationPriorityList = {}
 
 --匹配控件列表
 local function matchWidgets(widgetList)
@@ -28,7 +31,7 @@ local function matchWidgets(widgetList)
 				--Log("cant match widget: "..v.tag)
 				return false
 			else
-				Log("----matched widget: "..v.tag)
+				--Log("----matched widget: "..v.tag)
 			end
 		end
 	end
@@ -56,32 +59,12 @@ end
 
 --获取当前界面
 function M.getCurrentPage()
-	screen.keep(true)
 	for k, v in pairs(M.pageList) do
 		if M.matchPage(v.tag) then
 			Log("get current page: "..v.tag)
 			return v.tag
 		end
 	end
-	screen.keep(false)
-end
-
---检测界面是否有下一步按钮
-function M.isExsitNext()
-	for _, v in pairs(M.navigationList) do
-		if v.tag == "next" then
-			Log("exsit next action")
-			--prt(v)
-			local pot = screen.findColor(v.dstArea, v.dstPos, CFG.DEFAULT_FUZZY)	--高分辨率下有偏色
-			if pot ~= Point.INVALID then
-				return true
-			else
-				return false
-			end
-		end
-	end
-	
-	catchError(ERR_PARAM, "cant find comm next action")	
 end
 
 --点击页面专属next
@@ -107,16 +90,16 @@ function M.tapPageNext(pageTag)
 	catchError(ERR_PARAM, "cant find pageNext action")
 end
 
---点击全局通用next
+
+--点击全局next
 function M.tapNext()
 	for _, v in pairs(M.navigationList) do
 		if v.tag == "next" then
-			Log("found next action")
-			--prt(v)
 			local startTime = os.time()
 			while true do
 				local pot = screen.findColor(v.dstArea, v.dstPos, CFG.DEFAULT_FUZZY)	--高分辨率下有偏色
 				if pot ~= Point.INVALID then
+					Log("found next")
 					tap(pot.x, pot.y)
 					return
 				end
@@ -165,8 +148,35 @@ function M.tapWidget(pageTag, widgetTag)
 	catchError(ERR_PARAM, "cant find pageTag or widgetTag")
 end
 
+--检测界面是否有导航按钮，有就执行导航动作
+function M.execNavigation()
+	for _, v in pairs(M.navigationPriorityList) do
+		for _, _v in pairs(M.navigationList) do
+			if v == _v.tag then
+				--Log("try match navigation: ".._v.tag)
+				local pot = screen.findColor(_v.dstArea, _v.dstPos, CFG.DEFAULT_FUZZY)
+				if pot ~= Point.INVALID then
+					Log("Exsit Navigation [".._v.tag.."], execute it!")
+					if _v.actionFunc ~= nil then
+						_v.actionFunc()
+					else
+						tap(pot.x, pot.y)
+					end
+					
+					sleep(CFG.NAVIGATION_DELAY)
+					return true
+				else
+					break
+				end
+			end
+		end
+	end
+
+	return false
+end
+
 --将用户界面插入当前pageList总表
-function M.insertPage(_pageList)
+local function insertPage(_pageList)
 	if _pageList == nil or #_pageList == 0 then
 		catchError(ERR_PARAM, "err _pageList")
 	end
@@ -179,7 +189,7 @@ function M.insertPage(_pageList)
 end
 
 --将用全局导航界面插入当前navigationList总表
-function M.insertNavigation(_navigationList)
+local function insertNavigation(_navigationList)
 	if _navigationList == nil or #_navigationList == 0 then
 		catchError(ERR_PARAM, "err _navigationList")
 	end
@@ -191,6 +201,20 @@ function M.insertNavigation(_navigationList)
 	Log("Insert navigationList done")
 end
 
+--将用全局导航界面优先级插入当前navigationPriorityList总表
+local function insertNavigationPriority(_navigationPriorityList)
+	if _navigationPriorityList == nil or #_navigationPriorityList == 0 then
+		catchError(ERR_PARAM, "err _navigationPriorityList")
+	end
+	
+	for _, v in pairs(_navigationPriorityList) do
+		table.insert(M.navigationPriorityList, v)
+	end
+	
+	Log("Insert navigationPriorityList done")
+end
+
+
 --初始化控件，将srcPos缩放至dstPos
 local function initWidgets()
 	if #M.pageList == 0 then
@@ -200,8 +224,12 @@ local function initWidgets()
 	for k, v in pairs(M.pageList) do
 		for _k, _v in pairs(v.widgetList) do
 			if _v.enable and _v.srcPos ~= nil and string.len(_v.srcPos) > 0 then
-				_v.dstPos = scale.scalePos(_v.srcPos)
-				_v.dstArea = scale.getAnchorArea(_v.anchor)
+				if _v.dstPos == "" then
+					_v.dstPos = scale.scalePos(_v.srcPos)
+				end
+				if _v.dstArea == Rect.ZERO then
+					_v.dstArea = scale.getAnchorArea(_v.anchor)
+				end
 			end
 		end
 	end
@@ -215,23 +243,37 @@ local function initNavigations()
 	--全局导航控件
 	for _, v in pairs(M.navigationList) do
 		if v.enable and v.srcPos ~= nil and string.len(v.srcPos) > 0 then
-			v.dstPos = scale.scalePos(v.srcPos)
+			if v.dstPos == "" then
+				v.dstPos = scale.scalePos(v.srcPos)
+			end
+			if v.dstArea == Rect.ZERO then
+				v.dstArea = scale.getAnchorArea(v.anchor)
+			end
 		end
 	end
 	
 	--页面专用导航控件
 	for _, v in pairs(M.pageList) do
 		if v.pageNext ~= nil and v.srcPos ~= nil and string.len(v.srcPos) > 0 then
-			v.dstPos = scale.scalePos(v.srcPos)
-			v.dstArea = scale.getAnchorArea(v.anchor)
+			if v.dstPos == "" then
+				v.dstPos = scale.scalePos(v.srcPos)
+			end
+			if v.dstArea == Rect.ZERO then
+				v.dstArea = scale.getAnchorArea(v.anchor)
+			end
 		end
 	end
 	
 	Log("initNavigations done")
 end
 
---初始化放在task/projPage调用，因为必须保证界面数据已经插入pageList才能调用
-function M.initPage()
+--插入pageList、navigationList和navigationPriorityList数据插入page对应表中并初始化（缩放控件坐标）
+function M.initPage(pList, nList, npList)
+	insertPage(pList)
+	insertNavigation(nList)
+	insertNavigationPriority(npList)
+	
+	--插入数据后初始化界面
 	initWidgets()
 	initNavigations()
 end
