@@ -15,7 +15,7 @@ local _task = {
 		{tag = "比赛中"},
 		{tag = "终场统计", nextTag = "next", timeout = 900, checkInterval = 1000},
 		{tag = "终场比分", nextTag = "next"},
-
+		
 	},
 }
 
@@ -49,7 +49,13 @@ local fn = function()
 			for _, _v in pairs(v.widgetList) do
 				if _v.tag == "跳过余下比赛" then
 					if page.matchWidget(_v) then
-						skipLeftMatch()
+						page.tapWidget(v.tag, "跳过余下比赛")
+						sleep(300)
+						page.tapWidget(v.tag, "确定跳过")
+						sleep(300)
+						page.tapWidget(v.tag, "恭喜晋级")
+						sleep(300)
+						page.tapWidget(v.tag, "联赛奖励")
 						return
 					end
 					break

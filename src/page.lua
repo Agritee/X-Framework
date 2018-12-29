@@ -14,7 +14,7 @@ M.pageList = {}
 --公共导航控件，由task/projPage插入，如下一步、返回、确认、取消、通知
 M.navigationList = {}
 
---公共导航控件优先级，由task/projPage插入，如下一步、返回、确认、取消、通知
+--公共导航控件优先级，由task/projPage插入
 M.navigationPriorityList = {}
 
 --匹配单个控件，不受widget.enable值影响
@@ -140,6 +140,7 @@ function M.tapWidget(pageTag, widgetTag)
 						return false
 					end
 					
+					--prt(_v)
 					local startTime = os.time()
 					while true do
 						local pot = screen.findColor(_v.dstArea, _v.dstPos, CFG.DEFAULT_FUZZY)
@@ -149,7 +150,7 @@ function M.tapWidget(pageTag, widgetTag)
 						end
 						
 						if os.time() - startTime > CFG.DEFAULT_TIMEOUT then
-							catchError(ERR_TIMEOUT, "timeout in tapWidget")
+							catchError(ERR_TIMEOUT, "cant find tapWidget: ["..widgetTag.."] on page: ["..pageTag.."]")
 						end
 						sleep(100)
 					end
@@ -280,7 +281,7 @@ local function initNavigations()
 	Log("initNavigations done")
 end
 
---插入pageList、navigationList和navigationPriorityList数据插入page对应表中并初始化（缩放控件坐标）
+--将pageList、navigationList和navigationPriorityList数据插入page对应表中并初始化（缩放坐标）
 function M.initPage(pList, nList, npList)
 	insertPage(pList)
 	insertNavigation(nList)

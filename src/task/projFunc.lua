@@ -316,7 +316,4 @@ function selectExpiredPlayer()
 	end
 end
 
-function skipLeftMatch()
-	page.tapWidget("联赛教练模式", "跳过余下比赛")
-end
 

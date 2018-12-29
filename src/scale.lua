@@ -259,20 +259,10 @@ function M.getRatioPoint(x, y)
 	
 	local x1 = minX + (x - devMinX)/(devMaxX - devMinX) * w
 	local y1 = minY + (y - devMinY)/(devMaxY - devMinY) * h
-	prt(w)
-	prt(h)
-	Log(x1.."  fdsfs"..y1)
+
+	x1 = math.floor(x1 + 0.5)
+	y1 = math.floor(y1 + 0.5)
 	
-	if x1 - math.floor(x1) <= 0.4 then	--取点四舍五入
-		x1 = math.floor(x1)
-	else
-		x1 = math.ceil(x1)
-	end
-	if y1 - math.floor(y1) <= 0.4 then
-		y1 = math.floor(y1)
-	else
-		y1 = math.ceil(y1)
-	end
 	if x1 < minX then	--超出有效区的要归置
 		x1 = minX
 	end
@@ -285,8 +275,7 @@ function M.getRatioPoint(x, y)
 	if y1 > maxY then
 		y1 = maxY
 	end
-	
-	
+
 	return  x1, y1
 end
 

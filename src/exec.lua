@@ -147,9 +147,11 @@ function M.run(taskName, repeatTimes)
 					
 					--Log("try match process page: "..v.tag)
 					if currentPage == v.tag then
-						Log("------start execute process: "..v.tag)
+						--actionFunc中，涉及到界面变化时(actionFunc和next)会放开screen.keep(false)进行界面判定，但是因为完成actionFunc和next后，
+						--会重新返回screen.keep(true)处
+						screen.keep(false)		--暂时提出在此
 						
-						--exec actionFunc
+						Log("------start execute process: "..v.tag)
 						if v.actionFunc == nil then
 							Log("process: "..v.tag.." have no actionFunc")
 						else

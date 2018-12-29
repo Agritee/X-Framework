@@ -77,7 +77,7 @@ local function initScalingRatio()
 	--prt(CFG.SCALING_RATIO)
 end
 
---初始话环境参数
+--初始化环境参数
 local function initEnv()
 	screen.init(1, 0)
 	

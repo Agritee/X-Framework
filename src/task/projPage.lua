@@ -294,6 +294,31 @@ local _pageList = {
 				dstPos = "",
 				dstArea = Rect.ZERO
 			},
+			{
+				tag = "确定跳过",
+				enable = false,
+				anchor = "A",
+				--srcPos = "794|451|0xcaddf0,961|461|0xcaddf0,667|433|0xf5f5f5,369|408|0xcaddf0,936|491|0xf5f5f5,999|433|0xf5f5f5,897|372|0xf5f5f5,332|432|0xf5f5f5",
+				srcPos = "793|446|0xcaddf0,368|410|0xcaddf0,960|461|0xcaddf0,666|432|0xf5f5f5,618|492|0xf5f5f5,721|489|0xf5f5f5,992|256|0xf5f5f5",
+				dstPos = "",
+				dstArea = Rect.ZERO
+			},
+			{
+				tag = "恭喜晋级",
+				enable = false,
+				anchor = "A",
+				srcPos = "617|592|0xcaddf0,376|565|0xcaddf0,959|614|0xcaddf0,673|644|0xf5f5f5,1170|209|0xf5f5f5,169|103|0xf5f5f5,1159|106|0xf5f5f5,1242|132|0x972249",
+				dstPos = "",
+				dstArea = Rect.ZERO
+			},
+			{
+				tag = "联赛奖励",
+				enable = false,
+				anchor = "A",
+				srcPos = "617|597|0xcaddf0,370|561|0xcaddf0,959|611|0xcaddf0,632|240|0xf05674,669|242|0xfffada,706|242|0xf05674",
+				dstPos = "",
+				dstArea = Rect.ZERO
+			},
 		},
 	},
 	{
@@ -320,11 +345,20 @@ local _navigationList = {
 		srcPos = "1130|732|0x1270e3-0x13091a,1127|702|0x1270e3-0x13091a,1102|703|0x1270e3-0x13091a,1088|733|0x1270e3-0x13091a",
 		dstPos = "",
 		dstArea = Rect(
-			CFG.EFFECTIVE_AREA[1] + (CFG.EFFECTIVE_AREA[3] - CFG.EFFECTIVE_AREA[1]) * 3 / 4,
-			CFG.EFFECTIVE_AREA[2] + (CFG.EFFECTIVE_AREA[4] - CFG.EFFECTIVE_AREA[2]) * 7 / 8,
-			CFG.EFFECTIVE_AREA[3] - (CFG.EFFECTIVE_AREA[1] + (CFG.EFFECTIVE_AREA[3] - CFG.EFFECTIVE_AREA[1]) * 3 / 4),
-			CFG.EFFECTIVE_AREA[4] - (CFG.EFFECTIVE_AREA[2] + (CFG.EFFECTIVE_AREA[4] - CFG.EFFECTIVE_AREA[2]) * 7 / 8)
-		),
+			math.floor(CFG.EFFECTIVE_AREA[1] + (CFG.EFFECTIVE_AREA[3] - CFG.EFFECTIVE_AREA[1]) * 3 / 4),
+			math.floor(CFG.EFFECTIVE_AREA[2] + (CFG.EFFECTIVE_AREA[4] - CFG.EFFECTIVE_AREA[2]) * 7 / 8),
+			math.floor(CFG.DEV_RESOLUTION.width - (CFG.EFFECTIVE_AREA[1] + (CFG.EFFECTIVE_AREA[3] - CFG.EFFECTIVE_AREA[1]) * 3 / 4)),
+			math.floor(CFG.DEV_RESOLUTION.height - (CFG.EFFECTIVE_AREA[2] + (CFG.EFFECTIVE_AREA[4] - CFG.EFFECTIVE_AREA[2]) * 7 / 8))
+		)
+	},
+	{
+		tag = "comfirm",
+		enable = true,
+		anchor = "MTB",
+		srcPos = "682|460|0x2c8efa-0x2c1603,523|433|0xcaddf0,782|434|0xcaddf0,538|478|0xcaddf0,790|477|0xcaddf0,533|400|0xf5f5f5,\
+		772|390|0xf5f5f5,538|517|0xf5f5f5,763|517|0xf5f5f5",
+		dstPos = "",
+		dstArea = Rect.ZERO
 	},
 	{
 		tag = "确定-合约过期",
@@ -383,6 +417,22 @@ local _navigationList = {
 		dstPos = "",
 		dstArea = Rect.ZERO
 	},
+	{
+		tag = "教练续约定额",
+		enable = true,
+		anchor = "A",
+		srcPos = "617|483|0xcaddf0,377|445|0xcaddf0,935|488|0xcaddf0,477|270|0x4cd964,489|286|0x4cd964,641|524|0xf5f5f5,335|463|0xf5f5f5,1000|463|0xf5f5f5",
+		dstPos = "",
+		dstArea = Rect.ZERO
+	},
+	{
+		tag = "教练续约确定",
+		enable = true,
+		anchor = "A",
+		srcPos = "619|462|0xcaddf0,372|433|0xcaddf0,952|483|0xcaddf0,606|512|0xf5f5f5,607|397|0xf5f5f5,1108|294|0x2e823c,434|130|0x13304d",
+		dstPos = "",
+		dstArea = Rect.ZERO
+	},
 }
 
 --全局导航优先级，一般next在最后
@@ -394,7 +444,10 @@ local _navigationPriorityList = {
 	"球员续约-付款确认", 
 	"球员续约-支付确定", 
 	"球员续约-已续约",
+	"教练续约定额",
+	"教练续约确定",
 	"next",
+	"comfirm",
 }
 
 

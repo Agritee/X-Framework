@@ -20,4 +20,7 @@ function main()
 	xmod.exit()
 end
 sleep(1000)
+
 main()
+
+page.tapWidget("联赛教练模式", "恭喜晋级")
