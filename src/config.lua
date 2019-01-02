@@ -3,7 +3,7 @@
 -- Date: 2018-12-24
 -- Descrip: 参数配置表，注册在_G
 
-CFG = {}	--配置表
+CFG = {}	--脚本配置表
 
 -----------------调试参数-----------------
 CFG.LOG = true				--是否允许输出LOG信息
@@ -49,3 +49,10 @@ CFG.NAVIGATION_DELAY = 200		--/ms
 
 CFG.WAIT_CHECK_SKIP = 5			--/s
 CFG.WAIT_CHECK_NAVIGATION = 1 	--/s
+
+-----------------touch参数-----------------
+CFG.TOUCH_MOVE_STEP = 50	--touchMoveTo的移动步长
+
+
+USER = {}	--用户配置表
+USER.RESTORED_ENERGY = true

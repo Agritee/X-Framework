@@ -66,6 +66,12 @@ function M.isInTaskPage()
 	return false
 end
 
+--回溯流程片tag，用于M.run中控制回溯流程片
+local backProcessTag = nil
+function M.setBackProcess(backTag)
+	backProcessTag = backTag
+end
+
 --执行任务，param:任务名称，任务重复次数
 function M.run(taskName, repeatTimes)
 	local reTimes = repeatTimes or CFG.DEFAULT_REPEAT_TIMES
@@ -75,8 +81,7 @@ function M.run(taskName, repeatTimes)
 		catchError(ERR_PARAM, "have no task: "..taskName)
 	end
 	
-	local taskProcesses = M.getTaskProcesses(taskName)	--检查并获取任务流程是否存在
-	if taskProcesses == nil then
+	if M.getTaskProcesses(taskName) == nil then		--检查任务流程是否存在
 		catchError(ERR_PARAM, "task:"..taskName.." have no processes!")
 	end
 	--[[
@@ -100,6 +105,8 @@ function M.run(taskName, repeatTimes)
 		
 		for i = 1, reTimes, 1 do
 			Log("-----------------------START RUN A ROUND OF TASK: "..taskName.."-----------------------")
+			local taskProcesses = M.getTaskProcesses(taskName)	--重新获取流程，如果发生了回溯流程片改变了taskProcesses，在此处恢复
+			
 			for k, v in pairs(taskProcesses) do
 				if i == 1 then	--首次运行断点流程(断点未发生的情况下)均不跳过
 					if v.justBreakingRun == true then
@@ -149,7 +156,7 @@ function M.run(taskName, repeatTimes)
 					if currentPage == v.tag then
 						--actionFunc中，涉及到界面变化时(actionFunc和next)会放开screen.keep(false)进行界面判定，但是因为完成actionFunc和next后，
 						--会重新返回screen.keep(true)处
-						screen.keep(false)		--暂时提出在此
+						screen.keep(false)		--执行actionFunc可能涉及到界面变化
 						
 						Log("------start execute process: "..v.tag)
 						if v.actionFunc == nil then
@@ -191,6 +198,8 @@ function M.run(taskName, repeatTimes)
 					end
 					
 					--检测是否需要跳过当前流程片
+					--如果当前检测到的界面page_current为当前流程片界面page_k之后的某个流程片的界面page_k+n，那么设
+					--置page_k至page_k+n之间所有的流程片的sikpStaut属性为true
 					if currentPage ~= nil and os.time() - startTime > waitCheckSkipTime then	--跳过
 						local isProcessPage = false
 						local pageIndex = 0
@@ -208,10 +217,38 @@ function M.run(taskName, repeatTimes)
 						end
 					end
 					
+					--是否需要处理全局导航事件
 					if currentPage == nil and os.time() - startTime >= CFG.WAIT_CHECK_NAVIGATION then
+						screen.keep(false)		--执行execNavigation.actionFunc可能涉及到界面变化
 						if page.execNavigation() then
+							sleep(200)
 							--Log("executed a navigation")
 						end
+					end
+					
+					--检测是否需要回溯流程片，当运行到流程片k的时候，如需返回至K或k之前的某个流程片
+					--实现方法为：在k至k+1之间，插入需要回溯的流程片，例：processes = {p1, p2, p3, p4}，假如当运行完p3时，我们需要
+					--返回至p1，那么当运行到p3后，插入p1-p3的流程，即为processes = {p1, p2, p3, p1, p2, p3, p4}
+					--因在execNavigation中可能触发回溯，故而放在execNavigation之后
+					if backProcessTag then
+						Log("Exsit backProcess")
+						for _k, _v in pairs(taskProcesses) do
+							if _v.tag == backProcessTag and _k <= k then	--在当前(下一个)流程片之前存在backProcess流程片，满足回溯条件
+								local tmpProcesses = taskProcesses
+								local insertIndex = k + 1
+								for __k, __v in pairs(taskProcesses) do
+									if __k >= _k and __k <= k then
+										table.insert(tmpProcesses, insertIndex, __v)	--将需要回溯的流程片插入tmpProcesses
+										insertIndex = insertIndex + 1
+										--prt(tmpProcesses)
+									end
+								end
+								taskProcesses = tmpProcesses
+								Log("---------insert backProcess---------")
+								prt(taskProcesses)
+							end
+						end
+						backProcessTag = nil		--清除状态
 					end
 					
 					sleep(checkInterval)
@@ -224,5 +261,6 @@ function M.run(taskName, repeatTimes)
 		
 		M.setExecStatus("end")
 	end
+	
 	
 	

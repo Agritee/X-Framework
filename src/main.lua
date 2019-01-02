@@ -23,4 +23,7 @@ sleep(1000)
 
 main()
 
-page.tapWidget("联赛教练模式", "恭喜晋级")
+--page.tapWidget("联赛教练模式", "恭喜晋级")
+
+page.tapNavigation("能量不足")
+

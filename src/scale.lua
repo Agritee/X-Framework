@@ -13,56 +13,29 @@ package.loaded[modName] = M
 function M.toPointsString(pointsTable)
 	local strr = ""
 	for k, v in pairs(pointsTable) do
-		strr = string.format("%s%s|%s|%s", strr, tostring(v[1]), tostring(v[2]), tostring(v[3]))
+		strr = string.format("%s%s|%s|0x%06x", strr, tostring(v[1]), tostring(v[2]), tostring(v[3]))
 		if v[4] ~= nil then
 			strr = string.format("%s-0x%06x", strr, v[4])
 		end
 		strr = string.format("%s,", strr)
 	end
 	strr = string.sub(strr,1,-2)
+	
 	return strr
 end
 
 --将"x1|y1|c1-dif,x2|y2|c2-dif"转换成{{x1, y1, c1, dif},{x2, y2, c2, dif},}格式
 function M.toPointsTable(pointString)
-	local pointsTable = {}
-	local lastI = 0
-	local lastJ = 0
-	local i = 0
-	local j = 0
-	local pointStr = ""
-	local tmpStr = pointString..","
-	
-	while true do
-		local tmpTable = {}
-		i = string.find(tmpStr, ",", i + 1)
-		if i == nil then
-			break
-		end
-		pointStr = string.sub(tmpStr, lastI + 1, i - 1)
-		j = string.find(pointStr, "|")
-		
-		table.insert(tmpTable, tonumber(string.sub(pointStr, 1, j-1)))
-		
-		lastJ = j
-		j = string.find(pointStr, "|", j + 1)
-		
-		table.insert(tmpTable, tonumber(string.sub(pointStr, lastJ + 1, j-1)))
-		
-		local colorStr = string.sub(pointStr, j + 1, -1)
-		local _i, _j = string.find(colorStr, "-")
-		if _i ~= nil then
-			table.insert(tmpTable, string.sub(colorStr, 1, _i - 1))
-			table.insert(tmpTable, string.sub(colorStr, _i + 1, -1))
+	local posTb = {}
+	for x, y, c, dif in string.gmatch(pointString, "(%d+)|(%d+)|(%w+)%-?(%w*)") do
+		if string.len(dif) > 0 then
+			posTb[#posTb + 1] = {x, y, c, dif}
 		else
-			table.insert(tmpTable, colorStr)
+			posTb[#posTb + 1] = {x, y, c}
 		end
-		
-		table.insert(pointsTable, tmpTable)
-		lastI = i
 	end
 	
-	return pointsTable
+	return posTb
 end
 
 --线性二次插值取色，传入的为缩放后的原始坐标
@@ -70,10 +43,10 @@ end
 function bilinearPot(point)
 	local x, y = math.floor(point.x), math.floor(point.y)
 	local u, v = point.x - x, point.y - y
-	local r0, g0, b0=screen.getRGB(x, y)
-	local r1, g1, b1=screen.getRGB(x + 1, y)
-	local r2, g2, b2=screen.getRGB(x, y + 1)
-	local r3, g3, b3=screen.getRGB(x + 1, y + 1)
+	local r0, g0, b0 = screen.getRGB(x, y)
+	local r1, g1, b1 = screen.getRGB(x + 1, y)
+	local r2, g2, b2 = screen.getRGB(x, y + 1)
+	local r3, g3, b3 = screen.getRGB(x + 1, y + 1)
 	local r, g, b = 0, 0, 0
 	local tmpColor0={
 		r = (r0 * (1 - u) + r1 * u),
@@ -230,7 +203,7 @@ function M.scalePos(pos)
 		local x0, y0, c0 = v[1], v[2], v[3]
 		local x1, y1 = x0 * ratio, y0 * ratio
 		x1, y1 = math.floor(x1 + 0.5), math.floor(y1 + 0.5)
-
+		
 		pot[1] = x1
 		pot[2] = y1
 		pot[3] = c0
@@ -259,7 +232,7 @@ function M.getRatioPoint(x, y)
 	
 	local x1 = minX + (x - devMinX)/(devMaxX - devMinX) * w
 	local y1 = minY + (y - devMinY)/(devMaxY - devMinY) * h
-
+	
 	x1 = math.floor(x1 + 0.5)
 	y1 = math.floor(y1 + 0.5)
 	
@@ -275,7 +248,7 @@ function M.getRatioPoint(x, y)
 	if y1 > maxY then
 		y1 = maxY
 	end
-
+	
 	return  x1, y1
 end
 

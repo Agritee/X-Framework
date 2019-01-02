@@ -433,6 +433,31 @@ local _navigationList = {
 		dstPos = "",
 		dstArea = Rect.ZERO
 	},
+	{
+		tag = "能量不足",
+		enable = true,
+		anchor = "A",
+		srcPos = "712|530|0xcaddf0,330|494|0xcaddf0,1000|541|0xcaddf0,353|256|0xdedede,628|438|0xdedede,630|459|0xf5f5f5,1176|145|0x972249,1005|191|0xf5f5f5",
+		dstPos = "",
+		dstArea = Rect.ZERO,
+		actionFunc = waitEnergy
+	},
+	{
+		tag = "联赛奖励",		--在显示积分变化的界面弹出的作为导航控件处理
+		enable = true,
+		anchor = "A",
+		srcPos = "715|601|0xcaddf0,378|567|0xcaddf0,946|616|0xcaddf0,621|648|0xf5f5f5,621|527|0xf5f5f5,326|588|0xf5f5f5,1003|592|0xf5f5f5,251|366|0x2c813b",
+		dstPos = "",
+		dstArea = Rect.ZERO
+	},
+	{
+		tag = "恭喜晋级",
+		enable = false,
+		anchor = "A",
+		srcPos = "721|596|0xcaddf0,382|569|0xcaddf0,947|604|0xcaddf0,585|705|0x767677,736|708|0x767677,92|169|0x004998,109|539|0x004998,650|649|0xf5f5f5",
+		dstPos = "",
+		dstArea = Rect.ZERO
+	},	
 }
 
 --全局导航优先级，一般next在最后
@@ -446,8 +471,11 @@ local _navigationPriorityList = {
 	"球员续约-已续约",
 	"教练续约定额",
 	"教练续约确定",
+	"能量不足",
+	"联赛奖励",		--在显示积分变化的界面弹出的作为导航控件处理/48级联赛
+	"恭喜晋级",		--在显示积分变化的界面弹出的作为导航控件处理/48级联赛
 	"next",
-	"comfirm",
+	--"comfirm",
 }
 
 

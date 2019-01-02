@@ -162,6 +162,28 @@ function M.tapWidget(pageTag, widgetTag)
 	catchError(ERR_PARAM, "cant find pageTag or widgetTag")
 end
 
+--点击某一个导航控件
+function M.tapNavigation(navTag)
+	for _, v in pairs(M.navigationList) do
+		if v.tag == navTag then
+			local startTime = os.time()
+			while true do
+				local pot = screen.findColor(v.dstArea, v.dstPos, CFG.DEFAULT_FUZZY)
+				if pot ~= Point.INVALID then
+					Log("tapNavigation: "..navTag)
+					tap(pot.x, pot.y)	--点击控件的第一个点
+					return true
+				end
+				
+				if os.time() - startTime > CFG.DEFAULT_TIMEOUT then
+					catchError(ERR_TIMEOUT, "cant catch tapWidget: ["..navTag.."]")
+				end
+				sleep(100)
+			end			
+		end
+	end
+end
+
 --检测界面是否有导航按钮，有就执行导航动作
 function M.execNavigation()
 	for _, v in pairs(M.navigationPriorityList) do
@@ -171,10 +193,10 @@ function M.execNavigation()
 				local pot = screen.findColor(_v.dstArea, _v.dstPos, CFG.DEFAULT_FUZZY)
 				if pot ~= Point.INVALID then
 					Log("Exsit Navigation [".._v.tag.."], execute it!")
-					if _v.actionFunc ~= nil then
+					if _v.actionFunc ~= nil then	--执行导航actionFunc
 						_v.actionFunc()
 					else
-						tap(pot.x, pot.y)
+						tap(pot.x, pot.y)	--点击导航按钮
 					end
 					
 					sleep(CFG.NAVIGATION_DELAY)

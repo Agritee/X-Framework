@@ -173,6 +173,8 @@ function tap(x, y, delay)
 	touch.down(1, x, y)
 	sleep(d)
 	touch.up(1, x, y)
+	
+	Log("Tap at------ x:"..x.." y:"..y)
 end
 
 --点击，坐标按传入坐标在有效区所占位置比例缩放
@@ -183,7 +185,42 @@ function ratioTap(x, y, delay)
 	end
 	local x1, y1 = scale.getRatioPoint(x, y)
 	
-	touch.down(1, x1, y1)
-	sleep(d)
-	touch.up(1, x1, y1)
+	tap(x1, y1, delay)
+end
+
+--滑动，从(x1, y1)到(x2, y2)
+function slide(x1, y1, x2, y2)
+	if x1 ~= x2 then	--非竖直滑动
+		--将x,y移动距离按移动步长CFG.TOUCH_MOVE_STEP分解为步数
+		local stepX = x2 > x1 and CFG.TOUCH_MOVE_STEP or -CFG.TOUCH_MOVE_STEP
+		local stepY = (y2 - y1) / math.abs((x2 - x1) / stepX)
+		--Log("x1="..x1.." y1="..y1.." x2="..x2.." y2="..y2)
+		
+		touch.down(1, x1, y1)
+		sleep(200)
+		for i = 1, math.abs((x2 - x1) / stepX), 1 do
+			touch.move(1, x1 + i * stepX, y1 + i * stepY)
+			sleep(50)
+		end
+		touch.move(1, x2, y2)
+		sleep(200)
+		touch.up(1, x2, y2)
+	else	--竖直滑动，0不能作为除数所以单独处理
+		touch.down(1, x1, y1)
+		sleep(20)
+		local stepY = y2 > y1 and CFG.TOUCH_MOVE_STEP or -CFG.TOUCH_MOVE_STEP
+		for i = 1, math.abs((y2 - y1) / stepY), 1 do
+			touch.move(1, x2, y1 + i * stepY)
+			sleep(50)
+		end
+		touch.move(1, x2, y2)
+		sleep(200)
+		touch.up(1, x2, y2)
+	end	
+end
+
+function ratioSlide(x1, y1, x2, y2)
+	srcX, srcY = scale.getRatioPoint(x1, y1)
+	dstX, dstY = scale.getRatioPoint(x2, y2)
+	slide(srcX, srcY, dstX, dstY)
 end

@@ -284,19 +284,24 @@ function selectExpiredPlayer()
 		if exsitFlag == false then
 			table.insert(expiredPlayerFirstHalf, v)
 			tap(v.x, v.y)
-			sleep(20)
+			sleep(200)				
 		end
 	end
 	prt(expiredPlayerFirstHalf)
 	
 	if #expiredPlayerFirstHalf == 3 or #expiredPlayerFirstHalf == 6 then
-		touchMoveTo(20, 500, 20, 110) --滑动替补至下半部分
+		ratioSlide(20, 620, 20, 120) --滑动替补至下半部分
+		sleep(200)
 		local posTb = screen.findColors(
 			scale.getAnchorArea("A"),
 			"245|190|0xffffff,230|194|0xff3b2f,245|180|0xff3b2f,261|197|0xff3b2f,245|214|0xff3b2f",
 			CFG.DEFAULT_FUZZY,
 			screen.PRIORITY_DEFAULT,
 			999)
+		if #posTb >= 999 then
+			catchError(ERR_PARAM, "more than 999 point, cant find all point 2")
+		end
+		
 		for _, v in pairs(posTb) do
 			local exsitFlag = false
 			for _, _v in pairs(expiredPlayerLatterHalf) do
@@ -309,11 +314,34 @@ function selectExpiredPlayer()
 			if exsitFlag == false then
 				table.insert(expiredPlayerLatterHalf, v)
 				tap(v.x, v.y)
-				sleep(20)
+				sleep(200)	
 			end
 		end
 		prt(expiredPlayerLatterHalf)
 	end
+	Log("selected all players")
 end
 
+--处理能量不足
+function waitEnergy()
+	if USER.RESTORED_ENERGY then
+		dialog("能量不足100分钟内后继续，请勿操作", 5)
+		local startTime = os.time()
+		while true do
+			--if os.time() - startTime > 110 * 60 then
+			if os.time() - startTime > 5 then
+				dialog("已续足能量，即将继续任务", 5)
+				startTime = os.time()	--重置startTime
+				break
+			end
+			--sleep(60 * 1000)	--每分钟检测一次
+		end
+	else
+		Log("能量不足，请退出")
+		dialog("能量不足，请退出")
+		xmod.exit()
+	end
+	page.tapNavigation("能量不足")
+	exec.setBackProcess("联赛教练模式")
+end
 
