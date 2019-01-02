@@ -85,4 +85,4 @@ insertWaitFunc("终场统计", wfn)
 
 
 --将任务添加至exec.taskList
-exec.insertTask(_task)
+exec.loadTask(_task)

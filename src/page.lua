@@ -20,7 +20,7 @@ M.navigationPriorityList = {}
 --匹配单个控件，不受widget.enable值影响
 function M.matchWidget(widget)
 	--prt(v)
-	local pos = screen.findColor(widget.dstArea, widget.dstPos, CFG.DEFAULT_FUZZY)
+	local pos = screen.findColor(widget.dstArea, widget.dstPos, widget.fuzzy or CFG.DEFAULT_FUZZY)
 	if pos ~= Point.INVALID then
 		Log("match widget: ["..widget.tag.."] success!")
 		return true
@@ -32,14 +32,12 @@ end
 
 --匹配控件列表
 local function matchWidgets(widgetList)
-	local fuz = CFG.DEFAULT_FUZZY
 	local matchFlag = false
-	
 	for k, v in pairs(widgetList) do
 		matchFlag = true
 		if v.enable then
 			--prt(v)
-			local pos = screen.findColor(v.dstArea, v.dstPos, fuz)
+			local pos = screen.findColor(v.dstArea, v.dstPos, v.fuzzy or CFG.DEFAULT_FUZZY)
 			if pos == Point.INVALID then
 				--Log("cant match widget: "..v.tag)
 				return false
@@ -194,7 +192,9 @@ function M.execNavigation()
 				if pot ~= Point.INVALID then
 					Log("Exsit Navigation [".._v.tag.."], execute it!")
 					if _v.actionFunc ~= nil then	--执行导航actionFunc
+						screen.keep(false)		--执行execNavigation.actionFunc可能涉及到界面变化
 						_v.actionFunc()
+						screen.keep(true)
 					else
 						tap(pot.x, pot.y)	--点击导航按钮
 					end
@@ -304,7 +304,7 @@ local function initNavigations()
 end
 
 --将pageList、navigationList和navigationPriorityList数据插入page对应表中并初始化（缩放坐标）
-function M.initPage(pList, nList, npList)
+function M.loadPage(pList, nList, npList)
 	insertPage(pList)
 	insertNavigation(nList)
 	insertNavigationPriority(npList)

@@ -19,11 +19,12 @@ function main()
 	exec.run("联赛", 9)
 	xmod.exit()
 end
-sleep(1000)
+--sleep(1000)
 
 main()
 
 --page.tapWidget("联赛教练模式", "恭喜晋级")
 
-page.tapNavigation("能量不足")
+--page.tapNavigation("能量不足")
+prt(page.getCurrentPage())
 

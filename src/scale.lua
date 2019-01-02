@@ -19,7 +19,7 @@ function M.toPointsString(pointsTable)
 		end
 		strr = string.format("%s,", strr)
 	end
-	strr = string.sub(strr,1,-2)
+	strr = string.sub(strr, 1, -2)
 	
 	return strr
 end
@@ -27,7 +27,7 @@ end
 --将"x1|y1|c1-dif,x2|y2|c2-dif"转换成{{x1, y1, c1, dif},{x2, y2, c2, dif},}格式
 function M.toPointsTable(pointString)
 	local posTb = {}
-	for x, y, c, dif in string.gmatch(pointString, "(%d+)|(%d+)|(%w+)%-?(%w*)") do
+	for x, y, c, dif in string.gmatch(pointString, "(-?%d+)|(-?%d+)|(%w+)%-?(%w*)") do
 		if string.len(dif) > 0 then
 			posTb[#posTb + 1] = {x, y, c, dif}
 		else
@@ -71,7 +71,10 @@ end
 --T为上半top，B为下半bottom，L为left左半，R为right右半，M为中间middle，根据组合方式返回1/4-1/2区域的Rect
 function M.getAnchorArea(anchorTag)
 	local x0, y0 = CFG.EFFECTIVE_AREA[1], CFG.EFFECTIVE_AREA[2]
-	local w, h = CFG.EFFECTIVE_AREA[3] - CFG.EFFECTIVE_AREA[1], CFG.EFFECTIVE_AREA[4] - CFG.EFFECTIVE_AREA[2]
+	local w, h = CFG.EFFECTIVE_AREA[3] - CFG.EFFECTIVE_AREA[1], CFG.EFFECTIVE_AREA[4] - CFG.EFFECTIVE_AREA[2]	--有效区域
+	local dx0, dy0 = 0, 0
+	local dw, dh = CFG.DST_RESOLUTION.width, CFG.DST_RESOLUTION.height	--绝对区域，不考虑黑边
+	
 	--prt(CFG.EFFECTIVE_AREA)
 	local rect = Rect(0,0,0,0)
 	if anchorTag == "T" then	--上1/2
@@ -154,6 +157,10 @@ function M.getAnchorArea(anchorTag)
 		rect.x, rect.y = x0, y0
 		rect.width = w
 		rect.height = h
+	elseif anchorTag == "dLT" then
+		rect.x, rect.y = dx0, dy0
+		rect.width = math.floor(dw/2)
+		rect.height = math.floor(dh/2)
 	else	--其他anchorTag按整个区域取
 		rect.x, rect.y = x0, y0
 		rect.width = w

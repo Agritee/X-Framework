@@ -148,7 +148,7 @@ local _pageList = {
 			},
 		},
 	},
-	{
+	--[[{
 		tag = "匹配天梯对手",
 		widgetList = {
 			{
@@ -160,7 +160,7 @@ local _pageList = {
 				dstArea = Rect.ZERO
 			},
 		},
-	},
+	},]]
 	{
 		tag = "阵容展示",
 		widgetList = {
@@ -196,8 +196,9 @@ local _pageList = {
 			{
 				tag = "比赛信息",
 				enable = true,
-				anchor = "LT",
+				anchor = "dLT",
 				srcPos = "39|64|0x1ce0dc-0x171f23,186|68|0x1ce0dc-0x171f23,223|83|0xf1fcf9-0x0c0306,237|84|0xf1fcf9-0x0c0306,275|65|0x1bd194-0x172e2a,420|67|0x1bd194-0x172e2a",
+				--srcPos = "45|64|0x1CC8C8-0x173737,186|68|0x1CC8C8-0x173737,223|83|0xD9E5E0-0x241A1F,237|84|0xD9E5E0-0x241A1F,275|65|0x1BC189-0x173E35,420|67|0x1BC189-0x173E35",
 				dstPos = "",
 				dstArea = Rect.ZERO
 			},
@@ -218,7 +219,7 @@ local _pageList = {
 			},
 		},
 	},
-	{
+	--[[{
 		tag = "终场比分",
 		widgetList = {
 			{
@@ -243,7 +244,7 @@ local _pageList = {
 				dstArea = Rect.ZERO
 			},
 		},
-	},
+	},]]
 	
 	--联赛
 	{
@@ -321,7 +322,7 @@ local _pageList = {
 			},
 		},
 	},
-	{
+	--[[{
 		tag = "匹配联赛对手",
 		widgetList = {
 			{
@@ -333,7 +334,7 @@ local _pageList = {
 				dstArea = Rect.ZERO
 			},
 		},
-	},
+	},]]
 }
 
 --公共导航控件，如下一步、返回、确认、取消、通知
@@ -342,13 +343,14 @@ local _navigationList = {
 		tag = "next",
 		enable = true,
 		anchor = "CRB",
-		srcPos = "1130|732|0x1270e3-0x13091a,1127|702|0x1270e3-0x13091a,1102|703|0x1270e3-0x13091a,1088|733|0x1270e3-0x13091a",
+		--srcPos = "1130|732|0x1270e3-0x13091a,1127|702|0x1270e3-0x13091a,1102|703|0x1270e3-0x13091a,1088|733|0x1270e3-0x13091a",
+		srcPos = "1130|732|0x156DDF-0x15061E,1127|702|0x156DDF-0x15061E,1102|703|0x156DDF-0x15061E,1088|733|0x156DDF-0x15061E",
 		dstPos = "",
 		dstArea = Rect(
 			math.floor(CFG.EFFECTIVE_AREA[1] + (CFG.EFFECTIVE_AREA[3] - CFG.EFFECTIVE_AREA[1]) * 3 / 4),
 			math.floor(CFG.EFFECTIVE_AREA[2] + (CFG.EFFECTIVE_AREA[4] - CFG.EFFECTIVE_AREA[2]) * 7 / 8),
-			math.floor(CFG.DEV_RESOLUTION.width - (CFG.EFFECTIVE_AREA[1] + (CFG.EFFECTIVE_AREA[3] - CFG.EFFECTIVE_AREA[1]) * 3 / 4)),
-			math.floor(CFG.DEV_RESOLUTION.height - (CFG.EFFECTIVE_AREA[2] + (CFG.EFFECTIVE_AREA[4] - CFG.EFFECTIVE_AREA[2]) * 7 / 8))
+			math.floor(CFG.DST_RESOLUTION.width - (CFG.EFFECTIVE_AREA[1] + (CFG.EFFECTIVE_AREA[3] - CFG.EFFECTIVE_AREA[1]) * 3 / 4)),
+			math.floor(CFG.DST_RESOLUTION.height - (CFG.EFFECTIVE_AREA[2] + (CFG.EFFECTIVE_AREA[4] - CFG.EFFECTIVE_AREA[2]) * 7 / 8))
 		)
 	},
 	{
@@ -480,5 +482,5 @@ local _navigationPriorityList = {
 
 
 --将项目的pageList、navigationList和_navigationPriorityList插入page总表
-page.initPage(_pageList, _navigationList, _navigationPriorityList)
+page.loadPage(_pageList, _navigationList, _navigationPriorityList)
 

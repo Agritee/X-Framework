@@ -334,14 +334,14 @@ function waitEnergy()
 				startTime = os.time()	--重置startTime
 				break
 			end
-			--sleep(60 * 1000)	--每分钟检测一次
+			sleep(60 * 1000)	--每分钟检测一次
 		end
 	else
 		Log("能量不足，请退出")
 		dialog("能量不足，请退出")
 		xmod.exit()
 	end
-	page.tapNavigation("能量不足")
-	exec.setBackProcess("联赛教练模式")
+	page.tapNavigation("能量不足")		--点击取消
+	exec.setBackProcess("联赛教练模式")	--重新执行当前流程片
 end
 

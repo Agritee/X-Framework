@@ -9,13 +9,10 @@ local _task = {
 		{tag = "其他", justFirstRun = true},
 		{tag = "比赛", nextTag = "联赛", justFirstRun = true},
 		{tag = "联赛", nextTag = "自动比赛", justFirstRun = true},
-		{tag = "联赛教练模式", nextTag = "next"},
-		{tag = "匹配联赛对手", nextTag = "next"},
+		{tag = "联赛教练模式", nextTag = "next", timeout = 60},
 		{tag = "阵容展示", nextTag = "next"},
-		{tag = "比赛中"},
+		{tag = "比赛中", timeout = 60},
 		{tag = "终场统计", nextTag = "next", timeout = 900, checkInterval = 1000},
-		{tag = "终场比分", nextTag = "next"},
-		
 	},
 }
 
@@ -105,4 +102,4 @@ insertWaitFunc("终场统计", wfn)
 
 
 --将任务添加至taskList
-exec.insertTask(_task)
+exec.loadTask(_task)

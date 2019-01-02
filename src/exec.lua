@@ -13,7 +13,7 @@ package.loaded[modName] = M
 M.taskList = {}
 
 --将具体任务中的task表添加到taskList总表
-function M.insertTask(task)
+function M.loadTask(task)
 	table.insert(M.taskList, task)
 	--prt(M.taskList)
 end
@@ -219,7 +219,6 @@ function M.run(taskName, repeatTimes)
 					
 					--是否需要处理全局导航事件
 					if currentPage == nil and os.time() - startTime >= CFG.WAIT_CHECK_NAVIGATION then
-						screen.keep(false)		--执行execNavigation.actionFunc可能涉及到界面变化
 						if page.execNavigation() then
 							sleep(200)
 							--Log("executed a navigation")
