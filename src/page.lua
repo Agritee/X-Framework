@@ -22,10 +22,10 @@ function M.matchWidget(widget)
 	--prt(v)
 	local pos = screen.findColor(widget.dstArea, widget.dstPos, widget.fuzzy or CFG.DEFAULT_FUZZY)
 	if pos ~= Point.INVALID then
-		Log("match widget: ["..widget.tag.."] success!")
+		--Log("match widget: ["..widget.tag.."] success!")
 		return true
 	else
-		Log("match widget: ["..widget.tag.."] fail!")
+		--Log("match widget: ["..widget.tag.."] fail!")
 		return false
 	end
 end
