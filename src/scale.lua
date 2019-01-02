@@ -11,31 +11,26 @@ package.loaded[modName] = M
 
 --将{{x1, y1, c1, dif},{x2, y2, c2, dif},}转换成"x1|y1|c1-dif,x2|y2|c2-dif"格式
 function M.toPointsString(pointsTable)
-	local strr = ""
-	for k, v in pairs(pointsTable) do
-		strr = string.format("%s%s|%s|0x%06x", strr, tostring(v[1]), tostring(v[2]), tostring(v[3]))
-		if v[4] ~= nil then
-			strr = string.format("%s-0x%06x", strr, v[4])
+	local str = ''
+	for k,v in pairs(pointsTable) do
+		str = string.format("%s%s|%s|%s",str,v[1],v[2],v[3])
+		if v[4] then
+		    str = string.format("%s-%s",str,v[4])
 		end
-		strr = string.format("%s,", strr)
+		str = string.format("%s%s",str,',')
 	end
-	strr = string.sub(strr,1,-2)
-	
-	return strr
+	str = str:sub(1,-2)
+	return str
 end
 
 --将"x1|y1|c1-dif,x2|y2|c2-dif"转换成{{x1, y1, c1, dif},{x2, y2, c2, dif},}格式
 function M.toPointsTable(pointString)
-	local posTb = {}
-	for x, y, c, dif in string.gmatch(pointString, "(%d+)|(%d+)|(%w+)%-?(%w*)") do
-		if string.len(dif) > 0 then
-			posTb[#posTb + 1] = {x, y, c, dif}
-		else
-			posTb[#posTb + 1] = {x, y, c}
-		end
+	local tab = {}
+	for x,y,c,dif in pointString:gmatch('(-?%d+)|(-?%d+)|(%w+)-?(%w*)') do
+		dif = dif ~= '' and dif or nil
+		tab[#tab+1] = {x,y,c,dif}
 	end
-	
-	return posTb
+	return tab
 end
 
 --线性二次插值取色，传入的为缩放后的原始坐标
@@ -70,97 +65,38 @@ end
 --根据锚点位置返回一个转换后的Area(Rect格式)
 --T为上半top，B为下半bottom，L为left左半，R为right右半，M为中间middle，根据组合方式返回1/4-1/2区域的Rect
 function M.getAnchorArea(anchorTag)
-	local x0, y0 = CFG.EFFECTIVE_AREA[1], CFG.EFFECTIVE_AREA[2]
-	local w, h = CFG.EFFECTIVE_AREA[3] - CFG.EFFECTIVE_AREA[1], CFG.EFFECTIVE_AREA[4] - CFG.EFFECTIVE_AREA[2]
+	local x0, y0 = CFG.EFFECTIVE_AREA[1], CFG.EFFECTIVE_AREA[2] --界面有效区左上
+	local w, h = CFG.EFFECTIVE_AREA[3] - CFG.EFFECTIVE_AREA[1], CFG.EFFECTIVE_AREA[4] - CFG.EFFECTIVE_AREA[2]  --有效区的w、h
 	--prt(CFG.EFFECTIVE_AREA)
-	local rect = Rect(0,0,0,0)
-	if anchorTag == "T" then	--上1/2
-		rect.x, rect.y = x0, y0
-		rect.width = w
-		rect.height = math.floor(h/2)
-	elseif anchorTag == "B" then	--下1/2
-		rect.x, rect.y = x0, y0 + math.floor(h/2)
-		rect.width = w
-		rect.height = math.floor(h/2)
-	elseif anchorTag == "L" then	--左1/2
-		rect.x, rect.y = x0, y0
-		rect.width = math.floor(w/2)
-		rect.height = h
-	elseif anchorTag == "R" then	--右1/2
-		rect.x, rect.y = x0 + math.floor(w/2), y0
-		rect.width = math.floor(w/2)
-		rect.height = h
-	elseif anchorTag == "TL" or anchorTag == "LT" then	--上1/2，左1/2
-		rect.x, rect.y = x0, y0
-		rect.width = math.floor(w/2)
-		rect.height = math.floor(h/2)
-	elseif anchorTag == "TM" then	--上中1/2
-		rect.x, rect.y = x0 + math.floor(w/4), y0
-		rect.width = math.floor(w/2)
-		rect.height = math.floor(h/2)
-	elseif anchorTag == "TR" or anchorTag == "RT" then	--上1/2，右1/2
-		rect.x, rect.y = x0 + math.floor(w/2), y0
-		rect.width = math.floor(w/2)
-		rect.height = math.floor(h/2)
-	elseif anchorTag == "BL" or anchorTag == "LB" then	--下1/2，左1/2
-		rect.x, rect.y = x0, y0 + math.floor(h/2)
-		rect.width = math.floor(w/2)
-		rect.height = math.floor(h/2)
-	elseif anchorTag == "BM" then	--下中1/2
-		rect.x, rect.y = x0 + math.floor(w/4), y0 + math.floor(h/2)
-		rect.width = math.floor(w/2)
-		rect.height = math.floor(h/2)
-	elseif anchorTag == "BR" or anchorTag == "RB" then	--下1/2，右1/2
-		rect.x, rect.y = x0 + math.floor(w/2), y0 + math.floor(h/2)
-		rect.width = math.floor(w/2)
-		rect.height = math.floor(h/2)
-	elseif anchorTag == "LM" then	--左中1/2
-		rect.x, rect.y = x0, y0 + math.floor(h/4)
-		rect.width = math.floor(w/2)
-		rect.height = math.floor(h/2)
-	elseif anchorTag == "RM" then	--右中1/2
-		rect.x, rect.y = x0 + math.floor(w/2), y0 + math.floor(h/4)
-		rect.width = math.floor(w/2)
-		rect.height = math.floor(h/2)
-	elseif anchorTag == "M" then	--正中1/2
-		rect.x, rect.y = x0 + math.floor(w/4), y0 + math.floor(h/4)
-		rect.width = math.floor(w/2)
-		rect.height = math.floor(h/2)
-	elseif anchorTag == "MLR" then	--水平中间1/2
-		rect.x, rect.y = x0, y0 + math.floor(h/4)
-		rect.width = w
-		rect.height = math.floor(h/2)
-	elseif anchorTag == "MTB" then	--垂直中间1/2
-		rect.x, rect.y = x0 + math.floor(w/4), y0
-		rect.width = math.floor(w/2)
-		rect.height = h
-	elseif anchorTag == "CLT" then	--左上角小区域
-		rect.x, rect.y = x0, y0
-		rect.width = math.floor(w/4)
-		rect.height = math.floor(h/8)
-	elseif anchorTag == "CLB" then	--左下角小区域
-		rect.x, rect.y = x0, y0 + math.floor(h * 7/8)
-		rect.width = math.floor(w/4)
-		rect.height = math.floor(h/8)
-	elseif anchorTag == "CRT" then	--右上角小区域
-		rect.x, rect.y = x0 + math.floor(w * 7/8), y0
-		rect.width = math.floor(w/4)
-		rect.height = math.floor(h/8)
-	elseif anchorTag == "CRB" then	--右下角小区域
-		rect.x, rect.y = x0 + math.floor(w * 7/8), y0 + math.floor(h * 7/8)
-		rect.width = math.floor(w/4)
-		rect.height = math.floor(h/8)
-	elseif anchorTag == "A" then	--整个区域
-		rect.x, rect.y = x0, y0
-		rect.width = w
-		rect.height = h
-	else	--其他anchorTag按整个区域取
-		rect.x, rect.y = x0, y0
-		rect.width = w
-		rect.height = h
+	local Tag = {
+		["T"  ] = Rect(x0,y0,w,h/2),              --上1/2
+		["B"  ] = Rect(x0,y0+h/2,w,h/2),          --下1/2
+		["L"  ] = Rect(x0,y0,w/2,h),              --左1/2
+		["R"  ] = Rect(x0+w/2,y0,w/2,h),          --右1/2
+		["TL" ] = Rect(x0,y0,w/2,h/2),            --上1/2，左1/2
+		["LT" ] = Rect(x0,y0,w/2,h/2),
+		["TM" ] = Rect(x0+w/4,y0,w/2,h/2),        --上中1/2
+		["TR" ] = Rect(x0+w/2,y0,w/2,h/2),        --上1/2，右1/2
+		["RT" ] = Rect(x0+w/2,y0,w/2,h/2),
+		["LB" ] = Rect(x0,y0+h/2,w/2,h/2),        --下1/2，左1/2
+		["BM" ] = Rect(x0+w/4,y0+h/2,w/2,h/2),    --下中1/2
+		["BR" ] = Rect(x0+w/2,y0+h/2,w/2,h/2),    --下1/2，右1/2
+		["RB" ] = Rect(x0+w/2,y0+h/2,w/2,h/2),
+		["LM" ] = Rect(x0,y0+h/4,w/2,h/2),        --左中1/2
+		["RM" ] = Rect(x0+w/2,y0+h/4,w/2,h/2),    --右中1/2
+		["M"  ] = Rect(x0+w/4,y0+h/4,w/2,h/2),    --正中1/2
+		["MLR"] = Rect(x0,y0+h/4,w,h/2),          --水平中间1/2
+		["MTB"] = Rect(x0+w/4,y0,w/2,h),          --垂直中间1/2
+		["CLT"] = Rect(x0,y0,w/4,h/8),            --左上角小区域
+		["CLB"] = Rect(x0,y0+h*7/8,w/4,h/8),      --左下角小区域
+		["CRT"] = Rect(x0+w*7/8,y0,w/4,h/8),      --右上角小区域
+		["CRB"] = Rect(x0+w*7/8,y0+h*7/8,w/4,h/8),--右下角小区域
+		["A"  ] = Rect(x0,y0,w,h)--整个区域
+	}
+	if not Tag[anchorTag] then
+	    anchorTag = "A"
 	end
-	
-	return rect
+	return Tag[anchorTag]
 end
 
 --缩放点（x, y）
