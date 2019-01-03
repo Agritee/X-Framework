@@ -6,7 +6,7 @@
 --在主界面4个子界面切换
 function switchMainPage(pageName)
 	Log("swich to "..pageName)
-	
+	sleep(300)
 	if pageName == "比赛" then
 		ratioTap(179, 115)
 	elseif pageName == "俱乐部" then
@@ -326,6 +326,8 @@ end
 function waitEnergy()
 	if USER.RESTORED_ENERGY then
 		dialog("能量不足100分钟内后继续，请勿操作", 5)
+		page.tapNavigation("能量不足")		--点击取消
+		
 		local startTime = os.time()
 		while true do
 			--if os.time() - startTime > 110 * 60 then
@@ -341,7 +343,8 @@ function waitEnergy()
 		dialog("能量不足，请退出")
 		xmod.exit()
 	end
-	page.tapNavigation("能量不足")		--点击取消
-	exec.setBackProcess("联赛教练模式")	--重新执行当前流程片
+	
+	--联赛教练模式执行点击后，出现等待能量的情况，需重新执行联赛教练模式流程片
+	exec.execPrevProcess()
 end
 

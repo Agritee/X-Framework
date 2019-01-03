@@ -6,9 +6,10 @@
 local _task = {
 	tag = "联赛",
 	processes = {
-		{tag = "其他", justFirstRun = true},
-		{tag = "比赛", nextTag = "联赛", justFirstRun = true},
-		{tag = "联赛", nextTag = "自动比赛", justFirstRun = true},
+		{tag = "其他", mode = "firstRun"},
+		{tag = "比赛", nextTag = "联赛", mode = "firstRun"},
+		{tag = "联赛", nextTag = "自动比赛", mode = "firstRun"},
+		
 		{tag = "联赛教练模式", nextTag = "next", timeout = 60},
 		{tag = "阵容展示", nextTag = "next"},
 		{tag = "比赛中", timeout = 60},
@@ -83,9 +84,9 @@ local wfn = function(processIndex)
 	local timeAfterLastPlayingPage = os.time() - lastPlayingPageTime	--距离最后一个playing界面的时间间隔
 	
 	--跳过进球回放什么的,--游戏崩溃的情况下不点击
-	if timeAfterLastPlayingPage >= 3 and timeAfterLastPlayingPage <= 10 and isAppInFront() then
+	if timeAfterLastPlayingPage >= 3 and timeAfterLastPlayingPage <= 15 and isAppInFront() then
 		Log("skip replay")
-		tap(10, 60)
+		ratioTap(10, 60)
 		sleep(500)
 	end
 	

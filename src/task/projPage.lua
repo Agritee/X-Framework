@@ -335,6 +335,19 @@ local _pageList = {
 			},
 		},
 	},]]
+	{
+		tag = "初始化界面",
+		widgetList = {
+			{
+				tag = "综合特征",
+				enable = true,
+				anchor = "A",
+				srcPos = "134|302|0xdc0014,182|352|0xdc0014,311|337|0xdc0014,413|329|0xdc0014,555|312|0xdc0014,553|345|0xdc0014,353|445|0xffffff",
+				dstPos = "",
+				dstArea = Rect.ZERO
+			},
+		},
+	},
 }
 
 --公共导航控件，如下一步、返回、确认、取消、通知
@@ -344,7 +357,7 @@ local _navigationList = {
 		enable = true,
 		anchor = "CRB",
 		--srcPos = "1130|732|0x1270e3-0x13091a,1127|702|0x1270e3-0x13091a,1102|703|0x1270e3-0x13091a,1088|733|0x1270e3-0x13091a",
-		srcPos = "1130|732|0x156DDF-0x15061E,1127|702|0x156DDF-0x15061E,1102|703|0x156DDF-0x15061E,1088|733|0x156DDF-0x15061E",
+		srcPos = "1130|732|0x1270e3-0x13091a,1127|702|0x1270e3-0x13091a,1102|703|0x1270e3-0x13091a,1088|733|0x1270e3-0x13091a,1235|733|0x1270e3-0x13091a",
 		dstPos = "",
 		dstArea = Rect(
 			math.floor(CFG.EFFECTIVE_AREA[1] + (CFG.EFFECTIVE_AREA[3] - CFG.EFFECTIVE_AREA[1]) * 3 / 4),
@@ -454,12 +467,21 @@ local _navigationList = {
 	},
 	{
 		tag = "恭喜晋级",
-		enable = false,
+		enable = true,
 		anchor = "A",
 		srcPos = "721|596|0xcaddf0,382|569|0xcaddf0,947|604|0xcaddf0,585|705|0x767677,736|708|0x767677,92|169|0x004998,109|539|0x004998,650|649|0xf5f5f5",
 		dstPos = "",
 		dstArea = Rect.ZERO
-	},	
+	},
+	{
+		tag = "恢复比赛",
+		enable = true,
+		anchor = "A",
+		srcPos = "829|481|0xcaddf0,691|453|0xcaddf0,964|507|0xcaddf0,642|457|0xcaddf0,366|511|0xcaddf0,666|477|0xf5f5f5,391|435|0xf5f5f5,859|530|0xf5f5f5,\
+		326|203|0xf5f5f5,1004|201|0xf5f5f5",
+		dstPos = "",
+		dstArea = Rect.ZERO
+	},
 }
 
 --全局导航优先级，一般next在最后
@@ -476,6 +498,7 @@ local _navigationPriorityList = {
 	"能量不足",
 	"联赛奖励",		--在显示积分变化的界面弹出的作为导航控件处理/48级联赛
 	"恭喜晋级",		--在显示积分变化的界面弹出的作为导航控件处理/48级联赛
+	"恢复比赛",
 	"next",
 	--"comfirm",
 }

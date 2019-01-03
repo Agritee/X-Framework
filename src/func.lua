@@ -3,6 +3,45 @@
 -- Date: 2018-12-25
 -- Descrip: 功能函数
 
+--跳过初始化界面，主要用于自动重启后，跳过初始化界面
+function skipInitPage()
+	local startTime = os.time()
+	while true do
+		local currentPage = page.getCurrentPage()
+		prt(currentPage)
+		if currentPage == "初始化界面" then
+			Log("catch init page")
+			local _startTime = os.time()
+			while true do
+				local _currentPage = page.getCurrentPage()
+				if _currentPage ~= "初始化界面" then
+					sleep(2000)
+					if page.getCurrentPage() ~= "初始化界面" then
+						Log("skiped init page")
+						return
+					end
+				end
+				
+				if os.time() - _startTime > CFG.DEFAULT_TIMEOUT then
+					catchError(ERR_TIMEOUT, "cant catch init next page!")
+				end
+				
+				if (os.time() - _startTime) % 3 == 0 then
+					ratioTap(30, 60)
+				end
+				
+				sleep(500)
+			end			
+		end
+		
+		if os.time() - startTime > CFG.DEFAULT_TIMEOUT then
+			catchError(ERR_TIMEOUT, "cant catch init page!")
+		end
+		
+		sleep(200)
+	end
+end
+
 --检测当前游戏应用是否还在前端运行中
 function isAppInFront()
 	local appName = runtime.getForegroundApp()
@@ -129,7 +168,7 @@ function catchError(errType, errMsg, forceContinueFlag)
 	elseif etype == ERR_WARNING then		--警告任何时候只提示
 		LogError("!!!maybe some err in here, care it!!!")
 	elseif etype == ERR_TIMEOUT then		--超时错误允许exit，restart
-		if CFG.ALLOW_RESTART == true then	--允许重启
+		if CFG.ALLOW_RESTART then	--允许重启
 			dialog(errMsg.."\r\n等待超时，即将重启", 5)
 			if frontAppName() == CFG.APP_ID then
 				LogError("TIME OUT BUT APP STILL RUNNING！")
@@ -144,7 +183,7 @@ function catchError(errType, errMsg, forceContinueFlag)
 			if runApp(CFG.APP_ID) then
 				LogError("!!!its will restart script 15s later after restart app!!!")
 				--记录重启状态，重启之后会直接读取上一次保存的设置信息和相关变量，并不会弹出UI以实现自动续接任务
-				task.setCurrentTaskStatus("restart")
+				exec.setExecStatus("BREAKING")
 				sleep(15000)
 				xmod.restart()
 			else
@@ -165,6 +204,7 @@ end
 --点击操作
 function tap(x, y, delay)
 	local d = delay or CFG.DEFAULT_TAP_TIME
+	
 	if x == nil or y == nil then
 		x = 0
 		y = 0
@@ -185,7 +225,7 @@ function ratioTap(x, y, delay)
 	end
 	local x1, y1 = scale.getRatioPoint(x, y)
 	
-	tap(x1, y1, delay)
+	tap(x1, y1, d)
 end
 
 --滑动，从(x1, y1)到(x2, y2)
@@ -224,3 +264,4 @@ function ratioSlide(x1, y1, x2, y2)
 	dstX, dstY = scale.getRatioPoint(x2, y2)
 	slide(srcX, srcY, dstX, dstY)
 end
+

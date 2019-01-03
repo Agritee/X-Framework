@@ -15,16 +15,22 @@ require("task/rankSim")
 require("task/leagueSim")
 
 function main()
-
+	
+	screen.keep(false)
+	IS_BREAKING_TASK = exec.isExistBreakingTask() 
+	if IS_BREAKING_TASK then
+		skipInitPage()	--先跳过未定义界面
+	end
+	
 	exec.run("联赛", 9)
 	xmod.exit()
 end
---sleep(1000)
+
 
 main()
 
 --page.tapWidget("联赛教练模式", "恭喜晋级")
 
---page.tapNavigation("能量不足")
-prt(page.getCurrentPage())
-
+--page.tapNavigation("next")
+--prt(page.getCurrentPage())
+selectExpiredPlayer()

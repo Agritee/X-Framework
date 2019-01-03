@@ -108,7 +108,8 @@ function M.tapNext()
 		if v.tag == "next" then
 			local startTime = os.time()
 			while true do
-				local pot = screen.findColor(v.dstArea, v.dstPos, CFG.DEFAULT_FUZZY)	--高分辨率下有偏色
+				local pot = screen.findColor(v.dstArea, v.dstPos, v.fuzzy or CFG.DEFAULT_FUZZY)	--高分辨率下有偏色
+				--prt(v)
 				if pot ~= Point.INVALID then
 					Log("found next")
 					tap(pot.x, pot.y)
@@ -303,7 +304,7 @@ local function initNavigations()
 	Log("initNavigations done")
 end
 
---将pageList、navigationList和navigationPriorityList数据插入page对应表中并初始化（缩放坐标）
+--将pageList、navigationList和navigationPriorityList数据插入page对应表中并初始化（缩放坐标），在projPage中调用
 function M.loadPage(pList, nList, npList)
 	insertPage(pList)
 	insertNavigation(nList)
