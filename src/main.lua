@@ -22,7 +22,7 @@ function main()
 		skipInitPage()	--先跳过未定义界面
 	end
 	
-	exec.run("联赛", 9)
+	exec.run("天梯", 9)
 	xmod.exit()
 end
 
@@ -32,11 +32,11 @@ screen.init(1, 0)
 --page.tapWidget("联赛教练模式", "恭喜晋级")
 
 --page.tapNavigation("切换状态")
---prt(page.getCurrentPage())
+prt(page.getCurrentPage())
 --page.tapWidget("阵容展示", "切换状态")
 
 --获取一个区域内某种状态的所有球员位置信息
 --sleep(2000)
-switchPlayer()
+--switchPlayer()
 
 

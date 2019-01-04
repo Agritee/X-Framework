@@ -349,6 +349,20 @@ local _pageList = {
 		},
 	},]]
 	{
+		tag = "点球",
+		widgetList = {
+			{
+				tag = "比分综合特征",
+				enable = true,
+				anchor = "A",
+				srcPos = "132|621|0x1fbbbb-0x144444,133|682|0x1fbbbb-0x144444,1204|619|0x1ab981-0x19463d,1202|683|0x1ab981-0x19463d,208|698|0x2d3e40-0x171615,\
+				210|717|0x2d3e40-0x171615,1118|699|0x2d3e40-0x171615,1119|712|0x2d3e40-0x171615,634|679|0xb6cbc4-0x35343a,692|680|0xb6cbc4-0x35343a",
+				dstPos = "",
+				dstArea = Rect.ZERO
+			},
+		},
+	},
+	{
 		tag = "初始化界面",
 		widgetList = {
 			{
@@ -495,6 +509,23 @@ local _navigationList = {
 		dstPos = "",
 		dstArea = Rect.ZERO
 	},
+	{
+		tag = "天梯判负",
+		enable = true,
+		anchor = "A",
+		srcPos = "684|470|0xcaddf0,359|424|0xcaddf0,971|490|0xcaddf0,990|488|0xf5f5f5,342|433|0xf5f5f5,612|410|0xf5f5f5,638|509|0xf5f5f5,319|220|0xf5f5f5,1011|216|0xf5f5f5",
+		dstPos = "",
+		dstArea = Rect.ZERO
+	},
+	{
+		tag = "通知",
+		enable = true,
+		anchor = "RT",
+		srcPos = "1279|54|0x55a4f9-0x562b06,1269|45|0x55a4f9-0x562b06,1289|44|0x55a4f9-0x562b06,1268|65|0x55a4f9-0x562b06,1288|64|0x55a4f9-0x562b06,\
+		1268|55|0xccdff2,1278|44|0xccdff2,1289|54|0xccdff2,1198|66|0xffffff",
+		dstPos = "",
+		dstArea = Rect.ZERO
+	},
 }
 
 --全局导航优先级，一般next在最后
@@ -512,6 +543,8 @@ local _navigationPriorityList = {
 	"联赛奖励",		--在显示积分变化的界面弹出的作为导航控件处理/48级联赛
 	"恭喜晋级",		--在显示积分变化的界面弹出的作为导航控件处理/48级联赛
 	"恢复比赛",
+	"天梯判负",
+	"通知",
 	"next",
 	--"comfirm",
 }

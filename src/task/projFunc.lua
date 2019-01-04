@@ -137,7 +137,7 @@ local function getFixStatusPlayers(area, status)
 		CFG.DEFAULT_FUZZY,
 		screen.PRIORITY_DEFAULT,
 		999)
-	prt(#posTb)
+
 	if #posTb == 0 then
 		Log("cant find point on: "..status)
 		return posTb
@@ -154,8 +154,10 @@ local function getFixStatusPlayers(area, status)
 	local validPlayers = {}
 	for k, v in pairs(posTb) do
 		local exsitFlag = false
+		--同样位置会有多个点，x、y坐标同时小于offset时判定为同位置的坐标，以20像素/短边750为基准
+		local offset = (CFG.EFFECTIVE_AREA[4] - CFG.EFFECTIVE_AREA[2]) / 750 * 20 
 		for _k, _v in pairs(validPlayers) do
-			if math.abs(v.x - _v.x) < 30 and math.abs(v.y - _v.y) < 30 then
+			if math.abs(v.x - _v.x) < offset and math.abs(v.y - _v.y) < offset then
 				exsitFlag = true
 				break
 			end
@@ -204,7 +206,9 @@ local function getPlayerStatusInfo(seats)
 			return
 		end
 		
-		if a.y == b.y then
+		--if a.y == b.y then
+		--因不同状态下的首点取值位置不同，同一水平位置的y左边可能有微小区别，容错以10像素/短边750未基准
+		if math.abs(a.y - b.y) <= (CFG.EFFECTIVE_AREA[4] - CFG.EFFECTIVE_AREA[2]) / 750 * 10 then
 			return a.x < b.x
 		else
 			return a.y < b.y
@@ -257,6 +261,7 @@ function switchPlayer()
 	end
 
 	page.tapWidget("阵容展示", "替补席")
+	sleep(200)
 	
 	local benchFirst4Players = {}
 	local benchLatter3Players = {}

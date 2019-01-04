@@ -6,16 +6,14 @@
 local _task = {
 	tag = "天梯",
 	processes = {
-		--{tag = "其他", justFirstRun = true},
-		--{tag = "比赛", nextTag = "线上对战", justFirstRun = true},
-		--{tag = "线上对战", nextTag = "自动比赛", justFirstRun = true},
+		{tag = "其他", mode = "firstRun"},
+		{tag = "比赛", nextTag = "线上对战", mode = "firstRun"},
+		{tag = "线上对战", nextTag = "自动比赛", mode = "firstRun"},
+		
 		{tag = "天梯教练模式", nextTag = "next"},
-		{tag = "匹配天梯对手", nextTag = "next"},
 		{tag = "阵容展示", nextTag = "next"},
-		{tag = "比赛中"},
-		{tag = "终场统计", nextTag = "next", timeout = 1200},
-		{tag = "终场比分", nextTag = "next"},
-		{tag = "段位变化", nextTag = "next"},
+		{tag = "比赛中", timeout = 60},
+		{tag = "终场统计", nextTag = "next", timeout = 900},
 	},
 }
 
@@ -43,17 +41,30 @@ local fn = function()
 end
 insertFunc("其他", fn)
 
+local fn = function()
+	if USER.ALLOW_SUBSTITUTE then
+		switchPlayer()
+	end
+end
+insertFunc("阵容展示", fn)
+
 local lastPlayingPageTime = 0
 local lastProcessIndex = 0
+local skipPenalty = false
 local wfn = function(processIndex)
-	--if processIndex == 15 then		--点球时不检测,不是playing界面
-	--	Log("on penaltyKick not execute waitFuncList!")
-	--	return
-	--end
-	
-	if processIndex ~= lastProcessIndex then	--当切换流程片时更新
+	if processIndex ~= lastProcessIndex then	--当切换流程片时重置
 		lastPlayingPageTime = 0
 		lastProcessIndex = processIndex
+		skipWaitFunc = false
+	end
+	
+	if skipPenalty then
+		return
+	end
+	
+	if page.matchPage("点球") then	--有点球时不检测
+		skipPenalty = true
+		return
 	end
 	
 	if page.matchPage("比赛中") then
@@ -67,9 +78,9 @@ local wfn = function(processIndex)
 	local timeAfterLastPlayingPage = os.time() - lastPlayingPageTime	--距离最后一个playing界面的时间间隔
 	
 	--跳过进球回放什么的,--游戏崩溃的情况下不点击
-	if timeAfterLastPlayingPage >= 3 and timeAfterLastPlayingPage <= 10 and isAppInFront() then
+	if timeAfterLastPlayingPage >= 3 and timeAfterLastPlayingPage <= 15 and isAppInFront() then
 		Log("skip replay")
-		tap(10, 60)
+		ratioTap(10, 60)
 		sleep(500)
 	end
 	

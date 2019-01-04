@@ -75,5 +75,5 @@ USER.SUBSTITUTE_INDEX_LIST = {--[[{fieldIndex = 1, substituteCondition = 1},{},{
 	{fieldIndex = 4, substituteCondition = 1},
 	{fieldIndex = 5, substituteCondition = 1},
 	{fieldIndex = 9, substituteCondition = 1},
-	{fieldIndex = 11, substituteCondition = 1},
+	{fieldIndex = 10, substituteCondition = 1},
 }		--替补席对应关系表
