@@ -188,6 +188,19 @@ local _pageList = {
 				dstPos = "",
 				dstArea = Rect.ZERO
 			},
+			{
+				tag = "切换状态",
+				enable = true,
+				anchor = "RB",
+				srcPos = "840|697|0xDDE0C3-0x221F3C,805|684|0xDDE0C3-0x221F3C,886|679|0xDDE0C3-0x221F3C",
+				dstPos = "",
+				dstArea = Rect(
+					math.floor(CFG.EFFECTIVE_AREA[1] + (CFG.EFFECTIVE_AREA[3] - CFG.EFFECTIVE_AREA[1]) * 1 / 2),
+					math.floor(CFG.EFFECTIVE_AREA[2] + (CFG.EFFECTIVE_AREA[4] - CFG.EFFECTIVE_AREA[2]) * 5 / 6),
+					math.floor((CFG.EFFECTIVE_AREA[3] - CFG.EFFECTIVE_AREA[1]) / 4),
+					math.floor((CFG.EFFECTIVE_AREA[4] - CFG.EFFECTIVE_AREA[2]) / 6)
+				)
+			},
 		},
 	},
 	{

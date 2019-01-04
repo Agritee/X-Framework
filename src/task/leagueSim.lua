@@ -10,7 +10,7 @@ local _task = {
 		{tag = "比赛", nextTag = "联赛", mode = "firstRun"},
 		{tag = "联赛", nextTag = "自动比赛", mode = "firstRun"},
 		
-		{tag = "联赛教练模式", nextTag = "next", timeout = 60},
+		{tag = "联赛教练模式", nextTag = "next"},
 		{tag = "阵容展示", nextTag = "next"},
 		{tag = "比赛中", timeout = 60},
 		{tag = "终场统计", nextTag = "next", timeout = 900, checkInterval = 1000},
@@ -64,6 +64,13 @@ local fn = function()
 	end
 end
 insertFunc("联赛教练模式", fn)
+
+local fn = function()
+	if USER.ALLOW_SUBSTITUTE then
+		switchPlayer()
+	end
+end
+insertFunc("阵容展示", fn)
 
 local lastPlayingPageTime = 0
 local lastProcessIndex = 0

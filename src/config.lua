@@ -30,7 +30,7 @@ CFG.BLACK_BORDER = {		--黑边参数
 CFG.BILINEAR = false		--开启线性二次插值
 
 -----------------重启脚本及应用参数-----------------
-CFG.ALLOW_RESTART = true			--是否允许重启脚本来解决异常
+--CFG.ALLOW_RESTART = true			--是否允许重启脚本来解决异常
 CFG.APP_ID = "com.netease.pes"		--应用名称
 CFG.DEFAULT_APP_ID = "com.netease.pes"
 
@@ -61,9 +61,19 @@ CFG.DEFAULT_LONG_TAP_TIME = 800	--默认longtap时间/ms
 
 USER = {}	--用户配置表
 -----------------用户设置-----------------
-USER.ALLOW_SUBSTITUTE = false		--是否允许开场换人
-USER.SUBSTITUTE_INDEX_LIST = {{},{},{},{},{},{},{}}		--替补席对应关系表
+USER.ALLOW_RESTART = true			--是否允许重启脚本来解决异常
+
 USER.REFRESH_CONCTRACT = false
 USER.REPEAT_TIMES = 0				--任务循环次数
 USER.DEFAULT_REPEAT_TIMES = 10		--任务默认运行次数
 USER.RESTORED_ENERGY = true
+USER.ALLOW_SUBSTITUTE = true		--是否允许开场换人
+USER.SUBSTITUTE_INDEX_LIST = {--[[{fieldIndex = 1, substituteCondition = 1},{},{},{},{},{},{}]]
+	{fieldIndex = 1, substituteCondition = 1},
+	{fieldIndex = 2, substituteCondition = 1},
+	{fieldIndex = 3, substituteCondition = 1},
+	{fieldIndex = 4, substituteCondition = 1},
+	{fieldIndex = 5, substituteCondition = 1},
+	{fieldIndex = 9, substituteCondition = 1},
+	{fieldIndex = 11, substituteCondition = 1},
+}		--替补席对应关系表

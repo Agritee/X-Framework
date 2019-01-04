@@ -28,9 +28,15 @@ end
 
 
 main()
-
+screen.init(1, 0)
 --page.tapWidget("联赛教练模式", "恭喜晋级")
 
---page.tapNavigation("next")
+--page.tapNavigation("切换状态")
 --prt(page.getCurrentPage())
-selectExpiredPlayer()
+--page.tapWidget("阵容展示", "切换状态")
+
+--获取一个区域内某种状态的所有球员位置信息
+--sleep(2000)
+switchPlayer()
+
+

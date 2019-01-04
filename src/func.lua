@@ -168,7 +168,7 @@ function catchError(errType, errMsg, forceContinueFlag)
 	elseif etype == ERR_WARNING then		--警告任何时候只提示
 		LogError("!!!maybe some err in here, care it!!!")
 	elseif etype == ERR_TIMEOUT then		--超时错误允许exit，restart
-		if CFG.ALLOW_RESTART then	--允许重启
+		if USER.ALLOW_RESTART then	--允许重启
 			dialog(errMsg.."\r\n等待超时，即将重启", 5)
 			if frontAppName() == CFG.APP_ID then
 				LogError("TIME OUT BUT APP STILL RUNNING！")
