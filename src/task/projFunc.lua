@@ -250,7 +250,7 @@ end
 --换人
 function switchPlayer()
 	page.tapWidget("阵容展示", "切换状态")
-	sleep(1500)		--点击切换状态之后，会弹出“状态”提示，需等待淡出
+	sleep(1200)		--点击切换状态之后，会弹出“状态”提示，需等待淡出
 	
 	--取场上球员状态
 	local fieldPlayers = getPlayerStatusInfo("field")

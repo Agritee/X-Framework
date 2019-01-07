@@ -261,10 +261,10 @@ local function initWidgets()
 	for k, v in pairs(M.pageList) do
 		for _k, _v in pairs(v.widgetList) do
 			if _v.srcPos ~= nil and string.len(_v.srcPos) > 0 then
-				if _v.dstPos == "" then
+				if _v.dstPos == nil then
 					_v.dstPos = scale.scalePos(_v.srcPos)
 				end
-				if _v.dstArea == Rect.ZERO then
+				if _v.dstArea == nil then
 					_v.dstArea = scale.getAnchorArea(_v.anchor)
 				end
 			end
@@ -280,10 +280,10 @@ local function initNavigations()
 	--全局导航控件
 	for _, v in pairs(M.navigationList) do
 		if v.enable and v.srcPos ~= nil and string.len(v.srcPos) > 0 then
-			if v.dstPos == "" then
+			if v.dstPos == nil then
 				v.dstPos = scale.scalePos(v.srcPos)
 			end
-			if v.dstArea == Rect.ZERO then
+			if v.dstArea == nil then
 				v.dstArea = scale.getAnchorArea(v.anchor)
 			end
 		end
@@ -292,10 +292,10 @@ local function initNavigations()
 	--页面专用导航控件
 	for _, v in pairs(M.pageList) do
 		if v.pageNext ~= nil and v.srcPos ~= nil and string.len(v.srcPos) > 0 then
-			if v.dstPos == "" then
+			if v.dstPos == nil then
 				v.dstPos = scale.scalePos(v.srcPos)
 			end
-			if v.dstArea == Rect.ZERO then
+			if v.dstArea == nil then
 				v.dstArea = scale.getAnchorArea(v.anchor)
 			end
 		end
