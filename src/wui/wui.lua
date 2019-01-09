@@ -1,6 +1,6 @@
 --[[
   @Author xxzhushou
-  @Repo   https://github.com/xxzhushou/WUI
+  @Repo   https://github.com/xxzhushou/XMod_WUI
 ]]--
 
 local wui = {}
@@ -13,6 +13,7 @@ local moduleNames = {
     GridSelect = 'wui.comp.grid_select',
     Checkbox = 'wui.comp.checkbox',
     CheckboxList = 'wui.comp.checkbox_list',
+    DropDown = 'wui.comp.dropdown',
 }
 
 local aliasNames = {
@@ -23,6 +24,7 @@ local aliasNames = {
     grid_select = 'GridSelect',
     checkbox = 'Checkbox',
     checkbox_list = 'CheckboxList',
+    dropdown = 'DropDown',
 }
 
 for k, v in pairs(aliasNames) do
@@ -36,5 +38,7 @@ for k, v in pairs(moduleNames) do
         wui[k] = require(v)
     end
 end
+
+wui._VERSION = '1.1.0'
 
 return wui

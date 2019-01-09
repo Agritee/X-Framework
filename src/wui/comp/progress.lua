@@ -1,6 +1,6 @@
 --[[
   @Author xxzhushou
-  @Repo   https://github.com/xxzhushou/WUI
+  @Repo   https://github.com/xxzhushou/XMod_WUI
 ]]--
 
 local wutils = require 'wui.utils'

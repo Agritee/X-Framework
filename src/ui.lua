@@ -67,6 +67,7 @@ local rootLayout = {
 	view = 'div',
 	class = 'div',
 	style = {
+		width = 750,
 		['align-items'] = 'center',
 		--['justify-content'] = 'flex-end',
 		['justify-content'] = 'center',
@@ -176,6 +177,23 @@ local gridListPosation = {
 	{ title = '10', value = 10 },
 	{ title = '11', value = 11 }
 }
+
+local layoutList = {
+	{"TASK_NAME", "grid"},
+}
+
+function initUserSelection(paramList)
+	for k, v in pairs(paramList) do
+		local storeValue = storage.get(v[1], false)
+		if storeValue then
+			USER[v[1]] = storeValue
+		end
+		
+		if v[2] == "grid" then
+			
+		end
+	end
+end
 
 function initUISelect()
 	Log("load last user setting")
@@ -600,7 +618,7 @@ tabPageConfig.tabStyle = {
 	iconHeight = 0,
 	width = 160 * ratio,
 	height = 50 * ratio,
-	fontSize = 24,
+	fontSize = 24 * ratio,
 	hasActiveBottom = true,
 	activeBottomColor = '#FFC900',
 	activeBottomHeight = 6,
