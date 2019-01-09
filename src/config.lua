@@ -61,19 +61,24 @@ CFG.DEFAULT_LONG_TAP_TIME = 800	--默认longtap时间/ms
 
 USER = {}	--用户配置表
 -----------------用户设置-----------------
+USER.TASK_NAME = ""
+
+
+
 USER.ALLOW_RESTART = true			--是否允许重启脚本来解决异常
 
 USER.REFRESH_CONCTRACT = false
 USER.REPEAT_TIMES = 0				--任务循环次数
 USER.DEFAULT_REPEAT_TIMES = 10		--任务默认运行次数
+USER.BUY_ENERGY = true
 USER.RESTORED_ENERGY = true
 USER.ALLOW_SUBSTITUTE = true		--是否允许开场换人
 USER.SUBSTITUTE_INDEX_LIST = {--[[{fieldIndex = 1, substituteCondition = 1},{},{},{},{},{},{}]]
-	{fieldIndex = 1, substituteCondition = 1},
-	{fieldIndex = 2, substituteCondition = 1},
-	{fieldIndex = 3, substituteCondition = 1},
-	{fieldIndex = 4, substituteCondition = 1},
-	{fieldIndex = 5, substituteCondition = 1},
-	{fieldIndex = 9, substituteCondition = 1},
-	{fieldIndex = 10, substituteCondition = 1},
+	{fieldIndex = 0, substituteCondition = 0},
+	{fieldIndex = 0, substituteCondition = 0},
+	{fieldIndex = 0, substituteCondition = 0},
+	{fieldIndex = 0, substituteCondition = 0},
+	{fieldIndex = 0, substituteCondition = 0},
+	{fieldIndex = 0, substituteCondition = 0},
+	{fieldIndex = 0, substituteCondition = 0},
 }		--替补席对应关系表

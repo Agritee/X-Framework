@@ -100,6 +100,7 @@ end
 --初始化环境参数
 local function initEnv()
 	screen.init(1, 0)
+	screen.keep(false)
 	
 	initAppID()
 	initUserSetting()

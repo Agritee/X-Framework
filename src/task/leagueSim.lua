@@ -4,7 +4,7 @@
 -- Descrip: 自动刷联赛赛教练模式
 
 local _task = {
-	tag = "联赛",
+	tag = "自动联赛",
 	processes = {
 		{tag = "其他", mode = "firstRun"},
 		{tag = "比赛", nextTag = "联赛", mode = "firstRun"},

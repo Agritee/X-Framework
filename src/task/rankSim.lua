@@ -4,7 +4,7 @@
 -- Descrip: 自动刷天梯赛教练模式
 
 local _task = {
-	tag = "天梯",
+	tag = "自动天梯",
 	processes = {
 		{tag = "其他", mode = "firstRun"},
 		{tag = "比赛", nextTag = "线上对战", mode = "firstRun"},

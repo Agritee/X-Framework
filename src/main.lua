@@ -13,16 +13,24 @@ require("task/projFunc")
 require("task/projPage")
 require("task/rankSim")
 require("task/leagueSim")
+require("ui")
 
 function main()
-	
+
 	screen.keep(false)
-	IS_BREAKING_TASK = exec.isExistBreakingTask() 
+	IS_BREAKING_TASK = exec.isExistBreakingTask()
+	
+	if not IS_BREAKING_TASK then
+		dispUI()
+	end
+	
 	if IS_BREAKING_TASK then
 		skipInitPage()	--先跳过未定义界面
 	end
 	
-	exec.run("天梯", 9)
+
+	
+	exec.run(USER.TASK_NAME, USER.REPEAT_TIMES)
 	xmod.exit()
 end
 
@@ -32,11 +40,13 @@ screen.init(1, 0)
 --page.tapWidget("联赛教练模式", "恭喜晋级")
 
 --page.tapNavigation("切换状态")
-prt(page.getCurrentPage())
+--prt(page.getCurrentPage())
 --page.tapWidget("阵容展示", "切换状态")
 
 --获取一个区域内某种状态的所有球员位置信息
 --sleep(2000)
 --switchPlayer()
 
+dispUI()
 
+prt(USER)
