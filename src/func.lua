@@ -3,6 +3,19 @@
 -- Date: 2018-12-25
 -- Descrip: 功能函数
 
+--复制表
+function tbCopy(tb)
+	local tmp = {}
+	for k, v in pairs(tb) do
+		if type(v) == "table" then
+			tmp[k] = tbCopy(v)
+		else
+			tmp[k] = v
+		end
+	end
+	return tmp
+end
+
 --跳过初始化界面，主要用于自动重启后，跳过初始化界面
 function skipInitPage()
 	local startTime = os.time()

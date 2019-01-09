@@ -1,61 +1,233 @@
 local wui = require 'wui.wui'
 local cjson = require 'cjson'
 
+--style缩放参数(包括字体大小)，以保证在任何比例的分辨下，UI都能按照开发分辨率的样式完整的呈现，若比例大于开发分辨率，两边留白
 local ratio = (CFG.DST_RESOLUTION.height * CFG.DEV_RESOLUTION.width / CFG.DEV_RESOLUTION.height) / CFG.DST_RESOLUTION.width
 
-local storageUI = {map = {}}
-
-storageUI.put = function(key, value)
-	if not key or not value then
-		return
-	end
-	
-	storageUI.map[key] = value
-end
-
-storageUI.get = function(key, defaultValue)
-	if not key or not defaultValue then
-		return
-	end
-	
-	storageUI.load()
-	
-	return storageUI.map[key] or defaultValue
-end
-
-storageUI.commit = function() 
-	local UIDataStr = cjson.encode(storageUI.map)
-	
-	storage.put("UIData", UIDataStr)
-	storage.commit()
-	storageUI.purge()
-end
-
-storageUI.purge = function() 
-	storageUI.map = {}
-end
-
-storageUI.load = function()
-	local UIDataStr = storage.get("UIData", "{}")
-	
-	storageUI.map = cjson.decode(UIDataStr)
-end
-
-storageUI.delete = function(key)
-	if not key then
-		return
-	end
-	
-	storageUI.map[key] = nil
-	local tmpTb = storageUI.map
-	storageUI.purge()
-	storageUI.load()
-	storageUI.map[key] = nil
-	storageUI.commit()
-	storageUI.map = tmpTb
-end
-
 local uiClosedFlag = false
+
+local _gridList = {
+	{
+		tag = "选择任务",
+		checkedList = {1},
+		--当singleCheck为true时，通过USER[singleParamKey]设置值，否则用USER[list[i].paramKey]设置
+		--当singleCheck为true时，list每一项对应的值优先取list[i].value，value为nil时直接取title的值
+		--当singleCheck为false时，list中，由checkedList标记的项的值优先取list[i].value，value为nil时值为true
+		singleCheck = true,
+		singleParamKey = "TASK_NAME",
+		list = {
+			{title = '自动联赛'},
+			{title = '自动天梯'},
+			{title = '自动巡回', disabled = true},
+			{title = '手动联赛', disabled = true},
+			{title = '玄学抽球', disabled = true},
+			{title = '在线签到', disabled = true},
+		},
+		style = {
+			lineSpacing = 14 * ratio,
+			width = 160 * ratio,
+			height = 60 * ratio,
+			fontSize = 24 * ratio,
+			color = '#333333',
+			checkedColor = '#ffffff',
+			disabledColor = '#BBBBBB',
+			borderColor = '#666666',
+			checkedBorderColor = '#ffb200',
+			backgroundColor = '#ffffff',
+			checkedBackgroundColor = '#ffb200',
+			icon = ''
+		}
+	},
+	{
+		tag = "任务次数",
+		checkedList = {4},
+		singleCheck = true,
+		singleParamKey = "REPEAT_TIMES",
+		list = {
+			{title = '次数', disabled = true, value = 0},
+			{title = '1', value = 1},
+			{title = '2', value = 2},
+			{title = '5', value = 5},
+			{title = '10', value = 10},
+			{title = '20', value = 20},
+			{title = '50', value = 50},
+			{title = '无限', value = 9999},
+		},
+		style = {
+			lineSpacing = 14 * ratio,
+			width = 50 * ratio,
+			height = 40 * ratio,
+			fontSize = 16 * ratio * ratio,
+			color = '#999999',
+			checkedColor = '#ffffff',
+			disabledColor = '#BBBBBB',
+			borderColor = '#999999',
+			checkedBorderColor = '#ffb200',
+			backgroundColor = '#ffffff',
+			checkedBackgroundColor = '#ffb200',
+			icon = '',
+		}
+	},
+	{
+		tag = "选择功能",
+		checkedList = {1,2},
+		singleCheck = false,
+		singleParamKey = nil,
+		list = {
+			{title = '球员续约', paramKey = "REFRESH_CONCTRACT"},
+			{title = '等待恢复', paramKey = "RESTORED_ENERGY"},
+			{title = '购买能量', disabled = true, paramKey = "BUY_ENERGY"},
+			{title = '开场换人', paramKey = "ALLOW_SUBSTITUTE"},
+			{title = '自动重启', paramKey = "ALLOW_RESTART"},
+		},
+		style = {
+			lineSpacing = 14 * ratio,
+			width = 160 * ratio,
+			height = 60 * ratio,
+			fontSize = 24 * ratio,
+			color = '#333333',
+			checkedColor = '#333333',
+			disabledColor = '#BBBBBB',
+			borderColor = '#F6F6F6',
+			checkedBorderColor = '#ffb200',
+			backgroundColor = '#F6F6F6',
+			checkedBackgroundColor = '#FFFFFF',
+			--icon = ''
+		}
+	},
+	
+}
+
+--从_gridList获取list，并过滤掉不需要的参数
+local function generateGridList(gridTag)
+	for k, v in pairs(_gridList) do
+		if v.tag == gridTag then
+			local tmpList = tbCopy(v.list)
+			for _k, _v in pairs(tmpList) do
+				if _v.value then
+					_v.value = nil
+				end
+				if _v.paramKey then
+					_v.paramKey = nil
+				end
+			end
+			return tmpList
+		end
+	end
+end
+
+--从_gridList获取style
+local function generateGridStyle(gridTag)
+	for k, v in pairs(_gridList) do
+		if v.tag == gridTag then
+			return tbCopy(v.style)
+		end
+	end
+end
+
+local function generateGridID(gridTag)
+	return string.format("grid_%s", gridTag)
+end
+
+local function parserGridID(gridID)
+	return string.sub(gridID, 6, -1)
+end
+
+local function setGridChecked(gridTag, checkedList)
+	for k, v in pairs(_gridList) do
+		if v.tag == gridTag then
+			v.checkedList = checkedList
+			break
+		end
+	end
+end
+
+local function loadGridChecked()
+	Log("load last user setting")
+	prt(storage.get("TASK_NAME", "NO_TASK"))
+	prt(storage.get("REPEAT_TIMES", 0))
+	prt(storage.get("REFRESH_CONCTRACT", false))
+	prt(storage.get("BUY_ENERGY", false))
+	prt(storage.get("RESTORED_ENERGY", false))
+	prt(storage.get("ALLOW_SUBSTITUTE", false))
+	prt(storage.get("ALLOW_RESTART", false))
+	
+	for k, v in pairs(_gridList) do
+		local storeList = cjson.decode(storage.get(v.tag, "{}"))
+		Log("init initCheckedGrid: "..v.tag)
+		prt(storeList)
+		
+		if singleCheck then		--单选
+			if #storeList >= 1 then		--单选至少需有一个选项
+				v.checkedList = storeList	--为空可能是没有存储过，直接使用表里的默认值
+				
+				for _k, _v in pairs(v.list) do	--先全部置为unchecked
+					_v.checked = false
+				end
+				for _k, _v in pairs(v.list) do
+					for __k, __v in pairs(v.checkedList) do
+						if __v == _k then
+							_v.checked = true
+							break		--仅一个有效
+						end
+					end
+				end
+			end
+		else					--多选
+			v.checkedList = storeList
+			for _k, _v in pairs(v.list) do	--先全部置为unchecked
+				_v.checked = false
+			end
+			
+			for _k, _v in pairs(v.list) do
+				for __k, __v in pairs(v.checkedList) do
+					if __v == _k then
+						_v.checked = true
+					end
+				end
+			end
+		end
+	end
+end
+
+local function submitGridChecked()
+	for k, v in pairs(_gridList) do
+		--设置对应的USER值
+		if v.singleCheck then		--单选
+			USER[v.singleParamKey] = false
+			for _k, _v in pairs(v.list) do
+				for __k, __v in pairs(v.checkedList) do
+					if __v == _k then
+						USER[v.singleParamKey] = _v.value or _v.title
+						Log("set USER."..v.singleParamKey.."="..(v.value or _v.title))
+						break
+					end
+				end
+			end
+		else						--多选
+			for _k, _v in pairs(v.list) do
+				USER[_v.paramKey] = false
+			end
+			
+			for _k, _v in pairs(v.list) do
+				for __k, __v in pairs(v.checkedList) do
+					if __v == _k then
+						USER[_v.paramKey] = true
+						Log("set USER.".._v.paramKey.."=true")
+						break
+					end
+				end
+			end
+		end
+		
+		--保存当前checkedList数据
+		local storeStr = cjson.encode(v.checkedList)
+		Log("save user selection: "..storeStr)
+		storage.put(v.tag, storeStr)
+	end
+	
+	storage.commit()
+end
 
 local globalStyle = {
 	scroller = {
@@ -76,235 +248,7 @@ local rootLayout = {
 	}
 }
 
-
-local gridStyleTaskSelect = {
-	lineSpacing = 14 * ratio,
-	width = 160 * ratio,
-	height = 60 * ratio,
-	fontSize = 24 * ratio,
-	color = '#333333',
-	checkedColor = '#ffffff',
-	disabledColor = '#BBBBBB',
-	borderColor = '#666666',
-	checkedBorderColor = '#ffb200',
-	backgroundColor = '#ffffff',
-	checkedBackgroundColor = '#ffb200',
-	icon = ''
-}
-
-local gridListTaskSelect= {
-	{title = '自动联赛'},
-	{title = '自动天梯'},
-	{title = '自动巡回', disabled = true},
-	{title = '手动联赛', disabled = true},
-	{title = '玄学抽球', disabled = true},
-	{title = '在线签到', disabled = true},
-}
-
-local gridStyleTaskRepeat = {
-	lineSpacing = 14 * ratio,
-	width = 50 * ratio,
-	height = 40 * ratio,
-	fontSize = 16 * ratio * ratio,
-	color = '#999999',
-	checkedColor = '#ffffff',
-	disabledColor = '#BBBBBB',
-	borderColor = '#999999',
-	checkedBorderColor = '#ffb200',
-	backgroundColor = '#ffffff',
-	checkedBackgroundColor = '#ffb200',
-	icon = ''
-}
-
-local gridListTaskRepeat= {
-	{title = '次数', disabled = true},
-	{title = '1'},
-	{title = '2'},
-	{title = '5'},
-	{title = '10'},
-	{title = '20'},
-	{title = '50'},
-	{title = '无限'},
-}
-
-local gridStyleFunctionSelect = {
-	lineSpacing = 14 * ratio,
-	width = 160 * ratio,
-	height = 60 * ratio,
-	fontSize = 24 * ratio,
-	color = '#333333',
-	checkedColor = '#333333',
-	disabledColor = '#BBBBBB',
-	borderColor = '#F6F6F6',
-	checkedBorderColor = '#ffb200',
-	backgroundColor = '#F6F6F6',
-	checkedBackgroundColor = '#FFFFFF',
-	--icon = ''
-}
-
-local gridListFunctionSelect = {
-	{title = '球员续约'},
-	{title = '购买能量', disabled = true},
-	{title = '等待恢复'},
-	{title = '开场换人'},
-	{title = '自动重启'},
-}
-
-local gridStylePosition = {
-	lineSpacing = 14 * ratio,
-	width = 45 * ratio,
-	height = 40 * ratio,
-	fontSize = 15 * ratio,
-	color = '#333333',
-	checkedColor = '#ffffff',
-	disabledColor = '#eeeeee',
-	borderColor = '#666666',
-	checkedBorderColor = '#ffb200',
-	backgroundColor = '#ffffff',
-	checkedBackgroundColor = '#ffb200',
-}
-
-local gridListPosation = {
-	{ title = '1', value = 1 },
-	{ title = '2', value = 2 },
-	{ title = '3', value = 3 },
-	{ title = '4', value = 4 },
-	{ title = '5', value = 5 },
-	{ title = '6', value = 6 },
-	{ title = '7', value = 7 },
-	{ title = '8', value = 8 },
-	{ title = '9', value = 9 },
-	{ title = '10', value = 10 },
-	{ title = '11', value = 11 }
-}
-
-local layoutList = {
-	{"TASK_NAME", "grid"},
-}
-
-function initUserSelection(paramList)
-	for k, v in pairs(paramList) do
-		local storeValue = storage.get(v[1], false)
-		if storeValue then
-			USER[v[1]] = storeValue
-		end
-		
-		if v[2] == "grid" then
-			
-		end
-	end
-end
-
-function initUISelect()
-	Log("load last user setting")
-	prt(storage.get("USER.TASK_NAME", "NO_TASK"))
-	prt(storage.get("USER.REPEAT_TIMES", 0))
-	prt(storage.get("USER.REFRESH_CONCTRACT", false))
-	prt(storage.get("USER.BUY_ENERGY", false))
-	prt(storage.get("USER.RESTORED_ENERGY", false))
-	prt(storage.get("USER.ALLOW_SUBSTITUTE", false))
-	prt(storage.get("USER.ALLOW_RESTART", false))
-	
-
-	
-	local taskName = storage.get("USER.TASK_NAME", "NO_TASK")
-	for _, v in pairs(gridListTaskSelect) do
-		if v.title == taskName then
-			v.checked = true
-			break
-		end
-	end
-	USER.TASK_NAME = taskName
-	
-	local repeatTimes = storage.get("USER.REPEAT_TIMES", 0)
-	if repeatTimes > 0 then
-		if repeatTimes == 9999 then
-			for _, v in pairs(gridListTaskRepeat) do
-				if v.title == "无限" then
-					v.checked = true
-					break
-				end
-			end
-		else
-			for _, v in pairs(gridListTaskRepeat) do
-				--prt(v)
-				if v.title == tostring(repeatTimes) then
-					v.checked = true
-					break
-				end
-			end		
-		end
-	end
-	USER.REPEAT_TIMES = repeatTimes
-	
-	local refreshConctract = storage.get("USER.REFRESH_CONCTRACT", false)
-	if refreshConctract then
-		for _, v in pairs(gridListFunctionSelect) do
-			if v.title == "球员续约" then
-				v.checked = true
-				break
-			end
-		end
-	end
-	USER.REFRESH_CONCTRACT = refreshConctract
-	
-	local buyEnergy = storage.get("USER.BUY_ENERGY", false)
-	if buyEnergy then
-		for _, v in pairs(gridListFunctionSelect) do
-			if v.title == "购买能量" then
-				v.checked = true
-				break
-			end
-		end
-	end
-	USER.BUY_ENERGY = buyEnergy
-	
-	local restoredEnergy = storage.get("USER.RESTORED_ENERGY", false)
-	if restoredEnergy then
-		for _, v in pairs(gridListFunctionSelect) do
-			if v.title == "等待恢复" then
-				v.checked = true
-				break
-			end
-		end
-	end
-	USER.RESTORED_ENERGY = restoredEnergy
-
-	local allowSubstitute = storage.get("USER.ALLOW_SUBSTITUTE", false)
-	if allowSubstitute then
-		for _, v in pairs(gridListFunctionSelect) do
-			if v.title == "开场换人" then
-				v.checked = true
-				break
-			end
-		end
-	end
-	USER.ALLOW_SUBSTITUTE = allowSubstitute
-
-	local allowRestart = storage.get("USER.ALLOW_RESTART", false)
-	if allowRestart then
-		for _, v in pairs(gridListFunctionSelect) do
-			if v.title == "自动重启" then
-				v.checked = true
-				break
-			end
-		end
-	end
-	USER.ALLOW_RESTART = allowRestart
-	
-	for i = 1, 7, 1 do
-		tmpFieldIndex = string.format("USER.SUBSTITUTE_INDEX_LIST[%d].fieldIndex", i)
-		tmpSubstituteCondition = string.format("USER.SUBSTITUTE_INDEX_LIST[%d].substituteCondition", i)
-		
-		USER.SUBSTITUTE_INDEX_LIST[i].fieldIndex = storage.get(tmpFieldIndex, 0)
-		USER.SUBSTITUTE_INDEX_LIST[i].substituteCondition = storage.get(tmpSubstituteCondition, 0)
-		
-		prt(storage.get(tmpFieldIndex, 0))
-		prt(storage.get(tmpSubstituteCondition, 0))
-	end		
-end
-
-initUISelect()
+loadGridChecked()
 
 local pages = {
 	{
@@ -317,8 +261,8 @@ local pages = {
 		},
 		subviews = {
 			
-			
-			wui.GridSelect.createLayout({id = "grid_taskSelect", list = gridListTaskSelect, config = { single = true, totalWidth = 540  * ratio, gridStyle = gridStyleTaskSelect } }),
+			wui.GridSelect.createLayout({id = generateGridID("选择任务"), list = generateGridList("选择任务"),
+					config = { single = true, totalWidth = 540  * ratio, gridStyle = generateGridStyle("选择任务")} }),
 			{
 				view = 'div',
 				style = {
@@ -338,7 +282,8 @@ local pages = {
 				}
 			},
 			
-			wui.GridSelect.createLayout({id = "grid_taskRepeat", list = gridListTaskRepeat, config = {single = true, totalWidth = 480 * ratio, gridStyle = gridStyleTaskRepeat} }),
+			wui.GridSelect.createLayout({id = generateGridID("任务次数"), list = generateGridList("任务次数"),
+					config = {single = true, totalWidth = 480 * ratio, gridStyle = generateGridStyle("任务次数")} }),
 			{
 				view = 'div',
 				style = {
@@ -403,7 +348,8 @@ local pages = {
 				}
 			},
 			
-			wui.GridSelect.createLayout({id = "grid_functionSelect", list = gridListFunctionSelect, config = {limit = #gridListFunctionSelect, totalWidth = 500 * ratio, gridStyle = gridStyleFunctionSelect} }),
+			wui.GridSelect.createLayout({id = generateGridID("选择功能"), list = generateGridList("选择功能"),
+					config = {limit = #(generateGridList("选择功能")), totalWidth = 500 * ratio, gridStyle = generateGridStyle("选择功能")} }),
 		}
 		
 	},
@@ -439,131 +385,8 @@ local pages = {
 						}
 						
 					},
-					wui.GridSelect.createLayout({id = "grid_bench1", list = gridListPosation, config = {single = true, gridStyle = gridStylePosition } }),
+					--wui.GridSelect.createLayout({id = "grid_bench1", list = gridListPosation, config = {single = true, gridStyle = gridStylePosition } }),
 				},
-				
-			},
-			{
-				view = 'div',
-				style = {
-					width = 700 * ratio,
-					['background-color'] = '#F0F0F0',
-					['flex-direction'] = 'row',
-				},
-				subviews = {
-					{
-						view = 'text',
-						value = '  替补2号位  ',
-						style = {
-							['font-size'] = 20 * ratio,
-							color = '#5f5f5f'
-						}
-						
-					},
-					wui.GridSelect.createLayout({id = "grid_bench2", list = gridListPosation, config = {single = true, gridStyle = gridStylePosition } }),
-				},
-				
-			},
-			{
-				view = 'div',
-				style = {
-					width = 700 * ratio,
-					['background-color'] = '#F0F0F0',
-					['flex-direction'] = 'row',
-				},
-				subviews = {
-					{
-						view = 'text',
-						value = '  替补3号位  ',
-						style = {
-							['font-size'] = 20 * ratio,
-							color = '#5f5f5f'
-						}
-						
-					},
-					wui.GridSelect.createLayout({id = "grid_bench3", list = gridListPosation, config = {single = true, gridStyle = gridStylePosition } }),
-				},
-			},
-			{
-				view = 'div',
-				style = {
-					width = 700 * ratio,
-					['background-color'] = '#F0F0F0',
-					['flex-direction'] = 'row',
-				},
-				subviews = {
-					{
-						view = 'text',
-						value = '  替补4号位  ',
-						style = {
-							['font-size'] = 20 * ratio,
-							color = '#5f5f5f'
-						}
-						
-					},
-					wui.GridSelect.createLayout({id = "grid_bench4", list = gridListPosation, config = {single = true, gridStyle = gridStylePosition } }),
-				},
-			},
-			{
-				view = 'div',
-				style = {
-					width = 700 * ratio,
-					['background-color'] = '#F0F0F0',
-					['flex-direction'] = 'row',
-				},
-				subviews = {
-					{
-						view = 'text',
-						value = '  替补5号位  ',
-						style = {
-							['font-size'] = 20 * ratio,
-							color = '#5f5f5f'
-						}
-						
-					},
-					wui.GridSelect.createLayout({id = "grid_bench5", list = gridListPosation, config = {single = true, gridStyle = gridStylePosition } }),
-				},
-			},
-			{
-				view = 'div',
-				style = {
-					width = 700 * ratio,
-					['background-color'] = '#F0F0F0',
-					['flex-direction'] = 'row',
-				},
-				subviews = {
-					{
-						view = 'text',
-						value = '  替补6号位  ',
-						style = {
-							['font-size'] = 20 * ratio,
-							color = '#5f5f5f'
-						}
-						
-					},
-					wui.GridSelect.createLayout({id = "grid_bench6", list = gridListPosation, config = {single = true, gridStyle = gridStylePosition } }),
-				},
-			},
-			{
-				view = 'div',
-				style = {
-					width = 700 * ratio,
-					['background-color'] = '#F0F0F0',
-					['flex-direction'] = 'row',
-				},
-				subviews = {
-					{
-						view = 'text',
-						value = '  替补7号位  ',
-						style = {
-							['font-size'] = 20 * ratio,
-							color = '#5f5f5f'
-						}
-						
-					},
-					wui.GridSelect.createLayout({id = "grid_bench7", list = gridListPosation, config = {single = true, gridStyle = gridStylePosition } }),
-				},
-				
 			},
 		}
 	},
@@ -655,27 +478,16 @@ wui.Button.setOnClickedCallback(context:findView('btn_taskOk'), function (id, ac
 		prt(USER.TASK_NAME)
 		prt(USER.REPEAT_TIMES)
 		
-		local exsitFlag = false
-		for k, v in pairs(gridListTaskSelect) do
-			if USER.TASK_NAME == v.title then
-				exsitFlag = true
-				break
+		for k, v in pairs(_gridList) do
+			if v.tag == "选择任务" or v.tag == "任务次数" then
+				if #v.checkedList == 0 then
+					Log("no 选择任务 or 任务次数")
+					return
+				end
 			end
-		end
-		if not exsitFlag then
-			return
 		end
 		
-		exsitFlag = false
-		for k, v in pairs(gridListTaskRepeat) do
-			if USER.REPEAT_TIMES == 9999 or v.title == tostring(USER.REPEAT_TIMES) then
-				exsitFlag = true
-				break
-			end
-		end
-		if not exsitFlag then
-			return
-		end
+		submitGridChecked()
 		
 		uiClosedFlag = true
 		context:close()
@@ -684,161 +496,21 @@ wui.Button.setOnClickedCallback(context:findView('btn_taskOk'), function (id, ac
 	end
 )
 
-wui.GridSelect.setOnSelectedCallback(context:findView("grid_taskRepeat"), function (id, index, checked, checkedList)
-		print('wui.GridSelect index: ' .. tostring(index))
-		print('wui.GridSelect checked: ' .. tostring(checked))
-		for i, v in ipairs(checkedList) do
-			print('> wui.GridSelect checkedList index: ' .. tostring(v))
-		end
-		
-		local isChecked = function(checkedIndex)
-			for _k, _v in pairs(checkedList) do
-				if _v == checkedIndex then
-					return true
+
+local function setCallbacks()
+	for k, v in pairs(_gridList) do
+		wui.GridSelect.setOnSelectedCallback(context:findView(generateGridID(v.tag)), function (id, index, checked, checkedList)
+				print('wui.GridSelect index: ' .. tostring(index))
+				print('wui.GridSelect checked: ' .. tostring(checked))
+				for i, v in ipairs(checkedList) do
+					print('> wui.GridSelect checkedList index: ' .. tostring(v))
 				end
+				prt(checkedList)
+				setGridChecked(parserGridID(id), checkedList)
 			end
-			
-			return false
-		end
-		
-		if checked then
-			if isChecked(1) then
-				USER.REPEAT_TIMES = 1
-			elseif isChecked(2) then
-				USER.REPEAT_TIMES = 1
-			elseif isChecked(3) then
-				USER.REPEAT_TIMES = 2
-			elseif isChecked(4) then
-				USER.REPEAT_TIMES = 5
-			elseif isChecked(5) then
-				USER.REPEAT_TIMES = 10
-			elseif isChecked(6) then
-				USER.REPEAT_TIMES = 20
-			elseif isChecked(7) then
-				USER.REPEAT_TIMES = 50
-			elseif isChecked(8) then
-				USER.REPEAT_TIMES = 9999
-			end
-		else
-			USER.REPEAT_TIMES = 0
-		end
-		
-		storage.put("USER.REPEAT_TIMES", USER.REPEAT_TIMES)
-		prt(USER.REPEAT_TIMES)
+		)
 	end
-)
-
-wui.GridSelect.setOnSelectedCallback(context:findView("grid_taskSelect"), function (id, index, checked, checkedList)
-		print('wui.GridSelect index: ' .. tostring(index))
-		print('wui.GridSelect checked: ' .. tostring(checked))
-		for i, v in ipairs(checkedList) do
-			print('> wui.GridSelect checkedList index: ' .. tostring(v))
-		end
-		
-		if checked then
-			USER.TASK_NAME = gridListTaskSelect[checkedList[1]].title
-			storage.put("USER.TASK_NAME", USER.TASK_NAME)
-		else
-			USER.TASK_NAME = nil
-		end
-	end
-)
-
-wui.GridSelect.setOnSelectedCallback(context:findView("grid_functionSelect"), function (id, index, checked, checkedList)
-		print('wui.GridSelect index: ' .. tostring(index))
-		print('wui.GridSelect checked: ' .. tostring(checked))
-		for i, v in ipairs(checkedList) do
-			print('> wui.GridSelect checkedList index: ' .. tostring(v))
-		end
-		
-		local isChecked = function(checkedIndex)
-			for _k, _v in pairs(checkedList) do
-				if _v == checkedIndex then
-					return true
-				end
-			end
-			
-			return false
-		end
-		
-		if checked then
-			if isChecked(1) then
-				USER.REFRESH_CONCTRACT = true
-			else
-				USER.REFRESH_CONCTRACT = false
-			end
-			
-			if isChecked(2) then
-				USER.BUY_ENERGY = true
-			else
-				USER.BUY_ENERGY = false
-			end
-			
-			if isChecked(3) then
-				USER.RESTORED_ENERGY = true
-			else
-				USER.RESTORED_ENERGY = false
-			end
-			
-			if isChecked(4) then
-				USER.ALLOW_SUBSTITUTE = true
-			else
-				USER.ALLOW_SUBSTITUTE = false
-			end
-			
-			if isChecked(5) then
-				USER.ALLOW_RESTART = true
-			else
-				USER.ALLOW_RESTART = false
-			end
-		else
-			USER.REFRESH_CONCTRACT = false
-			USER.BUY_ENERGY = false
-			USER.RESTORED_ENERGY = false
-			USER.ALLOW_SUBSTITUTE = false
-			USER.ALLOW_RESTART = false
-		end
-		
-		storage.put("USER.REFRESH_CONCTRACT", USER.REFRESH_CONCTRACT)
-		storage.put("USER.BUY_ENERGY", USER.BUY_ENERGY)
-		storage.put("USER.RESTORED_ENERGY", USER.RESTORED_ENERGY)
-		storage.put("USER.ALLOW_SUBSTITUTE", USER.ALLOW_SUBSTITUTE)
-		storage.put("USER.ALLOW_RESTART", USER.ALLOW_RESTART)
-		
-	end,
-	function (id, limit)
-		print('wui.GridSelect limit: ' .. tostring(limit))
-	end
-)
-
-local benchList = {'grid_bench1', 'grid_bench2', 'grid_bench3', 'grid_bench4', 'grid_bench5', 'grid_bench6', 'grid_bench7'}
-
-for k, v in pairs(benchList) do
-	wui.GridSelect.setOnSelectedCallback(context:findView(v), function(id, index, checked, checkedList)
-			print('wui.GridSelect id: ' .. tostring(id))
-			print('wui.GridSelect index: ' .. tostring(index))
-			print('wui.GridSelect checked: ' .. tostring(checked))
-			
-			for _k, _v in pairs(benchList) do
-				if _v == id then
-					if checked then
-						USER.SUBSTITUTE_INDEX_LIST[_k].fieldIndex = index
-						USER.SUBSTITUTE_INDEX_LIST[_k].substituteCondition = 1
-					else
-						USER.SUBSTITUTE_INDEX_LIST[_k].fieldIndex = 0
-						USER.SUBSTITUTE_INDEX_LIST[_k].substituteCondition = 0
-					end
-
-					storage.put(string.format("USER.SUBSTITUTE_INDEX_LIST[%d].fieldIndex", _k), index)
-					storage.put(string.format("USER.SUBSTITUTE_INDEX_LIST[%d].substituteCondition", _k), 1)
-					break
-				end
-			end
-			--prt(USER.SUBSTITUTE_INDEX_LIST)
-			
-		end)
 end
-
 
 
 
@@ -847,25 +519,14 @@ end
 local count = 1
 
 function dispUI()
-
+	
 	
 	print('show view')
 	context:show()
-
+	
 	while not uiClosedFlag do
 		sleep(200)
 	end
-	
-	storage.commit()
-	
-	Log("storage.commit yet, prt info")
-	prt(storage.get("USER.TASK_NAME", "NO_TASK"))
-	prt(storage.get("USER.REPEAT_TIMES", 0))
-	prt(storage.get("USER.REFRESH_CONCTRACT", false))
-	prt(storage.get("USER.BUY_ENERGY", false))
-	prt(storage.get("USER.RESTORED_ENERGY", false))
-	prt(storage.get("USER.ALLOW_SUBSTITUTE", false))
-	prt(storage.get("USER.ALLOW_RESTART", false))
 	
 	for i = 1, 7, 1 do
 		tmpFieldIndex = string.format("USER.SUBSTITUTE_INDEX_LIST[%d].fieldIndex", i)
@@ -875,3 +536,7 @@ function dispUI()
 		prt(storage.get(tmpSubstituteCondition, 0))
 	end
 end
+
+
+setCallbacks()
+--prt(_gridList)
