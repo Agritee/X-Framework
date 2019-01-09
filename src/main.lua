@@ -35,7 +35,7 @@ function main()
 end
 
 
---main()
+main()
 screen.init(1, 0)
 --page.tapWidget("联赛教练模式", "恭喜晋级")
 
