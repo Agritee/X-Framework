@@ -59,19 +59,17 @@ CFG.DEFAULT_TAP_TIME = 50		--默认tap时间/ms
 CFG.DEFAULT_LONG_TAP_TIME = 800	--默认longtap时间/ms
 
 
-USER = {}	--用户配置表
+USER = {}	--用户配置表，主要有UI设置
 -----------------用户设置-----------------
-USER.TASK_NAME = ""
-
-
+USER.TASK_NAME = ""					--任务名称
 
 USER.ALLOW_RESTART = true			--是否允许重启脚本来解决异常
 
-USER.REFRESH_CONCTRACT = false
+USER.REFRESH_CONCTRACT = false		--自动续约合同
 USER.REPEAT_TIMES = 0				--任务循环次数
 USER.DEFAULT_REPEAT_TIMES = 10		--任务默认运行次数
-USER.BUY_ENERGY = true
-USER.RESTORED_ENERGY = true
+USER.BUY_ENERGY = true				--自动购买能量
+USER.RESTORED_ENERGY = true			--等待恢复能量
 USER.ALLOW_SUBSTITUTE = true		--是否允许开场换人
 USER.SUBSTITUTE_INDEX_LIST = {--[[{fieldIndex = 1, substituteCondition = 1},{},{},{},{},{},{}]]
 	{fieldIndex = 0, substituteCondition = 0},

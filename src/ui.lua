@@ -160,7 +160,7 @@ local _gridList = {
 		singleCheck = true,
 		singleBindParam = "USER.SUBSTITUTE_INDEX_LIST[2].fieldIndex",
 		list = {
-			{title = 'P1', disabled = true},
+			{title = 'P2', disabled = true},
 			{title = '1', value = 1},
 			{title = '2', value = 2},
 			{title = '3', value = 3},
@@ -219,7 +219,7 @@ local _gridList = {
 		singleCheck = true,
 		singleBindParam = "USER.SUBSTITUTE_INDEX_LIST[3].fieldIndex",
 		list = {
-			{title = 'P1', disabled = true},
+			{title = 'P3', disabled = true},
 			{title = '1', value = 1},
 			{title = '2', value = 2},
 			{title = '3', value = 3},
@@ -278,7 +278,7 @@ local _gridList = {
 		singleCheck = true,
 		singleBindParam = "USER.SUBSTITUTE_INDEX_LIST[4].fieldIndex",
 		list = {
-			{title = 'P1', disabled = true},
+			{title = 'P4', disabled = true},
 			{title = '1', value = 1},
 			{title = '2', value = 2},
 			{title = '3', value = 3},
@@ -337,7 +337,7 @@ local _gridList = {
 		singleCheck = true,
 		singleBindParam = "USER.SUBSTITUTE_INDEX_LIST[5].fieldIndex",
 		list = {
-			{title = 'P1', disabled = true},
+			{title = 'P5', disabled = true},
 			{title = '1', value = 1},
 			{title = '2', value = 2},
 			{title = '3', value = 3},
@@ -396,7 +396,7 @@ local _gridList = {
 		singleCheck = true,
 		singleBindParam = "USER.SUBSTITUTE_INDEX_LIST[6].fieldIndex",
 		list = {
-			{title = 'P1', disabled = true},
+			{title = 'P6', disabled = true},
 			{title = '1', value = 1},
 			{title = '2', value = 2},
 			{title = '3', value = 3},
@@ -455,7 +455,7 @@ local _gridList = {
 		singleCheck = true,
 		singleBindParam = "USER.SUBSTITUTE_INDEX_LIST[7].fieldIndex",
 		list = {
-			{title = 'P1', disabled = true},
+			{title = 'P7', disabled = true},
 			{title = '1', value = 1},
 			{title = '2', value = 2},
 			{title = '3', value = 3},
