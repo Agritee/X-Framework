@@ -4,7 +4,7 @@ local cjson = require 'cjson'
 --style缩放参数(包括字体大小)，以保证在任何比例的分辨下，UI都能按照开发分辨率的样式完整的呈现，若比例大于开发分辨率，两边留白
 local ratio = (CFG.DST_RESOLUTION.height * CFG.DEV_RESOLUTION.width / CFG.DEV_RESOLUTION.height) / CFG.DST_RESOLUTION.width
 
-local uiClosedFlag = false
+local showwingFlag = true
 
 local _gridList = {
 	{
@@ -95,8 +95,428 @@ local _gridList = {
 			--icon = ''
 		}
 	},
-	
+	{
+		tag = "替补1",
+		checkedList = {},
+		singleCheck = true,
+		singleParamKey = "USER.SUBSTITUTE_INDEX_LIST[1].index",
+		list = {
+			{title = 'P1', disabled = true},
+			{title = '1'},
+			{title = '2'},
+			{title = '3'},
+			{title = '4'},
+			{title = '5'},
+			{title = '6'},
+			{title = '7'},
+			{title = '8'},
+			{title = '9'},
+			{title = '10'},
+			{title = '11'},
+		},
+		style = {
+			lineSpacing = 14 * ratio,
+			width = 36 * ratio,
+			height = 30 * ratio,
+			fontSize = 10 * ratio,
+			color = '#333333',
+			checkedColor = '#333333',
+			disabledColor = '#BBBBBB',
+			borderColor = '#F6F6F6',
+			checkedBorderColor = '#ffb200',
+			backgroundColor = '#F6F6F6',
+			checkedBackgroundColor = '#FFFFFF',
+			icon = ''
+		}
+	},
+	{
+		tag = "状态1",
+		checkedList = {},
+		singleCheck = true,
+		singleParamKey = "USER.SUBSTITUTE_INDEX_LIST[1].substituteCondition",
+		list = {
+			{title = "好一档", value = 1},
+			{title = "好两档", value = 2},
+			{title = "主力红", value = 3},
+		},
+		style = {
+			lineSpacing = 14 * ratio,
+			width = 50 * ratio,
+			height = 30 * ratio,
+			fontSize = 10 * ratio,
+			color = '#333333',
+			checkedColor = '#333333',
+			disabledColor = '#BBBBBB',
+			borderColor = '#F6F6F6',
+			checkedBorderColor = '#ffb200',
+			backgroundColor = '#F6F6F6',
+			checkedBackgroundColor = '#FFFFFF',
+			icon = ''
+		}
+	},
+	{
+		tag = "替补2",
+		checkedList = {},
+		singleCheck = true,
+		singleParamKey = "USER.SUBSTITUTE_INDEX_LIST[1].index",
+		list = {
+			{title = 'P2', disabled = true},
+			{title = '1'},
+			{title = '2'},
+			{title = '3'},
+			{title = '4'},
+			{title = '5'},
+			{title = '6'},
+			{title = '7'},
+			{title = '8'},
+			{title = '9'},
+			{title = '10'},
+			{title = '11'},
+		},
+		style = {
+			lineSpacing = 14 * ratio,
+			width = 36 * ratio,
+			height = 30 * ratio,
+			fontSize = 10 * ratio,
+			color = '#333333',
+			checkedColor = '#333333',
+			disabledColor = '#BBBBBB',
+			borderColor = '#F6F6F6',
+			checkedBorderColor = '#ffb200',
+			backgroundColor = '#F6F6F6',
+			checkedBackgroundColor = '#FFFFFF',
+			icon = ''
+		}
+	},
+	{
+		tag = "状态2",
+		checkedList = {},
+		singleCheck = true,
+		singleParamKey = "USER.SUBSTITUTE_INDEX_LIST[1].substituteCondition",
+		list = {
+			{title = "好一档", value = 1},
+			{title = "好两档", value = 2},
+			{title = "主力红", value = 3},
+		},
+		style = {
+			lineSpacing = 14 * ratio,
+			width = 50 * ratio,
+			height = 30 * ratio,
+			fontSize = 10 * ratio,
+			color = '#333333',
+			checkedColor = '#333333',
+			disabledColor = '#BBBBBB',
+			borderColor = '#F6F6F6',
+			checkedBorderColor = '#ffb200',
+			backgroundColor = '#F6F6F6',
+			checkedBackgroundColor = '#FFFFFF',
+			icon = ''
+		}
+	},
+	{
+		tag = "替补3",
+		checkedList = {},
+		singleCheck = true,
+		singleParamKey = "USER.SUBSTITUTE_INDEX_LIST[1].index",
+		list = {
+			{title = 'P3', disabled = true},
+			{title = '1'},
+			{title = '2'},
+			{title = '3'},
+			{title = '4'},
+			{title = '5'},
+			{title = '6'},
+			{title = '7'},
+			{title = '8'},
+			{title = '9'},
+			{title = '10'},
+			{title = '11'},
+		},
+		style = {
+			lineSpacing = 14 * ratio,
+			width = 36 * ratio,
+			height = 30 * ratio,
+			fontSize = 10 * ratio,
+			color = '#333333',
+			checkedColor = '#333333',
+			disabledColor = '#BBBBBB',
+			borderColor = '#F6F6F6',
+			checkedBorderColor = '#ffb200',
+			backgroundColor = '#F6F6F6',
+			checkedBackgroundColor = '#FFFFFF',
+			icon = ''
+		}
+	},
+	{
+		tag = "状态3",
+		checkedList = {},
+		singleCheck = true,
+		singleParamKey = "USER.SUBSTITUTE_INDEX_LIST[1].substituteCondition",
+		list = {
+			{title = "好一档", value = 1},
+			{title = "好两档", value = 2},
+			{title = "主力红", value = 3},
+		},
+		style = {
+			lineSpacing = 14 * ratio,
+			width = 50 * ratio,
+			height = 30 * ratio,
+			fontSize = 10 * ratio,
+			color = '#333333',
+			checkedColor = '#333333',
+			disabledColor = '#BBBBBB',
+			borderColor = '#F6F6F6',
+			checkedBorderColor = '#ffb200',
+			backgroundColor = '#F6F6F6',
+			checkedBackgroundColor = '#FFFFFF',
+			icon = ''
+		}
+	},
+	{
+		tag = "替补4",
+		checkedList = {},
+		singleCheck = true,
+		singleParamKey = "USER.SUBSTITUTE_INDEX_LIST[1].index",
+		list = {
+			{title = 'P4', disabled = true},
+			{title = '1'},
+			{title = '2'},
+			{title = '3'},
+			{title = '4'},
+			{title = '5'},
+			{title = '6'},
+			{title = '7'},
+			{title = '8'},
+			{title = '9'},
+			{title = '10'},
+			{title = '11'},
+		},
+		style = {
+			lineSpacing = 14 * ratio,
+			width = 36 * ratio,
+			height = 30 * ratio,
+			fontSize = 10 * ratio,
+			color = '#333333',
+			checkedColor = '#333333',
+			disabledColor = '#BBBBBB',
+			borderColor = '#F6F6F6',
+			checkedBorderColor = '#ffb200',
+			backgroundColor = '#F6F6F6',
+			checkedBackgroundColor = '#FFFFFF',
+			icon = ''
+		}
+	},
+	{
+		tag = "状态4",
+		checkedList = {},
+		singleCheck = true,
+		singleParamKey = "USER.SUBSTITUTE_INDEX_LIST[1].substituteCondition",
+		list = {
+			{title = "好一档", value = 1},
+			{title = "好两档", value = 2},
+			{title = "主力红", value = 3},
+		},
+		style = {
+			lineSpacing = 14 * ratio,
+			width = 50 * ratio,
+			height = 30 * ratio,
+			fontSize = 10 * ratio,
+			color = '#333333',
+			checkedColor = '#333333',
+			disabledColor = '#BBBBBB',
+			borderColor = '#F6F6F6',
+			checkedBorderColor = '#ffb200',
+			backgroundColor = '#F6F6F6',
+			checkedBackgroundColor = '#FFFFFF',
+			icon = ''
+		}
+	},
+	{
+		tag = "替补5",
+		checkedList = {},
+		singleCheck = true,
+		singleParamKey = "USER.SUBSTITUTE_INDEX_LIST[1].index",
+		list = {
+			{title = 'P5', disabled = true},
+			{title = '1'},
+			{title = '2'},
+			{title = '3'},
+			{title = '4'},
+			{title = '5'},
+			{title = '6'},
+			{title = '7'},
+			{title = '8'},
+			{title = '9'},
+			{title = '10'},
+			{title = '11'},
+		},
+		style = {
+			lineSpacing = 14 * ratio,
+			width = 36 * ratio,
+			height = 30 * ratio,
+			fontSize = 10 * ratio,
+			color = '#333333',
+			checkedColor = '#333333',
+			disabledColor = '#BBBBBB',
+			borderColor = '#F6F6F6',
+			checkedBorderColor = '#ffb200',
+			backgroundColor = '#F6F6F6',
+			checkedBackgroundColor = '#FFFFFF',
+			icon = ''
+		}
+	},
+	{
+		tag = "状态5",
+		checkedList = {},
+		singleCheck = true,
+		singleParamKey = "USER.SUBSTITUTE_INDEX_LIST[1].substituteCondition",
+		list = {
+			{title = "好一档", value = 1},
+			{title = "好两档", value = 2},
+			{title = "主力红", value = 3},
+		},
+		style = {
+			lineSpacing = 14 * ratio,
+			width = 50 * ratio,
+			height = 30 * ratio,
+			fontSize = 10 * ratio,
+			color = '#333333',
+			checkedColor = '#333333',
+			disabledColor = '#BBBBBB',
+			borderColor = '#F6F6F6',
+			checkedBorderColor = '#ffb200',
+			backgroundColor = '#F6F6F6',
+			checkedBackgroundColor = '#FFFFFF',
+			icon = ''
+		}
+	},
+	{
+		tag = "替补6",
+		checkedList = {},
+		singleCheck = true,
+		singleParamKey = "USER.SUBSTITUTE_INDEX_LIST[1].index",
+		list = {
+			{title = 'P6', disabled = true},
+			{title = '1'},
+			{title = '2'},
+			{title = '3'},
+			{title = '4'},
+			{title = '5'},
+			{title = '6'},
+			{title = '7'},
+			{title = '8'},
+			{title = '9'},
+			{title = '10'},
+			{title = '11'},
+		},
+		style = {
+			lineSpacing = 14 * ratio,
+			width = 36 * ratio,
+			height = 30 * ratio,
+			fontSize = 10 * ratio,
+			color = '#333333',
+			checkedColor = '#333333',
+			disabledColor = '#BBBBBB',
+			borderColor = '#F6F6F6',
+			checkedBorderColor = '#ffb200',
+			backgroundColor = '#F6F6F6',
+			checkedBackgroundColor = '#FFFFFF',
+			icon = ''
+		}
+	},
+	{
+		tag = "状态6",
+		checkedList = {},
+		singleCheck = true,
+		singleParamKey = "USER.SUBSTITUTE_INDEX_LIST[1].substituteCondition",
+		list = {
+			{title = "好一档", value = 1},
+			{title = "好两档", value = 2},
+			{title = "主力红", value = 3},
+		},
+		style = {
+			lineSpacing = 14 * ratio,
+			width = 50 * ratio,
+			height = 30 * ratio,
+			fontSize = 10 * ratio,
+			color = '#333333',
+			checkedColor = '#333333',
+			disabledColor = '#BBBBBB',
+			borderColor = '#F6F6F6',
+			checkedBorderColor = '#ffb200',
+			backgroundColor = '#F6F6F6',
+			checkedBackgroundColor = '#FFFFFF',
+			icon = ''
+		}
+	},
+	{
+		tag = "替补7",
+		checkedList = {},
+		singleCheck = true,
+		singleParamKey = "USER.SUBSTITUTE_INDEX_LIST[1].index",
+		list = {
+			{title = 'P7', disabled = true},
+			{title = '1'},
+			{title = '2'},
+			{title = '3'},
+			{title = '4'},
+			{title = '5'},
+			{title = '6'},
+			{title = '7'},
+			{title = '8'},
+			{title = '9'},
+			{title = '10'},
+			{title = '11'},
+		},
+		style = {
+			lineSpacing = 14 * ratio,
+			width = 36 * ratio,
+			height = 30 * ratio,
+			fontSize = 10 * ratio,
+			color = '#333333',
+			checkedColor = '#333333',
+			disabledColor = '#BBBBBB',
+			borderColor = '#F6F6F6',
+			checkedBorderColor = '#ffb200',
+			backgroundColor = '#F6F6F6',
+			checkedBackgroundColor = '#FFFFFF',
+			icon = ''
+		}
+	},
+	{
+		tag = "状态7",
+		checkedList = {},
+		singleCheck = true,
+		singleParamKey = "USER.SUBSTITUTE_INDEX_LIST[1].substituteCondition",
+		list = {
+			{title = "好一档", value = 1},
+			{title = "好两档", value = 2},
+			{title = "主力红", value = 3},
+		},
+		style = {
+			lineSpacing = 14 * ratio,
+			width = 50 * ratio,
+			height = 30 * ratio,
+			fontSize = 10 * ratio,
+			color = '#333333',
+			checkedColor = '#333333',
+			disabledColor = '#BBBBBB',
+			borderColor = '#F6F6F6',
+			checkedBorderColor = '#ffb200',
+			backgroundColor = '#F6F6F6',
+			checkedBackgroundColor = '#FFFFFF',
+			icon = ''
+		}
+	},	
 }
+
+local function generateGridID(gridTag)
+	return string.format("grid_%s", gridTag)
+end
+
+local function parserGridID(gridID)
+	return string.sub(gridID, 6, -1)
+end
 
 --从_gridList获取list，并过滤掉不需要的参数
 local function generateGridList(gridTag)
@@ -125,14 +545,6 @@ local function generateGridStyle(gridTag)
 	end
 end
 
-local function generateGridID(gridTag)
-	return string.format("grid_%s", gridTag)
-end
-
-local function parserGridID(gridID)
-	return string.sub(gridID, 6, -1)
-end
-
 local function setGridChecked(gridTag, checkedList)
 	for k, v in pairs(_gridList) do
 		if v.tag == gridTag then
@@ -143,14 +555,7 @@ local function setGridChecked(gridTag, checkedList)
 end
 
 local function loadGridChecked()
-	Log("load last user setting")
-	prt(storage.get("TASK_NAME", "NO_TASK"))
-	prt(storage.get("REPEAT_TIMES", 0))
-	prt(storage.get("REFRESH_CONCTRACT", false))
-	prt(storage.get("BUY_ENERGY", false))
-	prt(storage.get("RESTORED_ENERGY", false))
-	prt(storage.get("ALLOW_SUBSTITUTE", false))
-	prt(storage.get("ALLOW_RESTART", false))
+	Log("loadGridChecked")
 	
 	for k, v in pairs(_gridList) do
 		local storeList = cjson.decode(storage.get(v.tag, "{}"))
@@ -241,8 +646,8 @@ local rootLayout = {
 	style = {
 		width = 750,
 		['align-items'] = 'center',
-		--['justify-content'] = 'flex-end',
-		['justify-content'] = 'center',
+		['justify-content'] = 'flex-end',
+		--['justify-content'] = 'center',
 	},
 	subviews = {
 	}
@@ -357,14 +762,15 @@ local pages = {
 		view = 'div',
 		style = {
 			width = 700 * ratio,
-			['background-color'] = '#F0F0F0'
+			['background-color'] = '#FFFFFF',
+			['justify-content'] = 'space-around',
 		},
 		subviews = {
 			{
 				view = 'text',
 				value = ' ',
 				style = {
-					['font-size'] = 20 * ratio,
+					['font-size'] = 10 * ratio,
 					color = '#5f5f5f'
 				}
 			},
@@ -372,29 +778,185 @@ local pages = {
 				view = 'div',
 				style = {
 					width = 700 * ratio,
-					['background-color'] = '#F0F0F0',
+					['background-color'] = '#FFFFFF',
 					['flex-direction'] = 'row',
+					--['justify-content'] = 'space-around',
+					['justify-content'] = 'center',
 				},
 				subviews = {
+					wui.GridSelect.createLayout({id = generateGridID("替补1"), list = generateGridList("替补1"), 
+					config = {single = true, totalWidth = 440 * ratio, gridStyle = generateGridStyle("替补1")}}),
 					{
 						view = 'text',
-						value = '  替补1号位  ',
+						value = '		',
 						style = {
 							['font-size'] = 20 * ratio,
 							color = '#5f5f5f'
 						}
-						
-					},
-					--wui.GridSelect.createLayout({id = "grid_bench1", list = gridListPosation, config = {single = true, gridStyle = gridStylePosition } }),
+					},					
+					wui.GridSelect.createLayout({id = generateGridID("状态1"), list = generateGridList("状态1"), 
+					config = {single = true, totalWidth = 160 * ratio, gridStyle = generateGridStyle("状态1")}}),
 				},
 			},
+			{
+				view = 'div',
+				style = {
+					width = 700 * ratio,
+					['background-color'] = '#FFFFFF',
+					['flex-direction'] = 'row',
+					--['justify-content'] = 'space-around',
+					['justify-content'] = 'center',
+				},
+				subviews = {
+					wui.GridSelect.createLayout({id = generateGridID("替补2"), list = generateGridList("替补2"), 
+					config = {single = true, totalWidth = 440 * ratio, gridStyle = generateGridStyle("替补2")}}),
+					{
+						view = 'text',
+						value = '		',
+						style = {
+							['font-size'] = 20 * ratio,
+							color = '#5f5f5f'
+						}
+					},					
+					wui.GridSelect.createLayout({id = generateGridID("状态2"), list = generateGridList("状态2"), 
+					config = {single = true, totalWidth = 160 * ratio, gridStyle = generateGridStyle("状态2")}}),
+				},
+			},
+			{
+				view = 'div',
+				style = {
+					width = 700 * ratio,
+					['background-color'] = '#FFFFFF',
+					['flex-direction'] = 'row',
+					--['justify-content'] = 'space-around',
+					['justify-content'] = 'center',
+				},
+				subviews = {
+					wui.GridSelect.createLayout({id = generateGridID("替补3"), list = generateGridList("替补3"), 
+					config = {single = true, totalWidth = 440 * ratio, gridStyle = generateGridStyle("替补3")}}),
+					{
+						view = 'text',
+						value = '		',
+						style = {
+							['font-size'] = 20 * ratio,
+							color = '#5f5f5f'
+						}
+					},					
+					wui.GridSelect.createLayout({id = generateGridID("状态3"), list = generateGridList("状态3"), 
+					config = {single = true, totalWidth = 160 * ratio, gridStyle = generateGridStyle("状态3")}}),
+				},
+			},
+			{
+				view = 'div',
+				style = {
+					width = 700 * ratio,
+					['background-color'] = '#FFFFFF',
+					['flex-direction'] = 'row',
+					--['justify-content'] = 'space-around',
+					['justify-content'] = 'center',
+				},
+				subviews = {
+					wui.GridSelect.createLayout({id = generateGridID("替补4"), list = generateGridList("替补4"), 
+					config = {single = true, totalWidth = 440 * ratio, gridStyle = generateGridStyle("替补4")}}),
+					{
+						view = 'text',
+						value = '		',
+						style = {
+							['font-size'] = 20 * ratio,
+							color = '#5f5f5f'
+						}
+					},					
+					wui.GridSelect.createLayout({id = generateGridID("状态4"), list = generateGridList("状态4"), 
+					config = {single = true, totalWidth = 160 * ratio, gridStyle = generateGridStyle("状态4")}}),
+				},
+			},
+			{
+				view = 'div',
+				style = {
+					width = 700 * ratio,
+					['background-color'] = '#FFFFFF',
+					['flex-direction'] = 'row',
+					--['justify-content'] = 'space-around',
+					['justify-content'] = 'center',
+				},
+				subviews = {
+					wui.GridSelect.createLayout({id = generateGridID("替补5"), list = generateGridList("替补5"), 
+					config = {single = true, totalWidth = 440 * ratio, gridStyle = generateGridStyle("替补5")}}),
+					{
+						view = 'text',
+						value = '		',
+						style = {
+							['font-size'] = 20 * ratio,
+							color = '#5f5f5f'
+						}
+					},					
+					wui.GridSelect.createLayout({id = generateGridID("状态5"), list = generateGridList("状态5"), 
+					config = {single = true, totalWidth = 160 * ratio, gridStyle = generateGridStyle("状态5")}}),
+				},
+			},
+			{
+				view = 'div',
+				style = {
+					width = 700 * ratio,
+					['background-color'] = '#FFFFFF',
+					['flex-direction'] = 'row',
+					--['justify-content'] = 'space-around',
+					['justify-content'] = 'center',
+				},
+				subviews = {
+					wui.GridSelect.createLayout({id = generateGridID("替补6"), list = generateGridList("替补6"), 
+					config = {single = true, totalWidth = 440 * ratio, gridStyle = generateGridStyle("替补6")}}),
+					{
+						view = 'text',
+						value = '		',
+						style = {
+							['font-size'] = 20 * ratio,
+							color = '#5f5f5f'
+						}
+					},					
+					wui.GridSelect.createLayout({id = generateGridID("状态6"), list = generateGridList("状态6"), 
+					config = {single = true, totalWidth = 160 * ratio, gridStyle = generateGridStyle("状态6")}}),
+				},
+			},
+			{
+				view = 'div',
+				style = {
+					width = 700 * ratio,
+					['background-color'] = '#FFFFFF',
+					['flex-direction'] = 'row',
+					--['justify-content'] = 'space-around',
+					['justify-content'] = 'center',
+				},
+				subviews = {
+					wui.GridSelect.createLayout({id = generateGridID("替补7"), list = generateGridList("替补7"), 
+					config = {single = true, totalWidth = 440 * ratio, gridStyle = generateGridStyle("替补7")}}),
+					{
+						view = 'text',
+						value = '		',
+						style = {
+							['font-size'] = 20 * ratio,
+							color = '#5f5f5f'
+						}
+					},					
+					wui.GridSelect.createLayout({id = generateGridID("状态7"), list = generateGridList("状态7"), 
+					config = {single = true, totalWidth = 160 * ratio, gridStyle = generateGridStyle("状态7")}}),
+				},
+			},
+			{
+				view = 'text',
+				value = ' ',
+				style = {
+					['font-size'] = 20 * ratio,
+					color = '#5f5f5f'
+				}
+			},		
 		}
 	},
 	{
 		view = 'div',
 		style = {
 			width = 700 * ratio,
-			['background-color'] = '#F0F0F0'
+			['background-color'] = '#FFFFFF'
 		},
 		subviews = {
 			{
@@ -450,7 +1012,8 @@ tabPageConfig.tabStyle = {
 	textPaddingRight = 10
 }
 
-tabPageConfig.wrapBackgroundColor= '#FF0000'
+--tabPageConfig.wrapBackgroundColor= '#FF0000'
+tabPageConfig.wrapBackgroundColor= '#FFFFFF'
 
 local context = UI.createContext(rootLayout, globalStyle)
 local rootView = context:getRootView()
@@ -489,15 +1052,14 @@ wui.Button.setOnClickedCallback(context:findView('btn_taskOk'), function (id, ac
 		
 		submitGridChecked()
 		
-		uiClosedFlag = true
+		showwingFlag = false
 		context:close()
 		
 		return
 	end
 )
 
-
-local function setCallbacks()
+local function setGridDefualtCallbacks()
 	for k, v in pairs(_gridList) do
 		wui.GridSelect.setOnSelectedCallback(context:findView(generateGridID(v.tag)), function (id, index, checked, checkedList)
 				print('wui.GridSelect index: ' .. tostring(index))
@@ -512,31 +1074,16 @@ local function setCallbacks()
 	end
 end
 
-
-
--- 显示UI，但不会阻塞
-
-local count = 1
-
 function dispUI()
-	
-	
 	print('show view')
 	context:show()
 	
-	while not uiClosedFlag do
+	while showwingFlag do
 		sleep(200)
 	end
 	
-	for i = 1, 7, 1 do
-		tmpFieldIndex = string.format("USER.SUBSTITUTE_INDEX_LIST[%d].fieldIndex", i)
-		tmpSubstituteCondition = string.format("USER.SUBSTITUTE_INDEX_LIST[%d].substituteCondition", i)
-		
-		prt(storage.get(tmpFieldIndex, 0))
-		prt(storage.get(tmpSubstituteCondition, 0))
-	end
+	--prt(_gridList)
 end
 
 
-setCallbacks()
---prt(_gridList)
+setGridDefualtCallbacks()
