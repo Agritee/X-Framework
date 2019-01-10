@@ -16,19 +16,15 @@ require("task/leagueSim")
 require("ui")
 
 function main()
-
 	screen.keep(false)
 	IS_BREAKING_TASK = exec.isExistBreakingTask()
 	
-	if not IS_BREAKING_TASK then
-		dispUI()
-	end
+	dispUI()
+	
 	
 	if IS_BREAKING_TASK then
 		skipInitPage()	--先跳过未定义界面
 	end
-	
-
 	
 	exec.run(USER.TASK_NAME, USER.REPEAT_TIMES)
 	xmod.exit()
@@ -46,8 +42,4 @@ screen.init(1, 0)
 --获取一个区域内某种状态的所有球员位置信息
 --sleep(2000)
 --switchPlayer()
-
-dispUI()
-
-prt(USER)
 

@@ -16,6 +16,25 @@ function tbCopy(tb)
 	return tmp
 end
 
+function setValueByStrKey(keyStr, value)
+	local keysTb = {}
+	for keyStr, keyIndex in string.gmatch(keyStr, "([%a_]+)%[?(%d*)%]?%.?") do
+		table.insert(keysTb, keyStr)
+		if string.len(keyIndex) > 0 then
+			table.insert(keysTb, tonumber(keyIndex))
+		end
+	end
+	
+	local iteratorTb = _G
+	for k, v in pairs(keysTb) do
+		if k < #keysTb then
+			iteratorTb = iteratorTb[v]
+		end
+	end
+	
+	iteratorTb[keysTb[#keysTb]] = value
+end
+
 --跳过初始化界面，主要用于自动重启后，跳过初始化界面
 function skipInitPage()
 	local startTime = os.time()
@@ -39,7 +58,7 @@ function skipInitPage()
 					catchError(ERR_TIMEOUT, "cant catch init next page!")
 				end
 				
-				if (os.time() - _startTime) % 3 == 0 then
+				if (os.time() - _startTime) % 2 == 0 then
 					ratioTap(30, 60)
 				end
 				

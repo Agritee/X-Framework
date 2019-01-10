@@ -14,7 +14,7 @@ local _gridList = {
 		--当singleCheck为true时，list每一项对应的值优先取list[i].value，value为nil时直接取title的值
 		--当singleCheck为false时，list中，由checkedList标记的项的值优先取list[i].value，value为nil时值为true
 		singleCheck = true,
-		singleParamKey = "TASK_NAME",
+		singleBindParam = "USER.TASK_NAME",
 		list = {
 			{title = '自动联赛'},
 			{title = '自动天梯'},
@@ -42,7 +42,7 @@ local _gridList = {
 		tag = "任务次数",
 		checkedList = {4},
 		singleCheck = true,
-		singleParamKey = "REPEAT_TIMES",
+		singleBindParam = "USER.REPEAT_TIMES",
 		list = {
 			{title = '次数', disabled = true, value = 0},
 			{title = '1', value = 1},
@@ -74,11 +74,11 @@ local _gridList = {
 		singleCheck = false,
 		singleParamKey = nil,
 		list = {
-			{title = '球员续约', paramKey = "REFRESH_CONCTRACT"},
-			{title = '等待恢复', paramKey = "RESTORED_ENERGY"},
-			{title = '购买能量', disabled = true, paramKey = "BUY_ENERGY"},
-			{title = '开场换人', paramKey = "ALLOW_SUBSTITUTE"},
-			{title = '自动重启', paramKey = "ALLOW_RESTART"},
+			{title = '球员续约', bindParam = "USER.REFRESH_CONCTRACT"},
+			{title = '等待恢复', bindParam = "USER.RESTORED_ENERGY"},
+			{title = '购买能量', disabled = true, bindParam = "USER.BUY_ENERGY"},
+			{title = '开场换人', bindParam = "USER.ALLOW_SUBSTITUTE"},
+			{title = '自动重启', bindParam = "USER.ALLOW_RESTART"},
 		},
 		style = {
 			lineSpacing = 14 * ratio,
@@ -99,20 +99,20 @@ local _gridList = {
 		tag = "替补1",
 		checkedList = {},
 		singleCheck = true,
-		singleParamKey = "USER.SUBSTITUTE_INDEX_LIST[1].index",
+		singleBindParam = "USER.SUBSTITUTE_INDEX_LIST[1].fieldIndex",
 		list = {
 			{title = 'P1', disabled = true},
-			{title = '1'},
-			{title = '2'},
-			{title = '3'},
-			{title = '4'},
-			{title = '5'},
-			{title = '6'},
-			{title = '7'},
-			{title = '8'},
-			{title = '9'},
-			{title = '10'},
-			{title = '11'},
+			{title = '1', value = 1},
+			{title = '2', value = 2},
+			{title = '3', value = 3},
+			{title = '4', value = 4},
+			{title = '5', value = 5},
+			{title = '6', value = 6},
+			{title = '7', value = 7},
+			{title = '8', value = 8},
+			{title = '9', value = 9},
+			{title = '10', value = 10},
+			{title = '11', value = 11},
 		},
 		style = {
 			lineSpacing = 14 * ratio,
@@ -133,11 +133,11 @@ local _gridList = {
 		tag = "状态1",
 		checkedList = {},
 		singleCheck = true,
-		singleParamKey = "USER.SUBSTITUTE_INDEX_LIST[1].substituteCondition",
+		singleBindParam = "USER.SUBSTITUTE_INDEX_LIST[1].substituteCondition",
 		list = {
 			{title = "好一档", value = 1},
 			{title = "好两档", value = 2},
-			{title = "主力红", value = 3},
+			{title = "主力红", value = 0},
 		},
 		style = {
 			lineSpacing = 14 * ratio,
@@ -154,24 +154,24 @@ local _gridList = {
 			icon = ''
 		}
 	},
-	{
+{
 		tag = "替补2",
 		checkedList = {},
 		singleCheck = true,
-		singleParamKey = "USER.SUBSTITUTE_INDEX_LIST[1].index",
+		singleBindParam = "USER.SUBSTITUTE_INDEX_LIST[2].fieldIndex",
 		list = {
-			{title = 'P2', disabled = true},
-			{title = '1'},
-			{title = '2'},
-			{title = '3'},
-			{title = '4'},
-			{title = '5'},
-			{title = '6'},
-			{title = '7'},
-			{title = '8'},
-			{title = '9'},
-			{title = '10'},
-			{title = '11'},
+			{title = 'P1', disabled = true},
+			{title = '1', value = 1},
+			{title = '2', value = 2},
+			{title = '3', value = 3},
+			{title = '4', value = 4},
+			{title = '5', value = 5},
+			{title = '6', value = 6},
+			{title = '7', value = 7},
+			{title = '8', value = 8},
+			{title = '9', value = 9},
+			{title = '10', value = 10},
+			{title = '11', value = 11},
 		},
 		style = {
 			lineSpacing = 14 * ratio,
@@ -192,11 +192,11 @@ local _gridList = {
 		tag = "状态2",
 		checkedList = {},
 		singleCheck = true,
-		singleParamKey = "USER.SUBSTITUTE_INDEX_LIST[1].substituteCondition",
+		singleBindParam = "USER.SUBSTITUTE_INDEX_LIST[2].substituteCondition",
 		list = {
 			{title = "好一档", value = 1},
 			{title = "好两档", value = 2},
-			{title = "主力红", value = 3},
+			{title = "主力红", value = 0},
 		},
 		style = {
 			lineSpacing = 14 * ratio,
@@ -213,24 +213,24 @@ local _gridList = {
 			icon = ''
 		}
 	},
-	{
+{
 		tag = "替补3",
 		checkedList = {},
 		singleCheck = true,
-		singleParamKey = "USER.SUBSTITUTE_INDEX_LIST[1].index",
+		singleBindParam = "USER.SUBSTITUTE_INDEX_LIST[3].fieldIndex",
 		list = {
-			{title = 'P3', disabled = true},
-			{title = '1'},
-			{title = '2'},
-			{title = '3'},
-			{title = '4'},
-			{title = '5'},
-			{title = '6'},
-			{title = '7'},
-			{title = '8'},
-			{title = '9'},
-			{title = '10'},
-			{title = '11'},
+			{title = 'P1', disabled = true},
+			{title = '1', value = 1},
+			{title = '2', value = 2},
+			{title = '3', value = 3},
+			{title = '4', value = 4},
+			{title = '5', value = 5},
+			{title = '6', value = 6},
+			{title = '7', value = 7},
+			{title = '8', value = 8},
+			{title = '9', value = 9},
+			{title = '10', value = 10},
+			{title = '11', value = 11},
 		},
 		style = {
 			lineSpacing = 14 * ratio,
@@ -251,11 +251,11 @@ local _gridList = {
 		tag = "状态3",
 		checkedList = {},
 		singleCheck = true,
-		singleParamKey = "USER.SUBSTITUTE_INDEX_LIST[1].substituteCondition",
+		singleBindParam = "USER.SUBSTITUTE_INDEX_LIST[3].substituteCondition",
 		list = {
 			{title = "好一档", value = 1},
 			{title = "好两档", value = 2},
-			{title = "主力红", value = 3},
+			{title = "主力红", value = 0},
 		},
 		style = {
 			lineSpacing = 14 * ratio,
@@ -272,24 +272,24 @@ local _gridList = {
 			icon = ''
 		}
 	},
-	{
+{
 		tag = "替补4",
 		checkedList = {},
 		singleCheck = true,
-		singleParamKey = "USER.SUBSTITUTE_INDEX_LIST[1].index",
+		singleBindParam = "USER.SUBSTITUTE_INDEX_LIST[4].fieldIndex",
 		list = {
-			{title = 'P4', disabled = true},
-			{title = '1'},
-			{title = '2'},
-			{title = '3'},
-			{title = '4'},
-			{title = '5'},
-			{title = '6'},
-			{title = '7'},
-			{title = '8'},
-			{title = '9'},
-			{title = '10'},
-			{title = '11'},
+			{title = 'P1', disabled = true},
+			{title = '1', value = 1},
+			{title = '2', value = 2},
+			{title = '3', value = 3},
+			{title = '4', value = 4},
+			{title = '5', value = 5},
+			{title = '6', value = 6},
+			{title = '7', value = 7},
+			{title = '8', value = 8},
+			{title = '9', value = 9},
+			{title = '10', value = 10},
+			{title = '11', value = 11},
 		},
 		style = {
 			lineSpacing = 14 * ratio,
@@ -310,11 +310,11 @@ local _gridList = {
 		tag = "状态4",
 		checkedList = {},
 		singleCheck = true,
-		singleParamKey = "USER.SUBSTITUTE_INDEX_LIST[1].substituteCondition",
+		singleBindParam = "USER.SUBSTITUTE_INDEX_LIST[4].substituteCondition",
 		list = {
 			{title = "好一档", value = 1},
 			{title = "好两档", value = 2},
-			{title = "主力红", value = 3},
+			{title = "主力红", value = 0},
 		},
 		style = {
 			lineSpacing = 14 * ratio,
@@ -331,24 +331,24 @@ local _gridList = {
 			icon = ''
 		}
 	},
-	{
+{
 		tag = "替补5",
 		checkedList = {},
 		singleCheck = true,
-		singleParamKey = "USER.SUBSTITUTE_INDEX_LIST[1].index",
+		singleBindParam = "USER.SUBSTITUTE_INDEX_LIST[5].fieldIndex",
 		list = {
-			{title = 'P5', disabled = true},
-			{title = '1'},
-			{title = '2'},
-			{title = '3'},
-			{title = '4'},
-			{title = '5'},
-			{title = '6'},
-			{title = '7'},
-			{title = '8'},
-			{title = '9'},
-			{title = '10'},
-			{title = '11'},
+			{title = 'P1', disabled = true},
+			{title = '1', value = 1},
+			{title = '2', value = 2},
+			{title = '3', value = 3},
+			{title = '4', value = 4},
+			{title = '5', value = 5},
+			{title = '6', value = 6},
+			{title = '7', value = 7},
+			{title = '8', value = 8},
+			{title = '9', value = 9},
+			{title = '10', value = 10},
+			{title = '11', value = 11},
 		},
 		style = {
 			lineSpacing = 14 * ratio,
@@ -369,11 +369,11 @@ local _gridList = {
 		tag = "状态5",
 		checkedList = {},
 		singleCheck = true,
-		singleParamKey = "USER.SUBSTITUTE_INDEX_LIST[1].substituteCondition",
+		singleBindParam = "USER.SUBSTITUTE_INDEX_LIST[5].substituteCondition",
 		list = {
 			{title = "好一档", value = 1},
 			{title = "好两档", value = 2},
-			{title = "主力红", value = 3},
+			{title = "主力红", value = 0},
 		},
 		style = {
 			lineSpacing = 14 * ratio,
@@ -390,24 +390,24 @@ local _gridList = {
 			icon = ''
 		}
 	},
-	{
+{
 		tag = "替补6",
 		checkedList = {},
 		singleCheck = true,
-		singleParamKey = "USER.SUBSTITUTE_INDEX_LIST[1].index",
+		singleBindParam = "USER.SUBSTITUTE_INDEX_LIST[6].fieldIndex",
 		list = {
-			{title = 'P6', disabled = true},
-			{title = '1'},
-			{title = '2'},
-			{title = '3'},
-			{title = '4'},
-			{title = '5'},
-			{title = '6'},
-			{title = '7'},
-			{title = '8'},
-			{title = '9'},
-			{title = '10'},
-			{title = '11'},
+			{title = 'P1', disabled = true},
+			{title = '1', value = 1},
+			{title = '2', value = 2},
+			{title = '3', value = 3},
+			{title = '4', value = 4},
+			{title = '5', value = 5},
+			{title = '6', value = 6},
+			{title = '7', value = 7},
+			{title = '8', value = 8},
+			{title = '9', value = 9},
+			{title = '10', value = 10},
+			{title = '11', value = 11},
 		},
 		style = {
 			lineSpacing = 14 * ratio,
@@ -428,11 +428,11 @@ local _gridList = {
 		tag = "状态6",
 		checkedList = {},
 		singleCheck = true,
-		singleParamKey = "USER.SUBSTITUTE_INDEX_LIST[1].substituteCondition",
+		singleBindParam = "USER.SUBSTITUTE_INDEX_LIST[6].substituteCondition",
 		list = {
 			{title = "好一档", value = 1},
 			{title = "好两档", value = 2},
-			{title = "主力红", value = 3},
+			{title = "主力红", value = 0},
 		},
 		style = {
 			lineSpacing = 14 * ratio,
@@ -449,24 +449,24 @@ local _gridList = {
 			icon = ''
 		}
 	},
-	{
+{
 		tag = "替补7",
 		checkedList = {},
 		singleCheck = true,
-		singleParamKey = "USER.SUBSTITUTE_INDEX_LIST[1].index",
+		singleBindParam = "USER.SUBSTITUTE_INDEX_LIST[7].fieldIndex",
 		list = {
-			{title = 'P7', disabled = true},
-			{title = '1'},
-			{title = '2'},
-			{title = '3'},
-			{title = '4'},
-			{title = '5'},
-			{title = '6'},
-			{title = '7'},
-			{title = '8'},
-			{title = '9'},
-			{title = '10'},
-			{title = '11'},
+			{title = 'P1', disabled = true},
+			{title = '1', value = 1},
+			{title = '2', value = 2},
+			{title = '3', value = 3},
+			{title = '4', value = 4},
+			{title = '5', value = 5},
+			{title = '6', value = 6},
+			{title = '7', value = 7},
+			{title = '8', value = 8},
+			{title = '9', value = 9},
+			{title = '10', value = 10},
+			{title = '11', value = 11},
 		},
 		style = {
 			lineSpacing = 14 * ratio,
@@ -487,11 +487,11 @@ local _gridList = {
 		tag = "状态7",
 		checkedList = {},
 		singleCheck = true,
-		singleParamKey = "USER.SUBSTITUTE_INDEX_LIST[1].substituteCondition",
+		singleBindParam = "USER.SUBSTITUTE_INDEX_LIST[7].substituteCondition",
 		list = {
 			{title = "好一档", value = 1},
 			{title = "好两档", value = 2},
-			{title = "主力红", value = 3},
+			{title = "主力红", value = 0},
 		},
 		style = {
 			lineSpacing = 14 * ratio,
@@ -559,8 +559,7 @@ local function loadGridChecked()
 	
 	for k, v in pairs(_gridList) do
 		local storeList = cjson.decode(storage.get(v.tag, "{}"))
-		Log("init initCheckedGrid: "..v.tag)
-		prt(storeList)
+		Log("load last selection: "..v.tag)
 		
 		if singleCheck then		--单选
 			if #storeList >= 1 then		--单选至少需有一个选项
@@ -599,26 +598,27 @@ local function submitGridChecked()
 	for k, v in pairs(_gridList) do
 		--设置对应的USER值
 		if v.singleCheck then		--单选
-			USER[v.singleParamKey] = false
+			--setValueByStrKey(v.singleBindParam, false)
 			for _k, _v in pairs(v.list) do
+				--prt(_v)
 				for __k, __v in pairs(v.checkedList) do
 					if __v == _k then
-						USER[v.singleParamKey] = _v.value or _v.title
-						Log("set USER."..v.singleParamKey.."="..(v.value or _v.title))
+						setValueByStrKey(v.singleBindParam, _v.value or _v.title)
+						Log("________commit set "..v.singleBindParam.."="..(_v.value or _v.title))
 						break
 					end
 				end
 			end
 		else						--多选
 			for _k, _v in pairs(v.list) do
-				USER[_v.paramKey] = false
+				setValueByStrKey(_v.bindParam, false)
 			end
 			
 			for _k, _v in pairs(v.list) do
 				for __k, __v in pairs(v.checkedList) do
 					if __v == _k then
-						USER[_v.paramKey] = true
-						Log("set USER.".._v.paramKey.."=true")
+						setValueByStrKey(_v.bindParam, true)
+						Log("________commit set ".._v.bindParam.."=true")
 						break
 					end
 				end
@@ -627,7 +627,7 @@ local function submitGridChecked()
 		
 		--保存当前checkedList数据
 		local storeStr = cjson.encode(v.checkedList)
-		Log("save user selection: "..storeStr)
+		Log("save user selection: "..v.tag)
 		storage.put(v.tag, storeStr)
 	end
 	
@@ -1043,8 +1043,15 @@ wui.Button.setOnClickedCallback(context:findView('btn_taskOk'), function (id, ac
 		
 		for k, v in pairs(_gridList) do
 			if v.tag == "选择任务" or v.tag == "任务次数" then
-				if #v.checkedList == 0 then
-					Log("no 选择任务 or 任务次数")
+				checkedFlag = false
+				for _k, _v in pairs(v.checkedList) do
+					if not v.list[_v].disabled then
+						checkedFlag = true
+						break
+					end
+				end
+				if not checkedFlag then
+					Log("not checked TASK_NAME or TASK_REPEATE")
 					return
 				end
 			end
@@ -1074,15 +1081,21 @@ local function setGridDefualtCallbacks()
 	end
 end
 
-function dispUI()
-	print('show view')
-	context:show()
+function dispUI()	
+	if not IS_BREAKING_TASK then
+		print('show view')
+		context:show()	
+		showwingFlag = true
+	else
+		showwingFlag = false
+		submitGridChecked()
+	end
 	
 	while showwingFlag do
 		sleep(200)
 	end
 	
-	--prt(_gridList)
+	prt(USER)
 end
 
 
