@@ -254,7 +254,7 @@ function M.run(taskName, repeatTimes)
 				
 				--是否需要处理全局导航事件
 				if currentPage == nil and os.time() - startTime >= CFG.WAIT_CHECK_NAVIGATION then
-					if page.execNavigation() then
+					if page.tryNavigation() then
 						sleep(200)
 						startTime = os.time()	--防止因执行Navigation.actionFunc超时
 					end

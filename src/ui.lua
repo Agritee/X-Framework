@@ -1031,7 +1031,6 @@ wui.Button.setOnClickedCallback(context:findView('btn_taskCancle'), function (id
 		
 		uiClosedFlag = true
 		context:close()
-		storage.purge()
 		xmod.exit()
 	end
 )

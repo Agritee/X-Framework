@@ -29,9 +29,9 @@ function M.toPointsTable(pointString)
 	local posTb = {}
 	for x, y, c, dif in string.gmatch(pointString, "(-?%d+)|(-?%d+)|(%w+)%-?(%w*)") do
 		if string.len(dif) > 0 then
-			posTb[#posTb + 1] = {x, y, c, dif}
+			posTb[#posTb + 1] = {tonumber(x), tonumber(y), c, dif}
 		else
-			posTb[#posTb + 1] = {x, y, c}
+			posTb[#posTb + 1] = {tonumber(x), tonumber(y), c}
 		end
 	end
 	
@@ -259,7 +259,22 @@ function M.getRatioPoint(x, y)
 	return  x1, y1
 end
 
-
+function M.offsetPos(pos, firstOffsetPot)
+	local posTb = M.toPointsTable(pos)
+	if #posTb < 1 then
+		return pos
+	end
+	
+	local offsetX = firstOffsetPot.x - posTb[1][1]
+	local offsetY = firstOffsetPot.y - posTb[1][2]
+	
+	for k, v in pairs(posTb) do
+		v[1] = v[1] + offsetX
+		v[2] = v[2] + offsetY
+	end
+	
+	return M.toPointsString(posTb)
+end
 
 
 
