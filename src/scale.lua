@@ -157,6 +157,10 @@ function M.getAnchorArea(anchorTag)
 		rect.x, rect.y = x0, y0
 		rect.width = w
 		rect.height = h
+	elseif anchorTag == "ABS" then	--整个区域(DST Area)
+		rect.x, rect.y = 0, 0
+		rect.width = CFG.DST_RESOLUTION.width
+		rect.height = CFG.DST_RESOLUTION.height		
 	elseif anchorTag == "dLT" then
 		rect.x, rect.y = dx0, dy0
 		rect.width = math.floor(dw/2)
@@ -255,7 +259,7 @@ function M.getRatioPoint(x, y)
 	if y1 > maxY then
 		y1 = maxY
 	end
-	
+
 	return  x1, y1
 end
 

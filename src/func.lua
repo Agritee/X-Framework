@@ -275,18 +275,18 @@ function slide(x1, y1, x2, y2)
 			sleep(50)
 		end
 		touch.move(1, x2, y2)
-		sleep(200)
+		sleep(50)
 		touch.up(1, x2, y2)
 	else	--竖直滑动，0不能作为除数所以单独处理
 		touch.down(1, x1, y1)
-		sleep(20)
+		sleep(200)
 		local stepY = y2 > y1 and CFG.TOUCH_MOVE_STEP or -CFG.TOUCH_MOVE_STEP
 		for i = 1, math.abs((y2 - y1) / stepY), 1 do
 			touch.move(1, x2, y1 + i * stepY)
 			sleep(50)
 		end
 		touch.move(1, x2, y2)
-		sleep(200)
+		sleep(50)
 		touch.up(1, x2, y2)
 	end	
 end

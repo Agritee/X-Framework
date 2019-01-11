@@ -72,11 +72,11 @@ USER.BUY_ENERGY = true				--自动购买能量
 USER.RESTORED_ENERGY = true			--等待恢复能量
 USER.ALLOW_SUBSTITUTE = true		--是否允许开场换人
 USER.SUBSTITUTE_INDEX_LIST = {--[[{fieldIndex = 1, substituteCondition = 1},{},{},{},{},{},{}]]
-	{fieldIndex = 0, substituteCondition = 0},
-	{fieldIndex = 0, substituteCondition = 0},
-	{fieldIndex = 0, substituteCondition = 0},
-	{fieldIndex = 0, substituteCondition = 0},
-	{fieldIndex = 0, substituteCondition = 0},
-	{fieldIndex = 0, substituteCondition = 0},
-	{fieldIndex = 0, substituteCondition = 0},
+	{fieldIndex = 1, substituteCondition = 1},
+	{fieldIndex = 2, substituteCondition = 1},
+	{fieldIndex = 3, substituteCondition = 1},
+	{fieldIndex = 4, substituteCondition = 1},
+	{fieldIndex = 5, substituteCondition = 1},
+	{fieldIndex = 9, substituteCondition = 1},
+	{fieldIndex = 10, substituteCondition = 1},
 }		--替补席对应关系表

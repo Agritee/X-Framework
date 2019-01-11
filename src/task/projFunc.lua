@@ -22,17 +22,19 @@ end
 
 --续约
 function selectExpiredPlayer()
-	sleep(200)
+	sleep(400)
 	
 	local expiredPlayerFirstHalf = {}
 	local expiredPlayerLatterHalf = {}
 	
 	local posTb = screen.findColors(
-		scale.getAnchorArea("A"),
-		"245|190|0xffffff,230|194|0xff3b2f,245|180|0xff3b2f,261|197|0xff3b2f,245|214|0xff3b2f",
+		scale.getAnchorArea("ABS"),
+		--"245|190|0xffffff,230|194|0xff3b2f,245|180|0xff3b2f,261|197|0xff3b2f,245|214|0xff3b2f,631|277|0xffffff,712|277|0xffffff",
+		scale.scalePos("78|242|0xffffff,89|254|0xffffff,245|190|0xffffff,245|182|0xff3b2f,233|196|0xff3b2f,258|195|0xff3b2f,245|214|0xff3b2f"),
 		CFG.DEFAULT_FUZZY,
 		screen.PRIORITY_DEFAULT,
 		999)
+	
 	if #posTb >= 999 then
 		catchError(ERR_PARAM, "more than 999 point, cant find all point")
 	end
@@ -40,7 +42,7 @@ function selectExpiredPlayer()
 	for _, v in pairs(posTb) do
 		local exsitFlag = false
 		for _, _v in pairs(expiredPlayerFirstHalf) do
-			if math.abs(v.x - _v.x) < 20 and math.abs(v.y - _v.y) < 20 then
+			if math.abs(v.x - _v.x) < 20 * CFG.SCALING_RATIO and math.abs(v.y - _v.y) < 20 * CFG.SCALING_RATIO then
 				exsitFlag = true
 				break
 			end
@@ -49,17 +51,19 @@ function selectExpiredPlayer()
 		if exsitFlag == false then
 			table.insert(expiredPlayerFirstHalf, v)
 			tap(v.x, v.y)
-			sleep(200)				
+			sleep(400)				
 		end
 	end
 	prt(expiredPlayerFirstHalf)
 	
 	if #expiredPlayerFirstHalf == 3 or #expiredPlayerFirstHalf == 6 then
 		ratioSlide(20, 620, 20, 120) --滑动替补至下半部分
+		Log("slede LatterHalf")
 		sleep(200)
 		local posTb = screen.findColors(
-			scale.getAnchorArea("A"),
-			"245|190|0xffffff,230|194|0xff3b2f,245|180|0xff3b2f,261|197|0xff3b2f,245|214|0xff3b2f",
+			scale.getAnchorArea("ABS"),
+			--"245|190|0xffffff,230|194|0xff3b2f,245|180|0xff3b2f,261|197|0xff3b2f,245|214|0xff3b2f",
+			scale.scalePos("78|242|0xffffff,89|254|0xffffff,245|190|0xffffff,245|182|0xff3b2f,233|196|0xff3b2f,258|195|0xff3b2f,245|214|0xff3b2f"),
 			CFG.DEFAULT_FUZZY,
 			screen.PRIORITY_DEFAULT,
 			999)
@@ -70,7 +74,7 @@ function selectExpiredPlayer()
 		for _, v in pairs(posTb) do
 			local exsitFlag = false
 			for _, _v in pairs(expiredPlayerLatterHalf) do
-				if math.abs(v.x - _v.x) < 20 and math.abs(v.y - _v.y) < 20 then
+				if math.abs(v.x - _v.x) < 20 * CFG.SCALING_RATIO and math.abs(v.y - _v.y) < 20 * CFG.SCALING_RATIO then
 					exsitFlag = true
 					break
 				end
@@ -133,7 +137,7 @@ local function getFixStatusPlayers(area, status)
 	
 	local posTb = screen.findColors(
 		area,
-		statusStr,
+		scale.scalePos(statusStr),
 		CFG.DEFAULT_FUZZY,
 		screen.PRIORITY_DEFAULT,
 		999)
@@ -280,7 +284,7 @@ function switchPlayer()
 	end
 	
 	--将替补席滑动至下半部分
-	ratioSlide(30, 715, 30, 153)
+	ratioSlide(30, 700, 30, 153)
 	sleep(500)
 	
 	--再取替补席后3个
@@ -337,7 +341,7 @@ function switchPlayer()
 	sleep(200)
 	
 	--滑动替补回到上半部分
-	ratioSlide(30, 153, 30, 715)
+	ratioSlide(30, 153, 30, 700)
 	sleep(500)
 	
 	for k, v in pairs(benchFirst4Players) do		--换上半部分

@@ -33,20 +33,24 @@ end
 
 main()
 screen.init(1, 0)
---page.tapWidget("联赛教练模式", "恭喜晋级")
+--sleep(2000)
+--page.tapWidget("联赛教练模式", "跳过余下比赛")
 
---page.tapNavigation("切换状态")
+--page.tapNavigation("next")
 --prt(page.getCurrentPage())
 --page.tapWidget("比赛", "联赛")
 
 --获取一个区域内某种状态的所有球员位置信息
---sleep(2000)
+sleep(2000)
 --switchPlayer()
 
- --prt(scale.offsetPos("343|308|0xffffff,343|315|0x007aff,324|312|0x007aff,363|313|0x007aff,324|355|0x007aff,362|355|0x007aff", Point(342, 306)))
+--prt(scale.offsetPos("343|308|0xffffff,343|315|0x007aff,324|312|0x007aff,363|313|0x007aff,324|355|0x007aff,362|355|0x007aff", Point(342, 306)))
 --storage.purge()
+--storage.put("test", "123")
 --storage.commit()
-Log("widget-终场统计-技术统计")
-prt(storage.get("widget-终场统计-技术统计", "null"))
-storage.purge()
-prt(storage.get("widget-终场统计-技术统计", "null"))
+--prt(storage.get("test", "noda"))
+
+--tap(293,852)
+--ratioSlide(30, 700, 30, 153, 200)
+
+switchPlayer()

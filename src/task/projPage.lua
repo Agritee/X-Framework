@@ -163,6 +163,7 @@ local _pageList = {
 			{
 				tag = "比赛信息",
 				enable = true,
+				noCache = true,
 				anchor = "dLT",
 				srcPos = "39|64|0x1ce0dc-0x171f23,186|68|0x1ce0dc-0x171f23,223|83|0xf1fcf9-0x0c0306,237|84|0xf1fcf9-0x0c0306,275|65|0x1bd194-0x172e2a,420|67|0x1bd194-0x172e2a",
 				--srcPos = "45|64|0x1CC8C8-0x173737,186|68|0x1CC8C8-0x173737,223|83|0xD9E5E0-0x241A1F,237|84|0xD9E5E0-0x241A1F,275|65|0x1BC189-0x173E35,420|67|0x1BC189-0x173E35",
@@ -219,12 +220,14 @@ local _pageList = {
 			{
 				tag = "跳过余下比赛",		--仅用于跳过余下比赛，enable == false，不参与matchPage/matchWidgets
 				enable = false,
+				noCache = true,
 				anchor = "RB",
-				srcPos = "936|725|0xcaddf0,987|719|0xcaddf0,712|700|0xcaddf0,711|722|0xcaddf0",
+				srcPos = "987|719|0xcaddf0,936|725|0xcaddf0,712|700|0xcaddf0,711|722|0xcaddf0",
 			},
 			{
 				tag = "确定跳过",
 				enable = false,
+				noCache = true,
 				anchor = "A",
 				--srcPos = "794|451|0xcaddf0,961|461|0xcaddf0,667|433|0xf5f5f5,369|408|0xcaddf0,936|491|0xf5f5f5,999|433|0xf5f5f5,897|372|0xf5f5f5,332|432|0xf5f5f5",
 				srcPos = "793|446|0xcaddf0,368|410|0xcaddf0,960|461|0xcaddf0,666|432|0xf5f5f5,618|492|0xf5f5f5,721|489|0xf5f5f5,992|256|0xf5f5f5",
@@ -273,8 +276,10 @@ local _navigationList = {
 	{
 		tag = "next",
 		enable = true,
+		noCache = true,
 		anchor = "CRB",
-		srcPos = "1130|732|0x1270e3-0x13091a,1127|702|0x1270e3-0x13091a,1102|703|0x1270e3-0x13091a,1088|733|0x1270e3-0x13091a,1235|733|0x1270e3-0x13091a",
+		--srcPos = "1130|732|0x1270e3-0x13091a,1127|702|0x1270e3-0x13091a,1102|703|0x1270e3-0x13091a,1088|733|0x1270e3-0x13091a,1235|733|0x1270e3-0x13091a",
+		srcPos = "1130|732|0x1F74CC-0x202331,1127|702|0x1F74CC-0x202331,1102|703|0x1F74CC-0x202331,1088|733|0x1F74CC-0x202331,1235|733|0x1F74CC-0x202331",
 		dstArea = Rect(
 			math.floor(CFG.EFFECTIVE_AREA[1] + (CFG.EFFECTIVE_AREA[3] - CFG.EFFECTIVE_AREA[1]) * 3 / 4),
 			math.floor(CFG.EFFECTIVE_AREA[2] + (CFG.EFFECTIVE_AREA[4] - CFG.EFFECTIVE_AREA[2]) * 7 / 8),

@@ -17,7 +17,7 @@ M.navigationList = {}
 --公共导航控件优先级，由task/projPage插入
 M.navigationPriorityList = {}
 
---匹配单个控件，不受widget.enable值影响
+--匹配单个控件，不受widget.enable值影响，不缓存
 function M.matchWidget(widget)
 	--prt(v)
 	local pos = screen.findColor(widget.dstArea, widget.dstPos, widget.fuzzy or CFG.DEFAULT_FUZZY)
@@ -30,7 +30,7 @@ function M.matchWidget(widget)
 	end
 end
 
---匹配控件列表
+--匹配控件列表，缓存
 local function matchWidgets(pageTag, widgetList)
 	local matchFlag = false
 	local storeItems = {}
@@ -38,15 +38,16 @@ local function matchWidgets(pageTag, widgetList)
 		matchFlag = true
 		if v.enable then
 			--prt(v)
-			if v.matchPos == nil then		--不存在缓存过的matchPos，使用找色
+			if v.matchPos == nil or v.noCache then		--不存在缓存过的matchPos，使用找色
 				local pot = screen.findColor(v.dstArea, v.dstPos, v.fuzzy or CFG.DEFAULT_FUZZY)
 				if pot == Point.INVALID then
 					--Log("cant find widget: "..v.tag)
 					return false
 				else
 					--Log("----find widget: "..v.tag)
-					v.matchPos = scale.offsetPos(v.dstPos, pot)
-					table.insert(storeItems, {string.format("widget-%s-%s", pageTag, v.tag), v.matchPos})
+					if not v.noCache then
+						table.insert(storeItems, {string.format("widget-%s-%s", pageTag, v.tag), scale.offsetPos(v.dstPos, pot)})
+					end
 				end
 			else							--存在缓存过的matchPos，使用比色
 				if not screen.matchColors(v.matchPos, v.fuzzy or CFG.DEFAULT_FUZZY) then
@@ -65,6 +66,22 @@ local function matchWidgets(pageTag, widgetList)
 			Log("store "..v[1])
 		end
 		storage.commit()
+		
+		for k, v in pairs(widgetList) do
+			if v.matchPos == nil and not v.noCache then
+				local key = string.format("widget-%s-%s", pageTag, v.tag)
+				for _k, _v in pairs(storeItems) do
+					if _v[1] == key then
+						local pos = storage.get(key, "")
+						if pos ~= "" then
+							v.matchPos = pos
+							Log("set new matchPos on: "..key)
+						end
+						break
+					end
+				end
+			end
+		end
 	end
 	
 	return matchFlag
@@ -98,23 +115,30 @@ function M.getCurrentPage()
 	end
 end
 
---点击页面专属next
+--点击页面专属next，缓存
 function M.tapPageNext(pageTag)
 	for _, v in pairs(M.pageList) do
 		if v.tag == pageTag then
 			local startTime = os.time()
 			while true do
-				if v.pageNext.matchPos == nil then
+				if v.pageNext.matchPos == nil or v.pageNext.noCache then
 					local pot = screen.findColor(v.pageNext.dstArea, v.pageNext.dstPos, CFG.DEFAULT_FUZZY)
 					if pot ~= Point.INVALID then
 						tap(pot.x, pot.y)
-						v.pageNext.matchPos = scale.offsetPos(v.pageNext.dstPos, pot)
-						storage.put(string.format("pageNext-%s", v.tag), v.pageNext.matchPos)
-						storage.commit()						
+				
+						if not v.pageNext.noCache then
+							v.pageNext.matchPos = scale.offsetPos(v.pageNext.dstPos, pot)
+							storage.put(string.format("pageNext-%s", v.tag), v.pageNext.matchPos)
+							storage.commit()
+						end
+						
 						return true
 					end
 				else
-					if screen.matchColors(v.pageNext.matchPos) then
+					if screen.matchColors(v.pageNext.matchPos, CFG.DEFAULT_FUZZY) then
+						local tmpTb = scale.toPointsTable(v.pageNext.matchPos)
+						tap(tmpTb[1][1], tmpTb[1][2])
+						
 						return true
 					end
 				end
@@ -131,7 +155,7 @@ function M.tapPageNext(pageTag)
 end
 
 
---点击全局next
+--点击全局next，不缓存
 function M.tapNext()
 	for _, v in pairs(M.navigationList) do
 		if v.tag == "next" then
@@ -156,7 +180,7 @@ function M.tapNext()
 	catchError(ERR_PARAM, "cant find comm next action")
 end
 
---点击控件
+--点击控件，采用findColor，不缓存
 function M.tapWidget(pageTag, widgetTag)
 	Log("tapWidget: "..widgetTag.." on page: "..pageTag)
 	for _, v in pairs(M.pageList) do
@@ -190,7 +214,7 @@ function M.tapWidget(pageTag, widgetTag)
 	catchError(ERR_PARAM, "cant find pageTag or widgetTag")
 end
 
---点击某一个导航控件
+--点击某一个导航控件，不缓存
 function M.tapNavigation(navTag)
 	for _, v in pairs(M.navigationList) do
 		if v.tag == navTag then
@@ -200,6 +224,7 @@ function M.tapNavigation(navTag)
 				if pot ~= Point.INVALID then
 					Log("tapNavigation: "..navTag)
 					tap(pot.x, pot.y)	--点击控件的第一个点
+					prt(v.dstPos)
 					return true
 				end
 				
@@ -212,12 +237,12 @@ function M.tapNavigation(navTag)
 	end
 end
 
---检测界面是否有导航按钮，有就执行导航动作
+--检测界面是否有导航按钮，有就执行导航动作，缓存
 function M.tryNavigation()
 	for _, v in pairs(M.navigationPriorityList) do
 		for _, _v in pairs(M.navigationList) do
 			if v == _v.tag then
-				if _v.matchPos == nil then
+				if _v.matchPos == nil or _v.noCache then
 					local pot = screen.findColor(_v.dstArea, _v.dstPos, CFG.DEFAULT_FUZZY)
 					if pot ~= Point.INVALID then
 						Log("Exsit find Navigation [".._v.tag.."], execute it!")
@@ -229,9 +254,12 @@ function M.tryNavigation()
 							tap(pot.x, pot.y)	--点击导航按钮
 						end
 						
-						_v.matchPos = scale.offsetPos(_v.dstPos, pot)
-						storage.put(string.format("navigation-%s", _v.tag), _v.matchPos)
-						storage.commit()			
+						if not _v.noCache then
+							_v.matchPos = scale.offsetPos(_v.dstPos, pot)
+							storage.put(string.format("navigation-%s", _v.tag), _v.matchPos)
+							storage.commit()
+							Log("store "..string.format("navigation-%s", _v.tag))
+						end
 
 						sleep(CFG.NAVIGATION_DELAY)
 						return true
@@ -246,7 +274,8 @@ function M.tryNavigation()
 							_v.actionFunc()
 							screen.keep(true)
 						else
-							M.tapNavigation(_v.tag)	--点击导航按钮
+							local tmpTb = scale.toPointsTable(_v.matchPos)
+							tap(tmpTb[1][1], tmpTb[1][2])	--点击导航按钮
 						end
 						
 						sleep(CFG.NAVIGATION_DELAY)
