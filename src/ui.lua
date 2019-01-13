@@ -76,7 +76,7 @@ local _gridList = {
 		list = {
 			{title = '球员续约', bindParam = "USER.REFRESH_CONCTRACT"},
 			{title = '等待恢复', bindParam = "USER.RESTORED_ENERGY"},
-			{title = '购买能量', disabled = true, bindParam = "USER.BUY_ENERGY"},
+			{title = '购买能量', bindParam = "USER.BUY_ENERGY"},
 			{title = '开场换人', bindParam = "USER.ALLOW_SUBSTITUTE"},
 			{title = '自动重启', bindParam = "USER.ALLOW_RESTART"},
 		},
@@ -647,7 +647,6 @@ local rootLayout = {
 		width = 750,
 		['align-items'] = 'center',
 		['justify-content'] = 'flex-end',
-		--['justify-content'] = 'center',
 	},
 	subviews = {
 	}
@@ -953,7 +952,8 @@ local pages = {
 		}
 	},
 	{
-		view = 'div',
+		view = 'scroller',
+		class = 'scroller',
 		style = {
 			width = 700 * ratio,
 			['background-color'] = '#FFFFFF'
@@ -961,16 +961,70 @@ local pages = {
 		subviews = {
 			{
 				view = 'text',
-				value = '教程',
+				value = '1.脚本说明',
 				style = {
-					['font-size'] = 20 * ratio,
+					['padding-left'] = 20 * ratio,
+					['padding-top'] = 20 * ratio,
+					['padding-bottom'] = 2 * ratio,
+					['font-size'] = 18 * ratio,
 					color = '#5f5f5f'
 				}
 				
+			},
+			{
+				view = 'text',
+				value = '本脚本为“实况足球辅助”全分辨率测试版，采用了全新的全分辨架构，同时基于叉叉平台最新的2.0引擎开发，但2.0引擎目前还处于内测阶段，可能还'
+				..'不太稳定，因此对脚本本身的稳定性也有一定影响。此内测版本免费测试使用，内测的目的是希望大家积极测试并反馈问题以便尽快修复和完善各个功能，故而'
+				..'可能不会对测试版用户过多的基础操作指导，于此，主要推荐已经能熟练使用之前的正式版的玩家进行测试，有问题请及时在测试群里@我，最好有配图或者视频。'
+				..'推荐使用小号测试',
+				style = {
+					['padding-left'] = 20 * ratio,
+					['padding-right'] = 20 * ratio,
+					['font-size'] = 16 * ratio,
+					color = '#5f5f5f'
+				}
+			},
+			{
+				view = 'text',
+				value = '2.功能说明',
+				style = {
+					['padding-left'] = 20 * ratio,
+					['padding-top'] = 20 * ratio,
+					['padding-bottom'] = 5 * ratio,
+					['font-size'] = 18 * ratio,
+					color = '#5f5f5f'
+				}
+			},
+			{
+				view = 'text',
+				value = 'a.任务界面：可以选择任务类型，目前仅支持联赛教练模式和天梯教练模式，并可在下方选择循环运行的次数。\nb.功能界面：球员'
+				..'续约为联赛模式时，如果出现球员合同耗尽的情况就自动续约；等待恢复为当能量耗尽时，脚本暂停100分钟等待能量恢复，然后再继续运行；购买能'
+				..'量为能量耗尽时使用金币自动购买能量；开场换人是在开始比赛前，根据场上和替补席的球员状态自动调整阵容，具体的规则在“换人设置”页面中'
+				..'设置；自动重启为当游戏闪退后者卡死时，可以自动重启游戏并继续任务，一般只推荐在root的手机或模拟器上使用\nc.换人设置：P1-P7为替补'
+				..'席从上到下第1-7个替补球员，1-11是将场上球员严格按照从上到下，从左到右的顺序规则编为1-11号，每一个替补选择对应的更换位置，同时需设'
+				..'置好换人条件，球员状态根据箭头方向分为5档，可设置当替补状态比场上球员好几档才更换，或者设置为只有当场上球员状态为红（箭头向下状态'
+				..'极差）才进行更换，编号示意图如下：\n',
+				style = {
+					['padding-left'] = 20 * ratio,
+					['padding-right'] = 20 * ratio,
+					['font-size'] = 16 * ratio,
+					color = '#5f5f5f'
+				}
+				
+			},
+			{
+				view = 'image',
+				src = 'xsp://substitute.jpg',
+				resize = 'stretch',
+				style = {
+					width = 260 * ratio,
+					height = 160 * ratio,
+					['padding-left'] = 20 * ratio,
+					['padding-bottom'] = 10 * ratio,
+				}
 			}
 		}
 	},
-	
 }
 
 local tabPageConfig = {}
@@ -990,7 +1044,6 @@ tabPageConfig.tabTitles = {
 	{
 		title = '使用教程',
 	},
-	
 }
 
 tabPageConfig.tabStyle = {
@@ -1012,7 +1065,6 @@ tabPageConfig.tabStyle = {
 	textPaddingRight = 10
 }
 
---tabPageConfig.wrapBackgroundColor= '#FF0000'
 tabPageConfig.wrapBackgroundColor= '#FFFFFF'
 
 local context = UI.createContext(rootLayout, globalStyle)

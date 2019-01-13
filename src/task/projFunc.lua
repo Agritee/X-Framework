@@ -20,87 +20,20 @@ function switchMainPage(pageName)
 	end
 end
 
---续约
-function selectExpiredPlayer()
-	sleep(400)
-	
-	local expiredPlayerFirstHalf = {}
-	local expiredPlayerLatterHalf = {}
-	
-	local posTb = screen.findColors(
-		scale.getAnchorArea("ABS"),
-		--"245|190|0xffffff,230|194|0xff3b2f,245|180|0xff3b2f,261|197|0xff3b2f,245|214|0xff3b2f,631|277|0xffffff,712|277|0xffffff",
-		scale.scalePos("78|242|0xffffff,89|254|0xffffff,245|190|0xffffff,245|182|0xff3b2f,233|196|0xff3b2f,258|195|0xff3b2f,245|214|0xff3b2f"),
-		CFG.DEFAULT_FUZZY,
-		screen.PRIORITY_DEFAULT,
-		999)
-	
-	if #posTb >= 999 then
-		catchError(ERR_PARAM, "more than 999 point, cant find all point")
-	end
-	
-	for _, v in pairs(posTb) do
-		local exsitFlag = false
-		for _, _v in pairs(expiredPlayerFirstHalf) do
-			if math.abs(v.x - _v.x) < 20 * CFG.SCALING_RATIO and math.abs(v.y - _v.y) < 20 * CFG.SCALING_RATIO then
-				exsitFlag = true
-				break
-			end
-		end
-		
-		if exsitFlag == false then
-			table.insert(expiredPlayerFirstHalf, v)
-			tap(v.x, v.y)
-			sleep(400)				
-		end
-	end
-	prt(expiredPlayerFirstHalf)
-	
-	if #expiredPlayerFirstHalf == 3 or #expiredPlayerFirstHalf == 6 then
-		ratioSlide(20, 620, 20, 120) --滑动替补至下半部分
-		Log("slede LatterHalf")
-		sleep(200)
-		local posTb = screen.findColors(
-			scale.getAnchorArea("ABS"),
-			--"245|190|0xffffff,230|194|0xff3b2f,245|180|0xff3b2f,261|197|0xff3b2f,245|214|0xff3b2f",
-			scale.scalePos("78|242|0xffffff,89|254|0xffffff,245|190|0xffffff,245|182|0xff3b2f,233|196|0xff3b2f,258|195|0xff3b2f,245|214|0xff3b2f"),
-			CFG.DEFAULT_FUZZY,
-			screen.PRIORITY_DEFAULT,
-			999)
-		if #posTb >= 999 then
-			catchError(ERR_PARAM, "more than 999 point, cant find all point 2")
-		end
-		
-		for _, v in pairs(posTb) do
-			local exsitFlag = false
-			for _, _v in pairs(expiredPlayerLatterHalf) do
-				if math.abs(v.x - _v.x) < 20 * CFG.SCALING_RATIO and math.abs(v.y - _v.y) < 20 * CFG.SCALING_RATIO then
-					exsitFlag = true
-					break
-				end
-			end
-			
-			if exsitFlag == false then
-				table.insert(expiredPlayerLatterHalf, v)
-				tap(v.x, v.y)
-				sleep(200)	
-			end
-		end
-		prt(expiredPlayerLatterHalf)
-	end
-	Log("selected all players")
-end
-
 --处理能量不足
-function waitEnergy()
-	if USER.RESTORED_ENERGY then
+function chargeEnergy()
+	if USER.BUY_ENERGY then
+		page.tapNavigation("能量不足", 2)
+		sleep(200)
+		page.tapNavigation("恢复100")
+	elseif USER.RESTORED_ENERGY then
 		dialog("能量不足100分钟内后继续，请勿操作", 5)
 		page.tapNavigation("能量不足")		--点击取消
 		
 		local startTime = os.time()
 		while true do
-			--if os.time() - startTime > 110 * 60 then
-			if os.time() - startTime > 5 then
+			if os.time() - startTime > 110 * 60 then
+			--if os.time() - startTime > 5 then
 				dialog("已续足能量，即将继续任务", 5)
 				startTime = os.time()	--重置startTime
 				break
@@ -211,8 +144,8 @@ local function getPlayerStatusInfo(seats)
 		end
 		
 		--if a.y == b.y then
-		--因不同状态下的首点取值位置不同，同一水平位置的y左边可能有微小区别，容错以10像素/短边750未基准
-		if math.abs(a.y - b.y) <= (CFG.EFFECTIVE_AREA[4] - CFG.EFFECTIVE_AREA[2]) / 750 * 10 then
+		--因不同状态下的首点取值位置不同，同一水平位置的y左边可能有微小区别，容错以6像素/短边750未基准
+		if math.abs(a.y - b.y) <= (CFG.EFFECTIVE_AREA[4] - CFG.EFFECTIVE_AREA[2]) / 750 * 6 then
 			return a.x < b.x
 		else
 			return a.y < b.y
@@ -370,4 +303,87 @@ function switchPlayer()
 			tap(CFG.DST_RESOLUTION.width/2, CFG.DST_RESOLUTION.height/2)
 		end
 	end
+end
+
+--续约
+local function selectExpiredPlayer()
+	sleep(400)
+	
+	local expiredPlayerFirstHalf = {}
+	local expiredPlayerLatterHalf = {}
+	
+	local posTb = screen.findColors(
+		scale.getAnchorArea("ABS"),
+		--"245|190|0xffffff,230|194|0xff3b2f,245|180|0xff3b2f,261|197|0xff3b2f,245|214|0xff3b2f,631|277|0xffffff,712|277|0xffffff",
+		scale.scalePos("78|242|0xffffff,89|254|0xffffff,245|190|0xffffff,245|182|0xff3b2f,233|196|0xff3b2f,258|195|0xff3b2f,245|214|0xff3b2f"),
+		CFG.DEFAULT_FUZZY,
+		screen.PRIORITY_DEFAULT,
+		999)
+	
+	if #posTb >= 999 then
+		catchError(ERR_PARAM, "more than 999 point, cant find all point")
+	end
+	
+	for _, v in pairs(posTb) do
+		local exsitFlag = false
+		for _, _v in pairs(expiredPlayerFirstHalf) do
+			if math.abs(v.x - _v.x) < 20 * CFG.SCALING_RATIO and math.abs(v.y - _v.y) < 20 * CFG.SCALING_RATIO then
+				exsitFlag = true
+				break
+			end
+		end
+		
+		if exsitFlag == false then
+			table.insert(expiredPlayerFirstHalf, v)
+			tap(v.x, v.y)
+			sleep(400)				
+		end
+	end
+	prt(expiredPlayerFirstHalf)
+	
+	if #expiredPlayerFirstHalf == 3 or #expiredPlayerFirstHalf == 6 then
+		ratioSlide(20, 620, 20, 120) --滑动替补至下半部分
+		Log("slede LatterHalf")
+		sleep(200)
+		local posTb = screen.findColors(
+			scale.getAnchorArea("ABS"),
+			--"245|190|0xffffff,230|194|0xff3b2f,245|180|0xff3b2f,261|197|0xff3b2f,245|214|0xff3b2f",
+			scale.scalePos("78|242|0xffffff,89|254|0xffffff,245|190|0xffffff,245|182|0xff3b2f,233|196|0xff3b2f,258|195|0xff3b2f,245|214|0xff3b2f"),
+			CFG.DEFAULT_FUZZY,
+			screen.PRIORITY_DEFAULT,
+			999)
+		if #posTb >= 999 then
+			catchError(ERR_PARAM, "more than 999 point, cant find all point 2")
+		end
+		
+		for _, v in pairs(posTb) do
+			local exsitFlag = false
+			for _, _v in pairs(expiredPlayerLatterHalf) do
+				if math.abs(v.x - _v.x) < 20 * CFG.SCALING_RATIO and math.abs(v.y - _v.y) < 20 * CFG.SCALING_RATIO then
+					exsitFlag = true
+					break
+				end
+			end
+			
+			if exsitFlag == false then
+				table.insert(expiredPlayerLatterHalf, v)
+				tap(v.x, v.y)
+				sleep(200)	
+			end
+		end
+		prt(expiredPlayerLatterHalf)
+	end
+	Log("selected all players")
+end
+
+function refreshContract()
+	selectExpiredPlayer()
+	page.tapNavigation("球员续约-点击签约")
+	sleep(400)
+	page.tapNavigation("球员续约-续约")
+	sleep(400)
+	page.tapNavigation("球员续约-付款确认")
+	sleep(400)
+	--page.tapNavigation("球员续约-支付确认")		--支付确认由next处理
+	--page.tapNavigation("球员续约-已续约")		--支付确认由next处理
 end

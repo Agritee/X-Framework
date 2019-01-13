@@ -74,40 +74,16 @@ function M.run(taskName, repeatTimes)
 		catchError(ERR_PARAM, "task:"..taskName.." have no processes!")
 	end
 	
+	page.setPageEnable(M.getTaskProcesses(taskName))	--设置page.enable
+	prt(page.getCurrentPage())
+	prt(page.matchPage("比赛"))
 	M.setExecStatus("START")
 	
 	for i = 1, reTimes, 1 do
 		Log("-----------------------START RUN A ROUND OF TASK: "..taskName.."-----------------------")
 		local taskProcesses = M.getTaskProcesses(taskName)	--重新获取流程，如果发生了回溯流程片改变了taskProcesses，在此处恢复
 		
-		for k, v in pairs(taskProcesses) do
-			--[[--跳过只允许首次运行的流程片和断点流程片
-			if i == 1 then	--首次运行要考虑是否跳过justFirstRun和justBreakingRun
-				--断点任务属性优先级高于首次运行属性
-				if v.justBreakingRun then	--有断点属性
-					if IS_BREAKING_TASK then	--发生了断点任务
-						v.skipStatus = false
-					else						--无断点发生，需再考虑有无首次运行属性
-						if v.justFirstRun then
-							v.justFirstRun = true
-						else
-							v.justFirstRun = false
-						end
-					end
-				elseif v.justFirstRun then
-					v.skipStatus = true
-				else
-					v.skipStatus = false
-				end
-			else		--非首次始终跳过首次运行和断点任务
-				if v.justFirstRun or v.justBreakingRun then
-					v.skipStatus = true
-				else
-					v.skipStatus = false
-				end
-			end]]
-			
-			
+		for k, v in pairs(taskProcesses) do	
 			if v.mode == "firstRun" then				--仅首次运行
 				if IS_BREAKING_TASK then		
 					if i <= 2 then		--有断点时，前两次都可能不需要跳过，因为恢复可能是从中间的流程片插入的，因而在第二遍流程还是可能返回首个流程片
@@ -140,15 +116,15 @@ function M.run(taskName, repeatTimes)
 		local waitCheckSkipTime = 0
 		if i == 1 then		--第一次运行就快速检测是否可以跳过主界面
 			waitCheckSipTime = 1
-			--waitCheckSkipTime = CFG.WAIT_CHECK_SKIP
 		else
 			waitCheckSkipTime = CFG.WAIT_CHECK_SKIP
 		end
-		--prt(taskProcesses)
+		
 		for k, v in pairs(taskProcesses) do
 			local checkInterval = v.checkInterval or CFG.DEFAULT_PAGE_CHECK_INTERVAL
 			local timeout = v.timeout or CFG.DEFAULT_TIMEOUT
 			
+			--监听和执行流程片
 			local startTime = os.time()
 			while true do		--循环匹配当前流程片界面
 				if v.skipStatus == true then	--跳过当前界面流程
@@ -159,9 +135,12 @@ function M.run(taskName, repeatTimes)
 					break
 				end
 				
-				screen.keep(true)		--为提高效率screen.keep(true)只在此处使用，其他地方慎用
+				--截取判定帧，在整个监听和执行流程片的过程中，均以此截取的界面进行判定
+				--为提高效率，screen.keep(true)尽量只在此处使用，但在process.actionFunc和navigation.actionFunc里可能涉及
+				--界面变化，因此进行了刷新帧或者释放帧的操作（这两处在执行完后会返回监听的开始处，重新截取判定帧，所以不影响）
+				screen.keep(true)		
 				local currentPage = page.getCurrentPage()
-				
+								
 				--Log("try match process page: "..v.tag)
 				if currentPage == v.tag then
 					--actionFunc中，涉及到界面变化时(actionFunc和next)会放开screen.keep(false)进行界面判定，但是因为完成actionFunc和next后，
@@ -252,7 +231,7 @@ function M.run(taskName, repeatTimes)
 					end
 				end
 				
-				--是否需要处理全局导航事件
+				--处理全局导航事件
 				if currentPage == nil and os.time() - startTime >= CFG.WAIT_CHECK_NAVIGATION then
 					if page.tryNavigation() then
 						sleep(200)

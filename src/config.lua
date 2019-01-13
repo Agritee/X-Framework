@@ -47,7 +47,7 @@ CFG.LOG_FILE_NAME = "log.dat"	--Log文件名
 CFG.DEFAULT_REPEAT_TIMES = 999
 
 -----------------延时参数-----------------
-CFG.DEFAULT_TIMEOUT = 30		--/s
+CFG.DEFAULT_TIMEOUT = 40		--/s
 CFG.NAVIGATION_DELAY = 200		--/ms
 
 CFG.WAIT_CHECK_SKIP = 3		--/s
@@ -72,11 +72,11 @@ USER.BUY_ENERGY = true				--自动购买能量
 USER.RESTORED_ENERGY = true			--等待恢复能量
 USER.ALLOW_SUBSTITUTE = true		--是否允许开场换人
 USER.SUBSTITUTE_INDEX_LIST = {--[[{fieldIndex = 1, substituteCondition = 1},{},{},{},{},{},{}]]
-	{fieldIndex = 1, substituteCondition = 1},
-	{fieldIndex = 2, substituteCondition = 1},
-	{fieldIndex = 3, substituteCondition = 1},
-	{fieldIndex = 4, substituteCondition = 1},
-	{fieldIndex = 5, substituteCondition = 1},
-	{fieldIndex = 9, substituteCondition = 1},
-	{fieldIndex = 10, substituteCondition = 1},
+	{fieldIndex = 1, substituteCondition = 0},
+	{fieldIndex = 2, substituteCondition = 0},
+	{fieldIndex = 3, substituteCondition = 0},
+	{fieldIndex = 4, substituteCondition = 0},
+	{fieldIndex = 5, substituteCondition = 0},
+	{fieldIndex = 9, substituteCondition = 0},
+	{fieldIndex = 10, substituteCondition = 0},
 }		--替补席对应关系表

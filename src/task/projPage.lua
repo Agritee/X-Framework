@@ -7,7 +7,8 @@
 --所有dstArea只有在dstArea == Rect.ZERO时候才会在初始化时进行getAnchorArea，否则使用预设的数据
 --所有dstPos只有在dstPos == ""时候才会在初始化时进行scalePos，否则使用预设的数据
 --在执行点击widgetList或者进行navigation时，存在actionFunc的时候优先执行actionFunc，否则点击dstPos的第一个点
---enable仅仅标识在matchPage/matchWidgets时，是否作为匹配项，其他操作不受影响，如Init时的缩放、matchWidget、tapWidget
+--page.enable标识当前界面是否加入getCurrentPage判定，在exec.run里根据任务设置（丢掉所有非当前任务的界面）
+--widget.enable仅仅标识在matchPage/matchWidgets时，是否作为匹配项，其他操作不受影响，如Init时的缩放、matchWidget、tapWidget
 
 --界面
 local _pageList = {
@@ -183,7 +184,7 @@ local _pageList = {
 			},
 		},
 	},
-
+	
 	--联赛
 	{
 		tag = "联赛",
@@ -252,6 +253,7 @@ local _pageList = {
 			{
 				tag = "比分综合特征",
 				enable = true,
+				noCache = true,
 				anchor = "A",
 				srcPos = "132|621|0x1fbbbb-0x144444,133|682|0x1fbbbb-0x144444,1204|619|0x1ab981-0x19463d,1202|683|0x1ab981-0x19463d,208|698|0x2d3e40-0x171615,\
 				210|717|0x2d3e40-0x171615,1118|699|0x2d3e40-0x171615,1119|712|0x2d3e40-0x171615,634|679|0xb6cbc4-0x35343a,692|680|0xb6cbc4-0x35343a",
@@ -290,9 +292,9 @@ local _navigationList = {
 	{
 		tag = "comfirm",
 		enable = true,
+		noCache = true,
 		anchor = "MTB",
-		srcPos = "682|460|0x2c8efa-0x2c1603,523|433|0xcaddf0,782|434|0xcaddf0,538|478|0xcaddf0,790|477|0xcaddf0,533|400|0xf5f5f5,\
-		772|390|0xf5f5f5,538|517|0xf5f5f5,763|517|0xf5f5f5",
+		srcPos = "843|449|0xcaddf0,884|405|0xcaddf0,507|457|0xcaddf0,409|407|0xcaddf0,487|379|0xf5f5f5,804|491|0xf5f5f5,328|436|0xf5f5f5,1007|435|0xf5f5f5",
 	},
 	{
 		tag = "确定-合约过期",
@@ -305,13 +307,14 @@ local _navigationList = {
 		enable = true,
 		anchor = "A",
 		srcPos = "235|197|0xff3b2f,258|198|0xff3b2f,394|129|0x205080,865|132|0x205080,400|708|0xc5c5c7,928|709|0xc5c5c7,1137|716|0x0079fd",
-		actionFunc = selectExpiredPlayer	--选中待签约球员, 
+		actionFunc = refreshContract	--续约合同,
 	},
 	{
 		tag = "球员续约-点击签约",
 		enable = true,
 		anchor = "A",
-		srcPos = "884|720|0xcaddf0,703|695|0xcaddf0,984|728|0xcaddf0,406|709|0xcaddf0,1137|714|0x0079fd,213|130|0x205080,1064|120|0x205080",
+		--srcPos = "884|720|0xcaddf0,703|695|0xcaddf0,984|728|0xcaddf0,406|709|0xcaddf0,1137|714|0x0079fd,213|130|0x205080,1064|120|0x205080",
+		srcPos = "884|720|0xcaddf0,703|695|0xcaddf0,984|728|0xcaddf0,406|709|0xcaddf0,213|130|0x205080,1064|120|0x205080",
 	},
 	{
 		tag = "球员续约-续约",
@@ -335,7 +338,9 @@ local _navigationList = {
 		tag = "球员续约-已续约",
 		enable = true,
 		anchor = "A",
-		srcPos = "618|533|0xcaddf0,373|495|0xcaddf0,952|543|0xcaddf0,416|581|0xf5f5f5,664|240|0x21c43d-0x0d090c,666|320|0x70ef85-0x1a0617,386|182|0xf5f5f5,414|121|0x13304d",
+		--srcPos = "618|533|0xcaddf0,373|495|0xcaddf0,952|543|0xcaddf0,416|581|0xf5f5f5,664|240|0x21c43d-0x0d090c,666|320|0x70ef85-0x1a0617,386|182|0xf5f5f5,414|121|0x13304d",
+		srcPos = "666|543|0xcaddf0,366|495|0xcaddf0,964|546|0xcaddf0,484|473|0xf5f5f5,835|568|0xf5f5f5,330|519|0xf5f5f5,997|524|0xf5f5f5,321|158|0xf5f5f5,\
+		1003|165|0xf5f5f5,1042|144|0x13304d,291|141|0x13304d"
 	},
 	{
 		tag = "教练续约定额",
@@ -353,8 +358,14 @@ local _navigationList = {
 		tag = "能量不足",
 		enable = true,
 		anchor = "A",
-		srcPos = "712|530|0xcaddf0,330|494|0xcaddf0,1000|541|0xcaddf0,353|256|0xdedede,628|438|0xdedede,630|459|0xf5f5f5,1176|145|0x972249,1005|191|0xf5f5f5",
-		actionFunc = waitEnergy
+		srcPos = "712|530|0xcaddf0,764|391|0xffffff,330|494|0xcaddf0,1000|541|0xcaddf0,353|256|0xdedede,628|438|0xdedede,630|459|0xf5f5f5,260|371|0x999999,1005|191|0xf5f5f5",
+		actionFunc = chargeEnergy
+	},
+	{
+		tag = "恢复100",
+		enable = true,
+		anchor = "A",
+		srcPos = "1117|219|0xebf7e6,1064|218|0xebf7e6,1024|218|0xebf7e6,992|217|0x97d880,967|218|0x2fb100,1007|379|0x2bb544,1038|373|0xffffff,1072|380|0x2bb544",
 	},
 	{
 		tag = "联赛奖励",		--在显示积分变化的界面弹出的作为导航控件处理
@@ -388,16 +399,23 @@ local _navigationList = {
 		srcPos = "1279|54|0x55a4f9-0x562b06,1269|45|0x55a4f9-0x562b06,1289|44|0x55a4f9-0x562b06,1268|65|0x55a4f9-0x562b06,1288|64|0x55a4f9-0x562b06,\
 		1268|55|0xccdff2,1278|44|0xccdff2,1289|54|0xccdff2,1198|66|0xffffff",
 	},
+	{
+		tag = "已成功替换球员",
+		enable = true,
+		anchor = "A",
+		srcPos = "617|444|0xcaddf0,378|412|0xcaddf0,939|454|0xcaddf0,568|491|0xf5f5f5,331|423|0xf5f5f5,415|99|0x99231c,439|105|0x99231c,112|539|0x004998",
+	},
+	
 }
 
 --全局导航优先级，一般next在最后
-local _navigationPriorityList = {
-	"确定-合约过期", 
-	"球员续约-球员列表", 
-	"球员续约-点击签约", 
-	"球员续约-续约", 
-	"球员续约-付款确认", 
-	"球员续约-支付确定", 
+local _navigationPriorityList0 = {
+	"确定-合约过期",
+	"球员续约-球员列表",
+	"球员续约-点击签约",
+	"球员续约-续约",
+	"球员续约-付款确认",
+	"球员续约-支付确定",
 	"球员续约-已续约",
 	"教练续约定额",
 	"教练续约确定",
@@ -406,9 +424,18 @@ local _navigationPriorityList = {
 	"恭喜晋级",		--在显示积分变化的界面弹出的作为导航控件处理/48级联赛
 	"恢复比赛",
 	"天梯判负",
-	"通知",
+	"notice",
+	"已成功替换球员",
 	"next",
 	--"comfirm",
+}
+
+local _navigationPriorityList = {
+	"球员续约-球员列表",
+	"comfirm",
+	"next",
+	"notice",
+	"能量不足",
 }
 
 

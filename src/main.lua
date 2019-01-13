@@ -30,15 +30,18 @@ function main()
 	xmod.exit()
 end
 
-
+--storage.purge()
+--storage.commit()
 main()
 screen.init(1, 0)
 --sleep(2000)
 --page.tapWidget("联赛教练模式", "跳过余下比赛")
 
 --page.tapNavigation("next")
---prt(page.getCurrentPage())
+prt(page.getCurrentPage())
 --page.tapWidget("比赛", "联赛")
+
+--page.tryNavigation()
 
 --获取一个区域内某种状态的所有球员位置信息
 sleep(2000)
@@ -53,4 +56,4 @@ sleep(2000)
 --tap(293,852)
 --ratioSlide(30, 700, 30, 153, 200)
 
-switchPlayer()
+--switchPlayer()

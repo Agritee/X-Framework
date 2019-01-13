@@ -16,8 +16,8 @@ local function initAppID()
 		xmod.exit()
 	else
 		if string.find(appid, CFG.DEFAULT_APP_ID) == nil and string.find(appid, "skzq") == nil then	--不同渠道应用包名
-			dialog(appid.."请先打开实况足球再开启脚本")
-			xmod.exit()
+			--dialog(appid.."请先打开实况足球再开启脚本")
+			--xmod.exit()
 		end
 		CFG.APP_ID = appid
 		Log("APP_ID:"..CFG.APP_ID)
