@@ -32,7 +32,7 @@ end
 
 --storage.purge()
 --storage.commit()
-main()
+--main()
 screen.init(1, 0)
 --sleep(2000)
 --page.tapWidget("联赛教练模式", "跳过余下比赛")
@@ -44,7 +44,7 @@ prt(page.getCurrentPage())
 --page.tryNavigation()
 
 --获取一个区域内某种状态的所有球员位置信息
-sleep(2000)
+--sleep(2000)
 --switchPlayer()
 
 --prt(scale.offsetPos("343|308|0xffffff,343|315|0x007aff,324|312|0x007aff,363|313|0x007aff,324|355|0x007aff,362|355|0x007aff", Point(342, 306)))
@@ -57,3 +57,14 @@ sleep(2000)
 --ratioSlide(30, 700, 30, 153, 200)
 
 --switchPlayer()
+
+
+
+
+
+
+local tb1 = {1,2,3,4,5,{1,2,3}}
+local tb2 = {1,2,3,4,5,{1,2,3}}
+
+prt(compareTb(tb1, tb2))
+prt(type(nil))

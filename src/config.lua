@@ -80,3 +80,5 @@ USER.SUBSTITUTE_INDEX_LIST = {--[[{fieldIndex = 1, substituteCondition = 1},{},{
 	{fieldIndex = 9, substituteCondition = 0},
 	{fieldIndex = 10, substituteCondition = 0},
 }		--替补席对应关系表
+
+USER.DROP_CACHE = false				--清空缓存

@@ -70,7 +70,7 @@ local _gridList = {
 	},
 	{
 		tag = "选择功能",
-		checkedList = {1,2},
+		checkedList = {1},
 		singleCheck = false,
 		singleParamKey = nil,
 		list = {
@@ -97,7 +97,7 @@ local _gridList = {
 	},
 	{
 		tag = "替补1",
-		checkedList = {},
+		checkedList = {2},
 		singleCheck = true,
 		singleBindParam = "USER.SUBSTITUTE_INDEX_LIST[1].fieldIndex",
 		list = {
@@ -131,7 +131,7 @@ local _gridList = {
 	},
 	{
 		tag = "状态1",
-		checkedList = {},
+		checkedList = {1},
 		singleCheck = true,
 		singleBindParam = "USER.SUBSTITUTE_INDEX_LIST[1].substituteCondition",
 		list = {
@@ -154,9 +154,9 @@ local _gridList = {
 			icon = ''
 		}
 	},
-{
+	{
 		tag = "替补2",
-		checkedList = {},
+		checkedList = {3},
 		singleCheck = true,
 		singleBindParam = "USER.SUBSTITUTE_INDEX_LIST[2].fieldIndex",
 		list = {
@@ -190,7 +190,7 @@ local _gridList = {
 	},
 	{
 		tag = "状态2",
-		checkedList = {},
+		checkedList = {1},
 		singleCheck = true,
 		singleBindParam = "USER.SUBSTITUTE_INDEX_LIST[2].substituteCondition",
 		list = {
@@ -213,9 +213,9 @@ local _gridList = {
 			icon = ''
 		}
 	},
-{
+	{
 		tag = "替补3",
-		checkedList = {},
+		checkedList = {4},
 		singleCheck = true,
 		singleBindParam = "USER.SUBSTITUTE_INDEX_LIST[3].fieldIndex",
 		list = {
@@ -249,7 +249,7 @@ local _gridList = {
 	},
 	{
 		tag = "状态3",
-		checkedList = {},
+		checkedList = {1},
 		singleCheck = true,
 		singleBindParam = "USER.SUBSTITUTE_INDEX_LIST[3].substituteCondition",
 		list = {
@@ -272,9 +272,9 @@ local _gridList = {
 			icon = ''
 		}
 	},
-{
+	{
 		tag = "替补4",
-		checkedList = {},
+		checkedList = {5},
 		singleCheck = true,
 		singleBindParam = "USER.SUBSTITUTE_INDEX_LIST[4].fieldIndex",
 		list = {
@@ -308,7 +308,7 @@ local _gridList = {
 	},
 	{
 		tag = "状态4",
-		checkedList = {},
+		checkedList = {1},
 		singleCheck = true,
 		singleBindParam = "USER.SUBSTITUTE_INDEX_LIST[4].substituteCondition",
 		list = {
@@ -331,9 +331,9 @@ local _gridList = {
 			icon = ''
 		}
 	},
-{
+	{
 		tag = "替补5",
-		checkedList = {},
+		checkedList = {6},
 		singleCheck = true,
 		singleBindParam = "USER.SUBSTITUTE_INDEX_LIST[5].fieldIndex",
 		list = {
@@ -367,7 +367,7 @@ local _gridList = {
 	},
 	{
 		tag = "状态5",
-		checkedList = {},
+		checkedList = {1},
 		singleCheck = true,
 		singleBindParam = "USER.SUBSTITUTE_INDEX_LIST[5].substituteCondition",
 		list = {
@@ -390,9 +390,9 @@ local _gridList = {
 			icon = ''
 		}
 	},
-{
+	{
 		tag = "替补6",
-		checkedList = {},
+		checkedList = {7},
 		singleCheck = true,
 		singleBindParam = "USER.SUBSTITUTE_INDEX_LIST[6].fieldIndex",
 		list = {
@@ -426,7 +426,7 @@ local _gridList = {
 	},
 	{
 		tag = "状态6",
-		checkedList = {},
+		checkedList = {1},
 		singleCheck = true,
 		singleBindParam = "USER.SUBSTITUTE_INDEX_LIST[6].substituteCondition",
 		list = {
@@ -449,9 +449,9 @@ local _gridList = {
 			icon = ''
 		}
 	},
-{
+	{
 		tag = "替补7",
-		checkedList = {},
+		checkedList = {8},
 		singleCheck = true,
 		singleBindParam = "USER.SUBSTITUTE_INDEX_LIST[7].fieldIndex",
 		list = {
@@ -485,7 +485,7 @@ local _gridList = {
 	},
 	{
 		tag = "状态7",
-		checkedList = {},
+		checkedList = {1},
 		singleCheck = true,
 		singleBindParam = "USER.SUBSTITUTE_INDEX_LIST[7].substituteCondition",
 		list = {
@@ -507,7 +507,57 @@ local _gridList = {
 			checkedBackgroundColor = '#FFFFFF',
 			icon = ''
 		}
-	},	
+	},
+	{
+		tag = "清空缓存",
+		checkedList = {3},
+		singleCheck = true,
+		singleBindParam = "USER.DROP_CACHE",
+		list = {
+			{title = "清空缓存", disabled = true},
+			{title = "开启", value = true},
+			{title = "关闭", value = false},
+		},
+		style = {
+			lineSpacing = 1 * ratio,
+			width = 80 * ratio,
+			height = 40 * ratio,
+			fontSize = 16 * ratio,
+			color = '#333333',
+			checkedColor = '#333333',
+			disabledColor = '#ffb200',
+			borderColor = '#F6F6F6',
+			checkedBorderColor = '#ffb200',
+			backgroundColor = '#F6F6F6',
+			checkedBackgroundColor = '#ffb200',
+			icon = ''
+		}
+	},
+	{
+		tag = "日志记录",
+		checkedList = {3},
+		singleCheck = true,
+		singleBindParam = "CFG.LOG",
+		list = {
+			{title = "日志记录", disabled = true},
+			{title = "开启", value = true},
+			{title = "关闭", value = false},
+		},
+		style = {
+			lineSpacing = 14 * ratio,
+			width = 80 * ratio,
+			height = 40 * ratio,
+			fontSize = 16 * ratio,
+			color = '#333333',
+			checkedColor = '#333333',
+			disabledColor = '#ffb200',
+			borderColor = '#F6F6F6',
+			checkedBorderColor = '#ffb200',
+			backgroundColor = '#F6F6F6',
+			checkedBackgroundColor = '#ffb200',
+			icon = ''
+		}
+	},
 }
 
 local function generateGridID(gridTag)
@@ -558,27 +608,32 @@ local function loadGridChecked()
 	Log("loadGridChecked")
 	
 	for k, v in pairs(_gridList) do
-		local storeList = cjson.decode(storage.get(v.tag, "{}"))
-		Log("load last selection: "..v.tag)
-		
-		if singleCheck then		--单选
-			if #storeList >= 1 then		--单选至少需有一个选项
-				v.checkedList = storeList	--为空可能是没有存储过，直接使用表里的默认值
-				
-				for _k, _v in pairs(v.list) do	--先全部置为unchecked
-					_v.checked = false
-				end
-				for _k, _v in pairs(v.list) do
-					for __k, __v in pairs(v.checkedList) do
-						if __v == _k then
-							_v.checked = true
-							break		--仅一个有效
-						end
+		local storeList = cjson.decode(storage.get(v.tag, '[0]'))	--{0}表示没有数据
+
+		if v.singleCheck then		--单选
+			if #storeList >= 1 and storeList[1] ~= 0 then		--有存储数据，使用存储数据，否则使用默认
+				Log("load last singleCheck selection: "..v.tag)
+				v.checkedList = storeList
+			end
+			
+			for _k, _v in pairs(v.list) do	--先全部置为unchecked
+				_v.checked = false
+			end
+
+			for _k, _v in pairs(v.list) do
+				for __k, __v in pairs(v.checkedList) do
+					if __v == _k then
+						_v.checked = true
+						break		--仅一个有效
 					end
 				end
 			end
 		else					--多选
-			v.checkedList = storeList
+			if #storeList == 0 or (#storeList >= 1 and storeList[1] ~= 0) then		--有存储数据，使用存储数据，否则使用默认
+				Log("load last selection: "..v.tag)
+				v.checkedList = storeList
+			end
+			
 			for _k, _v in pairs(v.list) do	--先全部置为unchecked
 				_v.checked = false
 			end
@@ -783,8 +838,8 @@ local pages = {
 					['justify-content'] = 'center',
 				},
 				subviews = {
-					wui.GridSelect.createLayout({id = generateGridID("替补1"), list = generateGridList("替补1"), 
-					config = {single = true, totalWidth = 440 * ratio, gridStyle = generateGridStyle("替补1")}}),
+					wui.GridSelect.createLayout({id = generateGridID("替补1"), list = generateGridList("替补1"),
+							config = {single = true, totalWidth = 440 * ratio, gridStyle = generateGridStyle("替补1")}}),
 					{
 						view = 'text',
 						value = '		',
@@ -792,9 +847,9 @@ local pages = {
 							['font-size'] = 20 * ratio,
 							color = '#5f5f5f'
 						}
-					},					
-					wui.GridSelect.createLayout({id = generateGridID("状态1"), list = generateGridList("状态1"), 
-					config = {single = true, totalWidth = 160 * ratio, gridStyle = generateGridStyle("状态1")}}),
+					},
+					wui.GridSelect.createLayout({id = generateGridID("状态1"), list = generateGridList("状态1"),
+							config = {single = true, totalWidth = 160 * ratio, gridStyle = generateGridStyle("状态1")}}),
 				},
 			},
 			{
@@ -807,8 +862,8 @@ local pages = {
 					['justify-content'] = 'center',
 				},
 				subviews = {
-					wui.GridSelect.createLayout({id = generateGridID("替补2"), list = generateGridList("替补2"), 
-					config = {single = true, totalWidth = 440 * ratio, gridStyle = generateGridStyle("替补2")}}),
+					wui.GridSelect.createLayout({id = generateGridID("替补2"), list = generateGridList("替补2"),
+							config = {single = true, totalWidth = 440 * ratio, gridStyle = generateGridStyle("替补2")}}),
 					{
 						view = 'text',
 						value = '		',
@@ -816,9 +871,9 @@ local pages = {
 							['font-size'] = 20 * ratio,
 							color = '#5f5f5f'
 						}
-					},					
-					wui.GridSelect.createLayout({id = generateGridID("状态2"), list = generateGridList("状态2"), 
-					config = {single = true, totalWidth = 160 * ratio, gridStyle = generateGridStyle("状态2")}}),
+					},
+					wui.GridSelect.createLayout({id = generateGridID("状态2"), list = generateGridList("状态2"),
+							config = {single = true, totalWidth = 160 * ratio, gridStyle = generateGridStyle("状态2")}}),
 				},
 			},
 			{
@@ -831,8 +886,8 @@ local pages = {
 					['justify-content'] = 'center',
 				},
 				subviews = {
-					wui.GridSelect.createLayout({id = generateGridID("替补3"), list = generateGridList("替补3"), 
-					config = {single = true, totalWidth = 440 * ratio, gridStyle = generateGridStyle("替补3")}}),
+					wui.GridSelect.createLayout({id = generateGridID("替补3"), list = generateGridList("替补3"),
+							config = {single = true, totalWidth = 440 * ratio, gridStyle = generateGridStyle("替补3")}}),
 					{
 						view = 'text',
 						value = '		',
@@ -840,9 +895,9 @@ local pages = {
 							['font-size'] = 20 * ratio,
 							color = '#5f5f5f'
 						}
-					},					
-					wui.GridSelect.createLayout({id = generateGridID("状态3"), list = generateGridList("状态3"), 
-					config = {single = true, totalWidth = 160 * ratio, gridStyle = generateGridStyle("状态3")}}),
+					},
+					wui.GridSelect.createLayout({id = generateGridID("状态3"), list = generateGridList("状态3"),
+							config = {single = true, totalWidth = 160 * ratio, gridStyle = generateGridStyle("状态3")}}),
 				},
 			},
 			{
@@ -855,8 +910,8 @@ local pages = {
 					['justify-content'] = 'center',
 				},
 				subviews = {
-					wui.GridSelect.createLayout({id = generateGridID("替补4"), list = generateGridList("替补4"), 
-					config = {single = true, totalWidth = 440 * ratio, gridStyle = generateGridStyle("替补4")}}),
+					wui.GridSelect.createLayout({id = generateGridID("替补4"), list = generateGridList("替补4"),
+							config = {single = true, totalWidth = 440 * ratio, gridStyle = generateGridStyle("替补4")}}),
 					{
 						view = 'text',
 						value = '		',
@@ -864,9 +919,9 @@ local pages = {
 							['font-size'] = 20 * ratio,
 							color = '#5f5f5f'
 						}
-					},					
-					wui.GridSelect.createLayout({id = generateGridID("状态4"), list = generateGridList("状态4"), 
-					config = {single = true, totalWidth = 160 * ratio, gridStyle = generateGridStyle("状态4")}}),
+					},
+					wui.GridSelect.createLayout({id = generateGridID("状态4"), list = generateGridList("状态4"),
+							config = {single = true, totalWidth = 160 * ratio, gridStyle = generateGridStyle("状态4")}}),
 				},
 			},
 			{
@@ -879,8 +934,8 @@ local pages = {
 					['justify-content'] = 'center',
 				},
 				subviews = {
-					wui.GridSelect.createLayout({id = generateGridID("替补5"), list = generateGridList("替补5"), 
-					config = {single = true, totalWidth = 440 * ratio, gridStyle = generateGridStyle("替补5")}}),
+					wui.GridSelect.createLayout({id = generateGridID("替补5"), list = generateGridList("替补5"),
+							config = {single = true, totalWidth = 440 * ratio, gridStyle = generateGridStyle("替补5")}}),
 					{
 						view = 'text',
 						value = '		',
@@ -888,9 +943,9 @@ local pages = {
 							['font-size'] = 20 * ratio,
 							color = '#5f5f5f'
 						}
-					},					
-					wui.GridSelect.createLayout({id = generateGridID("状态5"), list = generateGridList("状态5"), 
-					config = {single = true, totalWidth = 160 * ratio, gridStyle = generateGridStyle("状态5")}}),
+					},
+					wui.GridSelect.createLayout({id = generateGridID("状态5"), list = generateGridList("状态5"),
+							config = {single = true, totalWidth = 160 * ratio, gridStyle = generateGridStyle("状态5")}}),
 				},
 			},
 			{
@@ -903,8 +958,8 @@ local pages = {
 					['justify-content'] = 'center',
 				},
 				subviews = {
-					wui.GridSelect.createLayout({id = generateGridID("替补6"), list = generateGridList("替补6"), 
-					config = {single = true, totalWidth = 440 * ratio, gridStyle = generateGridStyle("替补6")}}),
+					wui.GridSelect.createLayout({id = generateGridID("替补6"), list = generateGridList("替补6"),
+							config = {single = true, totalWidth = 440 * ratio, gridStyle = generateGridStyle("替补6")}}),
 					{
 						view = 'text',
 						value = '		',
@@ -912,9 +967,9 @@ local pages = {
 							['font-size'] = 20 * ratio,
 							color = '#5f5f5f'
 						}
-					},					
-					wui.GridSelect.createLayout({id = generateGridID("状态6"), list = generateGridList("状态6"), 
-					config = {single = true, totalWidth = 160 * ratio, gridStyle = generateGridStyle("状态6")}}),
+					},
+					wui.GridSelect.createLayout({id = generateGridID("状态6"), list = generateGridList("状态6"),
+							config = {single = true, totalWidth = 160 * ratio, gridStyle = generateGridStyle("状态6")}}),
 				},
 			},
 			{
@@ -927,8 +982,8 @@ local pages = {
 					['justify-content'] = 'center',
 				},
 				subviews = {
-					wui.GridSelect.createLayout({id = generateGridID("替补7"), list = generateGridList("替补7"), 
-					config = {single = true, totalWidth = 440 * ratio, gridStyle = generateGridStyle("替补7")}}),
+					wui.GridSelect.createLayout({id = generateGridID("替补7"), list = generateGridList("替补7"),
+							config = {single = true, totalWidth = 440 * ratio, gridStyle = generateGridStyle("替补7")}}),
 					{
 						view = 'text',
 						value = '		',
@@ -936,9 +991,9 @@ local pages = {
 							['font-size'] = 20 * ratio,
 							color = '#5f5f5f'
 						}
-					},					
-					wui.GridSelect.createLayout({id = generateGridID("状态7"), list = generateGridList("状态7"), 
-					config = {single = true, totalWidth = 160 * ratio, gridStyle = generateGridStyle("状态7")}}),
+					},
+					wui.GridSelect.createLayout({id = generateGridID("状态7"), list = generateGridList("状态7"),
+							config = {single = true, totalWidth = 160 * ratio, gridStyle = generateGridStyle("状态7")}}),
 				},
 			},
 			{
@@ -948,7 +1003,7 @@ local pages = {
 					['font-size'] = 20 * ratio,
 					color = '#5f5f5f'
 				}
-			},		
+			},
 		}
 	},
 	{
@@ -1022,7 +1077,35 @@ local pages = {
 					['padding-left'] = 20 * ratio,
 					['padding-bottom'] = 10 * ratio,
 				}
-			}
+			},
+			{
+				view = 'text',
+				value = '3.高级功能',
+				style = {
+					['padding-left'] = 20 * ratio,
+					['padding-top'] = 20 * ratio,
+					['padding-bottom'] = 5 * ratio,
+					['font-size'] = 18 * ratio,
+					color = '#5f5f5f'
+				}
+			},
+			{
+				view = 'div',
+				style = {
+					width = 700 * ratio,
+					['background-color'] = '#FFFFFF',
+					['flex-direction'] = 'row',
+					['justify-content'] = 'space-around',
+					--['justify-content'] = 'center',
+				},
+				subviews = {
+					wui.GridSelect.createLayout({id = generateGridID("清空缓存"), list = generateGridList("清空缓存"),
+							config = {single = true, totalWidth = 250 * ratio, gridStyle = generateGridStyle("清空缓存")}}),
+					
+					wui.GridSelect.createLayout({id = generateGridID("日志记录"), list = generateGridList("日志记录"),
+							config = {single = true, totalWidth = 250 * ratio, gridStyle = generateGridStyle("日志记录")}}),
+				},
+			},
 		}
 	},
 }
@@ -1132,10 +1215,10 @@ local function setGridDefualtCallbacks()
 	end
 end
 
-function dispUI()	
+function dispUI()
 	if not IS_BREAKING_TASK then
 		print('show view')
-		context:show()	
+		context:show()
 		showwingFlag = true
 	else
 		showwingFlag = false

@@ -16,6 +16,48 @@ function tbCopy(tb)
 	return tmp
 end
 
+--比较比是否相等
+function compareTb(srcTb, dstTb)
+	local getAbsLen = function (tb)
+		local count = 0
+		for k, _ in pairs(tb) do
+			count = count + 1
+		end
+		return count
+	end
+	
+	if getAbsLen(srcTb) ~= getAbsLen(dstTb) then
+		return false
+	end
+	
+	equalFlag = false
+	
+	for k, v in pairs(srcTb) do
+		if type(v) == "table" then
+			local exsitFlag = false
+			for _k, _v in pairs(dstTb) do
+				if _k == k and type(_v) == "table" then
+					exsitFlag = true
+					if not compareTb(v, _v) then
+						return false
+					end
+					break
+				end
+			end
+			
+			if not exsitFlag then
+				return false
+			end
+		else
+			if v ~= dstTb[k] then
+				return false
+			end
+		end
+	end
+	
+	return true
+end
+
 function setValueByStrKey(keyStr, value)
 	local keysTb = {}
 	for keyStr, keyIndex in string.gmatch(keyStr, "([%a_]+)%[?(%d*)%]?%.?") do

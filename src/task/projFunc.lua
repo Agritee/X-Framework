@@ -59,9 +59,9 @@ local function getFixStatusPlayers(area, status)
 	elseif status == "good" then	--状态较好
 		statusStr = "667|646|0x74aa00-0x233200,661|652|0x74aa00-0x233200,664|641|0x74aa00-0x233200,672|650|0x74aa00-0x233200,673|640|0x74aa00-0x233200"
 	elseif status == "bad" then		--状态较差
-		statusStr = "661|639|0x925300-0x211300,668|646|0x925300-0x211300,664|650|0x925300-0x211300,672|642|0x925300-0x211300,673|652|0x925300-0x211300"
+		statusStr = "668|646|0x925300-0x211300,661|639|0x925300-0x211300,664|650|0x925300-0x211300,672|642|0x925300-0x211300,673|652|0x925300-0x211300"
 	elseif status == "worse" then	--状态极差
-		statusStr = "666|644|0x8f0505-0x2a0505,667|636|0x8f0505-0x2a0505,660|644|0x8f0505-0x2a0505,672|645|0x8f0505-0x2a0505,667|651|0x8f0505-0x2a0505"
+		statusStr = "666|646|0x8f0505-0x2a0505,667|636|0x8f0505-0x2a0505,660|644|0x8f0505-0x2a0505,672|645|0x8f0505-0x2a0505,667|651|0x8f0505-0x2a0505"
 	elseif status == "normal" then	--状态一般
 		statusStr = "666|646|0xb6ae00-0x0e0e00,656|646|0xb6ae00-0x0e0e00,673|646|0xb6ae00-0x0e0e00,665|639|0xb6ae00-0x0e0e00,665|652|0xb6ae00-0x0e0e00"
 	else
@@ -145,7 +145,7 @@ local function getPlayerStatusInfo(seats)
 		
 		--if a.y == b.y then
 		--因不同状态下的首点取值位置不同，同一水平位置的y左边可能有微小区别，容错以6像素/短边750未基准
-		if math.abs(a.y - b.y) <= (CFG.EFFECTIVE_AREA[4] - CFG.EFFECTIVE_AREA[2]) / 750 * 6 then
+		if math.abs(a.y - b.y) <= (CFG.EFFECTIVE_AREA[4] - CFG.EFFECTIVE_AREA[2]) / 750 * 5 then
 			return a.x < b.x
 		else
 			return a.y < b.y
