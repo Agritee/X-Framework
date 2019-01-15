@@ -20,7 +20,7 @@ local _gridList = {
 			{title = '自动天梯'},
 			{title = '自动巡回', disabled = true},
 			{title = '手动联赛', disabled = true},
-			{title = '玄学抽球', disabled = true},
+			{title = '玄学抽球'},
 			{title = '在线签到', disabled = true},
 		},
 		style = {
@@ -535,7 +535,7 @@ local _gridList = {
 	},
 	{
 		tag = "日志记录",
-		checkedList = {3},
+		checkedList = {2},
 		singleCheck = true,
 		singleBindParam = "CFG.LOG",
 		list = {
@@ -658,8 +658,14 @@ local function submitGridChecked()
 				--prt(_v)
 				for __k, __v in pairs(v.checkedList) do
 					if __v == _k then
-						setValueByStrKey(v.singleBindParam, _v.value or _v.title)
-						Log("________commit set "..v.singleBindParam.."="..(_v.value or _v.title))
+						if type(_v.value) == "boolean" then  
+							setValueByStrKey(v.singleBindParam, _v.value)
+							Log("________commit set "..v.singleBindParam.."="..tostring(_v.value))
+						else
+							setValueByStrKey(v.singleBindParam, _v.value or _v.title)
+							Log("________commit set "..v.singleBindParam.."="..(_v.value or _v.title))
+						end
+						
 						break
 					end
 				end
@@ -719,7 +725,6 @@ local pages = {
 			['align-items'] = 'center'
 		},
 		subviews = {
-			
 			wui.GridSelect.createLayout({id = generateGridID("选择任务"), list = generateGridList("选择任务"),
 					config = { single = true, totalWidth = 540  * ratio, gridStyle = generateGridStyle("选择任务")} }),
 			{

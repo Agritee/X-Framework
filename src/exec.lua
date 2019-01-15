@@ -75,8 +75,7 @@ function M.run(taskName, repeatTimes)
 	end
 	
 	page.setPageEnable(M.getTaskProcesses(taskName))	--设置page.enable
-	prt(page.getCurrentPage())
-	prt(page.matchPage("比赛"))
+
 	M.setExecStatus("START")
 	
 	for i = 1, reTimes, 1 do

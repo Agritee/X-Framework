@@ -271,6 +271,28 @@ local _pageList = {
 			},
 		},
 	},
+	{
+		tag = "抽球-支付界面",
+		widgetList = {
+			{
+				tag = "综合特征",
+				enable = true,
+				anchor = "A",
+				srcPos = "870|498|0xcaddf0,696|464|0xcaddf0,962|508|0xcaddf0,374|465|0xcaddf0,617|508|0xcaddf0,667|489|0xf5f5f5,532|542|0xf5f5f5,778|429|0xf5f5f5,184|702|0x373737",
+			},
+		},
+	},
+	{
+		tag = "抽球界面",
+		widgetList = {
+			{
+				tag = "综合特征",
+				enable = true,
+				anchor = "B",
+				srcPos = "205|679|0x1b1719-0x1b171a,467|678|0x1b1719-0x1b171a,907|675|0x1b1719-0x1b171a,1298|677|0x1b1719-0x1b171a,110|713|0x1b1719-0x1b171a,337|708|0x1b1719-0x1b171a,930|713|0x1b1719-0x1b171a,1271|710|0x1b1719-0x1b171a",
+			},
+		},
+	},
 }
 
 --公共导航控件，如下一步、返回、确认、取消、通知
@@ -280,7 +302,6 @@ local _navigationList = {
 		enable = true,
 		noCache = true,
 		anchor = "CRB",
-		--srcPos = "1130|732|0x1270e3-0x13091a,1127|702|0x1270e3-0x13091a,1102|703|0x1270e3-0x13091a,1088|733|0x1270e3-0x13091a,1235|733|0x1270e3-0x13091a",
 		srcPos = "1130|732|0x1F74CC-0x202331,1127|702|0x1F74CC-0x202331,1102|703|0x1F74CC-0x202331,1088|733|0x1F74CC-0x202331,1235|733|0x1F74CC-0x202331",
 		dstArea = Rect(
 			math.floor(CFG.EFFECTIVE_AREA[1] + (CFG.EFFECTIVE_AREA[3] - CFG.EFFECTIVE_AREA[1]) * 3 / 4),
@@ -294,7 +315,9 @@ local _navigationList = {
 		enable = true,
 		noCache = true,
 		anchor = "MTB",
-		srcPos = "843|449|0xcaddf0,884|405|0xcaddf0,507|457|0xcaddf0,409|407|0xcaddf0,487|379|0xf5f5f5,804|491|0xf5f5f5,328|436|0xf5f5f5,1007|435|0xf5f5f5",
+		--srcPos = "843|449|0xcaddf0,884|405|0xcaddf0,507|457|0xcaddf0,409|407|0xcaddf0,487|379|0xf5f5f5,804|491|0xf5f5f5,328|436|0xf5f5f5,1007|435|0xf5f5f5",
+		--兼容手机联赛界面的确定按钮过小的问题
+		srcPos = "864|497|0xcaddf0,861|467|0xcaddf0,415|475|0xcaddf0,554|499|0xcaddf0,329|486|0xf5f5f5,997|481|0xf5f5f5,502|549|0xf5f5f5,831|427|0xf5f5f5",
 	},
 	{
 		tag = "确定-合约过期",
@@ -358,7 +381,7 @@ local _navigationList = {
 		tag = "能量不足",
 		enable = true,
 		anchor = "A",
-		srcPos = "712|530|0xcaddf0,764|391|0xffffff,330|494|0xcaddf0,1000|541|0xcaddf0,353|256|0xdedede,628|438|0xdedede,630|459|0xf5f5f5,260|371|0x999999,1005|191|0xf5f5f5",
+		srcPos = "712|530|0xcaddf0,764|391|0xffffff,330|494|0xcaddf0,1000|541|0xcaddf0,353|256|0xdedede,628|438|0xdedede,630|459|0xf5f5f5,1005|191|0xf5f5f5",
 		actionFunc = chargeEnergy
 	},
 	{

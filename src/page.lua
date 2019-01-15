@@ -72,7 +72,7 @@ local function matchWidgets(pageTag, widgetList)
 					--Log("cant match widget: "..v.tag)				
 					return false
 				else
-					Log("----match widget: "..v.tag)				
+					--Log("----match widget: "..v.tag)				
 				end
 			end
 		end

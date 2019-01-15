@@ -13,18 +13,20 @@ require("task/projFunc")
 require("task/projPage")
 require("task/rankSim")
 require("task/leagueSim")
+require("task/drawBall")
 require("ui")
 
 function main()
 	screen.keep(false)
 	IS_BREAKING_TASK = exec.isExistBreakingTask()
-	
+
 	dispUI()
-	
-	
+
 	if IS_BREAKING_TASK then
 		skipInitPage()	--先跳过未定义界面
 	end
+	prt("CFG.LOG")
+	log(CFG.LOG)
 	
 	exec.run(USER.TASK_NAME, USER.REPEAT_TIMES)
 	xmod.exit()
@@ -32,13 +34,13 @@ end
 
 --storage.purge()
 --storage.commit()
---main()
+---main()
 screen.init(1, 0)
 --sleep(2000)
 --page.tapWidget("联赛教练模式", "跳过余下比赛")
 
 --page.tapNavigation("next")
-prt(page.getCurrentPage())
+prt(page.getCurrentPage(true))
 --page.tapWidget("比赛", "联赛")
 
 --page.tryNavigation()
@@ -61,10 +63,3 @@ prt(page.getCurrentPage())
 
 
 
-
-
-local tb1 = {1,2,3,4,5,{1,2,3}}
-local tb2 = {1,2,3,4,5,{1,2,3}}
-
-prt(compareTb(tb1, tb2))
-prt(type(nil))

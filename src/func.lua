@@ -26,6 +26,10 @@ function compareTb(srcTb, dstTb)
 		return count
 	end
 	
+	if srcTb == nil or dstTb == nil then
+		return false
+	end
+	
 	if getAbsLen(srcTb) ~= getAbsLen(dstTb) then
 		return false
 	end
