@@ -41,7 +41,7 @@ sleep(2000)
 
 --page.tapWidget("联赛教练模式", "跳过余下比赛")
 --page.tapNavigation("next")
-prt(page.getCurrentPage(true))
+--prt(page.getCurrentPage(true))
 --page.tapWidget("比赛", "联赛")
 
 --page.tryNavigation()
