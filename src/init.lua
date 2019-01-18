@@ -1,7 +1,7 @@
 -- init.lua
 -- Author: cndy1860
 -- Date: 2018-12-25
--- Descrip: 负责初始化相关操作
+-- Descrip: 负责初始化相关操作 
 
 --初始化游戏包名
 local function initAppID()
@@ -94,7 +94,7 @@ end
 
 --初始化环境参数
 local function initEnv()
-	screen.init(1)
+	screen.init(screen.LANDSCAPE_RIGHT)
 	screen.keep(false)
 	
 	initAppID()

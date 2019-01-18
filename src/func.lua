@@ -1,7 +1,7 @@
 -- func.lua
 -- Author: cndy1860
 -- Date: 2018-12-25
--- Descrip: 功能函数
+-- Descrip: 功能函数 
 
 --复制表
 function tbCopy(tb)

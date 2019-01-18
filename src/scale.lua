@@ -1,7 +1,7 @@
 -- scale.lua
 -- Author: cndy1860
 -- Date: 2018-12-24
--- Descrip: 负责多分辨率适配的坐标转换
+-- Descrip: 负责多分辨率适配的坐标转换 
 require("math")
 
 local modName = "scale"

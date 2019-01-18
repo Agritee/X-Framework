@@ -13,7 +13,8 @@ require("task/projFunc")
 require("task/projPage")
 require("task/rankSim")
 require("task/leagueSim")
-require("task/drawBall")
+require("task/drawBox")
+require("task/drawRegular")
 require("ui")
 
 function main()
@@ -25,8 +26,6 @@ function main()
 	if IS_BREAKING_TASK then
 		skipInitPage()	--先跳过未定义界面
 	end
-	prt("CFG.LOG")
-	log(CFG.LOG)
 	
 	exec.run(USER.TASK_NAME, USER.REPEAT_TIMES)
 	xmod.exit()
@@ -36,12 +35,12 @@ end
 --storage.commit()
 
 main()
-screen.init(1)
+screen.init(screen.LANDSCAPE_RIGHT)
 sleep(2000)
 
 prt(page.getCurrentPage(true))
 
---page.tapWidget("联赛教练模式", "跳过余下比赛")
+page.tapWidget("标准经纪人", "中场")
 --page.tapNavigation("next")
 
 --page.tapWidget("比赛", "联赛")

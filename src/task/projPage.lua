@@ -286,6 +286,12 @@ local _pageList = {
 				anchor = "A",
 				srcPos = "291|374|0x007aff,285|379|0xf8f9fb,298|379|0xf8f9fb,291|385|0x007aff,291|394|0x007aff,285|400|0xf8f9fb,298|400|0xf8f9fb,314|396|0x007aff,311|381|0x007aff,321|376|0xf8f9fb",
 			},
+			{
+				tag = "标准经纪人",
+				enable = true,
+				anchor = "A",
+				srcPos = "667|380|0x007aff,666|392|0x007aff,666|386|0xf8f9fb,653|378|0x007aff,644|396|0x007aff,635|396|0xf8f9fb,644|404|0xf8f9fb,667|399|0xf8f9fb,690|396|0x007aff,698|397|0xf8f9fb",
+			},
 		},
 	},
 	{
@@ -304,10 +310,39 @@ local _pageList = {
 				srcPos = "291|555|0xfee580,285|547|0xcda301,291|564|0xcda301,412|614|0x007aff,257|381|0x3e3d40,328|377|0x3e3d40,181|128|0xe38ca8-0x195e47",
 			},
 			{
-				tag = "付款确认",
+				tag = "金币付款确认",
 				enable = false,
 				anchor = "A",
 				srcPos = "829|393|0xfee680,808|401|0xcea402,853|400|0xcea402,697|342|0xe6e6ed,961|482|0xe6e6ed",
+			},
+		},
+	},
+	{
+		tag = "标准经纪人",
+		widgetList = {
+			{
+				tag = "前锋",
+				enable = true,
+				anchor = "L",
+				srcPos = "291|365|0xd9b800,212|548|0x1e53b1,370|547|0xcda301,153|611|0xfdfdfd,411|614|0x007aff",
+			},
+			{
+				tag = "中场",
+				enable = true,
+				anchor = "MTB",
+				srcPos = "291|365|0xd9b800,212|548|0x1e53b1,370|547|0xcda301,153|611|0xfdfdfd,411|614|0x007aff",
+			},
+			{
+				tag = "后卫",
+				enable = true,
+				anchor = "R",
+				srcPos = "291|365|0xd9b800,212|548|0x1e53b1,370|547|0xcda301,153|611|0xfdfdfd,411|614|0x007aff",
+			},
+			{
+				tag = "GP付款确认",
+				enable = false,
+				anchor = "A",
+				srcPos = "500|393|0x1e54b2,517|392|0x9ec2ff,372|346|0xe6e6ed,630|489|0xe6e6ed,828|394|0xfee680,844|375|0xcea402",
 			},
 		},
 	},

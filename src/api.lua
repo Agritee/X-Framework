@@ -98,6 +98,9 @@ end
 -------------screen--------------
 screen = {}
 
+screen.LANDSCAPE_RIGHT = 1
+screen.LANDSCAPE_LEFT = 2
+
 function screen.init(orientation)
 	init("0", orientation)
 end
@@ -166,8 +169,8 @@ end
 
 ----丢掉不常用的priority,需要的话可自行分离，当limit>99时，分区进行查找，以解决1.9只能返回最多99点的问题
 function screen.findColors(rect, color, globalFuzz, priority, limit)
-	local split = 4		--分区阶数，将把rect分为split*rect个区域分开扫描
-	if limit ~= nil and limit > 99 then	--超过99点，进行分(split^2个)区进行findColors再汇总
+	if limit ~= nil and limit > 99 then	--超过99点，进行分区findColors再汇总
+		local split = 4		--分区阶数，将把rect分为split*rect个区域分开扫描
 		local x0, y0 = rect.x, rect.y
 		local stepX, stepY = rect.width / split, rect.height / split
 		

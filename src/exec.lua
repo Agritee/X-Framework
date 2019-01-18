@@ -1,7 +1,7 @@
 -- exec.lua
 -- Author: cndy1860
 -- Date: 2018-12-25
--- Descrip: 运行任务
+-- Descrip: 运行任务 
 
 local modName = "exec"
 local M = {}

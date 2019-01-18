@@ -1,16 +1,16 @@
--- drawBall.lua
+-- drawRegular.lua
 -- Author: cndy1860
--- Date: 2019-01-15
--- Descrip: 抽球
+-- Date: 2019-01-158
+-- Descrip: 标准抽，GP
 
 local _task = {
-	tag = "玄学抽球",
+	tag = "标准抽球",
 	processes = {
 		{tag = "其他", mode = "firstRun"},
 		{tag = "合同", nextTag = "经纪人", mode = "firstRun"},
-		{tag = "经纪人", nextTag = "箱式经纪人", mode = "firstRun"},
+		{tag = "经纪人", nextTag = "标准经纪人", mode = "firstRun"},
 		
-		{tag = "箱式经纪人"},
+		{tag = "标准经纪人"},
 		{tag = "抽球界面"},
 	},
 }
@@ -39,16 +39,15 @@ end
 insertFunc("其他", fn)
 
 local fn = function()
-	if USER.DROP_BALL_SINGLE then
-		page.tapWidget("箱式经纪人", "单抽")
-	else
-		page.tapWidget("箱式经纪人", "连抽")
-	end
+	local posationTag = USER.DROP_REGULAR_POSATION
+	page.tapWidget("标准经纪人", posationTag)
+
 	sleep(200)
-	page.tapWidget("箱式经纪人", "付款确认")
+	page.tapWidget("标准经纪人", "GP付款确认")
 	sleep(200)
+	
 end
-insertFunc("箱式经纪人", fn)
+insertFunc("标准经纪人", fn)
 
 local fn = function()
 	Log("wait drawBall")

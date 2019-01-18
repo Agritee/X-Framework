@@ -86,5 +86,6 @@ USER.SUBSTITUTE_INDEX_LIST = {--[[{fieldIndex = 1, substituteCondition = 1},{},{
 
 USER.DROP_CACHE = false				--清空缓存
 
-USER.DROP_BALL_SINGLE = true
 USER.DROP_STOP_TIME = 13
+USER.DROP_BALL_SINGLE = true
+USER.DROP_REGULAR_POSATION = "前锋"		--"MF", "CB"

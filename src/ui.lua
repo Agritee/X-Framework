@@ -19,8 +19,8 @@ local _gridList = {
 			{title = '自动联赛'},
 			{title = '自动天梯'},
 			{title = '自动巡回', disabled = true},
-			{title = '手动联赛', disabled = true},
-			{title = '玄学抽球'},
+			{title = '箱式抽球'},
+			{title = '标准抽球'},
 			{title = '在线签到', disabled = true},
 		},
 		style = {
@@ -93,6 +93,55 @@ local _gridList = {
 			backgroundColor = '#F6F6F6',
 			checkedBackgroundColor = '#FFFFFF',
 			--icon = ''
+		}
+	},
+	{
+		tag = "抽球位置",
+		checkedList = {1},
+		singleCheck = true,
+		singleBindParam = "USER.DROP_REGULAR_POSATION",
+		list = {
+			{title = '前锋'},
+			{title = '中场'},
+			{title = '后卫'},
+		},
+		style = {
+			lineSpacing = 14 * ratio,
+			width = 70 * ratio,
+			height = 30 * ratio,
+			fontSize = 14 * ratio,
+			color = '#333333',
+			checkedColor = '#ffffff',
+			disabledColor = '#BBBBBB',
+			borderColor = '#666666',
+			checkedBorderColor = '#ffb200',
+			backgroundColor = '#ffffff',
+			checkedBackgroundColor = '#ffb200',
+			icon = ''
+		}
+	},
+	{
+		tag = "抽球类型",
+		checkedList = {1},
+		singleCheck = true,
+		singleBindParam = "USER.DROP_BALL_SINGLE",
+		list = {
+			{title = '单抽', value = true},
+			{title = '十连', value = false},
+		},
+		style = {
+			lineSpacing = 14 * ratio,
+			width = 70 * ratio,
+			height = 30 * ratio,
+			fontSize = 14 * ratio,
+			color = '#333333',
+			checkedColor = '#ffffff',
+			disabledColor = '#BBBBBB',
+			borderColor = '#666666',
+			checkedBorderColor = '#ffb200',
+			backgroundColor = '#ffffff',
+			checkedBackgroundColor = '#ffb200',
+			icon = ''
 		}
 	},
 	{
@@ -828,7 +877,69 @@ local pages = {
 			{
 				view = 'div',
 				style = {
-					width = 400 * ratio,
+					width = 500 * ratio,
+					['background-color'] = '#FFFFFF',
+					['flex-direction'] = 'row',
+					['justify-content'] = 'flex-start',
+				},
+				subviews = 	{
+					{
+						view = 'text',
+						value = '抽球位置		',
+						style = {
+							['background-color'] = '#FFFFFF',
+							['font-size'] = 26 * ratio,
+							color = '#5f5f5f'
+						}
+					},
+					wui.GridSelect.createLayout({id = generateGridID("抽球位置"), list = generateGridList("抽球位置"),
+							config = { single = true, totalWidth = 400  * ratio, gridStyle = generateGridStyle("抽球位置")} }),
+				}
+			},
+			{
+				view = 'text',
+				value = ' \n',
+				style = {
+					['background-color'] = '#FFFFFF',
+					['font-size'] = 10 * ratio,
+					color = '#5f5f5f'
+				}
+			},
+			{
+				view = 'div',
+				style = {
+					width = 500 * ratio,
+					['background-color'] = '#FFFFFF',
+					['flex-direction'] = 'row',
+					['justify-content'] = 'flex-start',
+				},
+				subviews = 	{
+					{
+						view = 'text',
+						value = '抽球类型		',
+						style = {
+							['background-color'] = '#FFFFFF',
+							['font-size'] = 26 * ratio,
+							color = '#5f5f5f'
+						}
+					},
+					wui.GridSelect.createLayout({id = generateGridID("抽球类型"), list = generateGridList("抽球类型"),
+							config = { single = true, totalWidth = 318  * ratio, gridStyle = generateGridStyle("抽球类型")} }),
+				}
+			},
+			{
+				view = 'text',
+				value = ' \n',
+				style = {
+					['background-color'] = '#FFFFFF',
+					['font-size'] = 10 * ratio,
+					color = '#5f5f5f'
+				}
+			},
+			{
+				view = 'div',
+				style = {
+					width = 500 * ratio,
 					['background-color'] = '#FFFFFF',
 					['flex-direction'] = 'row',
 					['justify-content'] = 'flex-start',
@@ -860,6 +971,15 @@ local pages = {
 							['background-color'] = '#EEEEEE'
 						}
 					},
+				}
+			},
+			{
+				view = 'text',
+				value = ' \n\n\n',
+				style = {
+					['background-color'] = '#FFFFFF',
+					['font-size'] = 14 * ratio,
+					color = '#5f5f5f'
 				}
 			},
 		}
@@ -1289,7 +1409,7 @@ function dispUI()
 		sleep(200)
 	end
 	
-	prt(USER)
+	--prt(USER)
 end
 
 

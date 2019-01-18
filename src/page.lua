@@ -1,7 +1,7 @@
 -- config.lua
 -- Author: cndy1860
 -- Date: 2018-12-24
--- Descrip: 界面特征判定相关
+-- Descrip: 界面特征判定相关 
 
 local modName = "page"
 local M = {}
@@ -31,8 +31,6 @@ function M.setPageEnable(processes)
 			end
 		end
 	end
-	
-	prt(M.pageList)
 end
 
 --匹配单个控件，不受widget.enable值影响，使用matchColors但不缓存数据
