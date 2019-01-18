@@ -3,11 +3,6 @@
 -- Date: 2018-12-25
 -- Descrip: 负责初始化相关操作
 
-local modName = "init"
-local M = {}
-_G[modName] = M
-package.loaded[modName] = M
-
 --初始化游戏包名
 local function initAppID()
 	local appid = runtime.getForegroundApp()
@@ -99,7 +94,7 @@ end
 
 --初始化环境参数
 local function initEnv()
-	screen.init(1, 0)
+	screen.init(1)
 	screen.keep(false)
 	
 	initAppID()

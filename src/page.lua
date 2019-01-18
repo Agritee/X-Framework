@@ -31,21 +31,42 @@ function M.setPageEnable(processes)
 			end
 		end
 	end
-
+	
 	prt(M.pageList)
 end
 
---匹配单个控件，不受widget.enable值影响，不缓存
-function M.matchWidget(widget)
-	--prt(v)
-	local pos = screen.findColor(widget.dstArea, widget.dstPos, widget.fuzzy or CFG.DEFAULT_FUZZY)
-	if pos ~= Point.INVALID then
-		--Log("match widget: ["..widget.tag.."] success!")
-		return true
-	else
-		--Log("match widget: ["..widget.tag.."] fail!")
-		return false
+--匹配单个控件，不受widget.enable值影响，使用matchColors但不缓存数据
+function M.matchWidget(pageTag, widgetTag)
+	for _, v in pairs(M.pageList) do
+		if v.tag == pageTag then
+			for _, _v in pairs(v.widgetList) do
+				if _v.tag == widgetTag then
+					if (not CFG.ALLOW_CACHE) or _v.matchPos == nil or _v.noCache then
+						local pos = screen.findColor(_v.dstArea, _v.dstPos, _v.fuzzy or CFG.DEFAULT_FUZZY)
+						if pos ~= Point.INVALID then
+							Log("match widget: [".._v.tag.."] success!")
+							return true
+						else
+							Log("match widget: [".._v.tag.."] fail!")
+							return false
+						end
+					else
+						if screen.matchColors(_v.matchPos, _v.fuzzy or CFG.DEFAULT_FUZZY) then
+							Log("matchPos widget: [".._v.tag.."] success!")
+							return true
+						else
+							Log("matchPos widget: [".._v.tag.."] fail!")
+							return false
+						end
+					end
+					break
+				end
+			end
+			break
+		end
 	end
+	
+	return false
 end
 
 --匹配控件列表，缓存
@@ -56,23 +77,23 @@ local function matchWidgets(pageTag, widgetList)
 		matchFlag = true
 		if v.enable then
 			--prt(v)
-			if v.matchPos == nil or v.noCache then		--不存在缓存过的matchPos，使用找色
+			if (not CFG.ALLOW_CACHE) or v.matchPos == nil or v.noCache then		--不存在缓存过的matchPos，使用找色
 				local pot = screen.findColor(v.dstArea, v.dstPos, v.fuzzy or CFG.DEFAULT_FUZZY)
 				if pot == Point.INVALID then
 					--Log("cant find widget: "..v.tag)
 					return false
 				else
 					--Log("----find widget: "..v.tag)
-					if not v.noCache then
+					if CFG.ALLOW_CACHE and (not v.noCache) then
 						table.insert(storeItems, {string.format("widget-%s-%s", pageTag, v.tag), scale.offsetPos(v.dstPos, pot)})
 					end
 				end
 			else							--存在缓存过的matchPos，使用比色
 				if not screen.matchColors(v.matchPos, v.fuzzy or CFG.DEFAULT_FUZZY) then
-					--Log("cant match widget: "..v.tag)				
+					--Log("cant match widget: "..v.tag)
 					return false
 				else
-					--Log("----match widget: "..v.tag)				
+					--Log("----match widget: "..v.tag)
 				end
 			end
 		end
@@ -234,7 +255,7 @@ function M.tapNavigation(navTag, potIndex)
 				if pot ~= Point.INVALID then
 					Log("tapNavigation: "..navTag..(potIndex or ""))
 					if potIndex == nil then		--点击控件的第一个点
-						tap(pot.x, pot.y)	
+						tap(pot.x, pot.y)
 					else		--点击第potIndex个点
 						local posTb = scale.toPointsTable(scale.offsetPos(v.dstPos, pot))
 						if potIndex <= #posTb then
@@ -250,7 +271,7 @@ function M.tapNavigation(navTag, potIndex)
 					catchError(ERR_TIMEOUT, "cant catch tapWidget: ["..navTag.."]")
 				end
 				sleep(100)
-			end			
+			end
 		end
 	end
 end
@@ -260,7 +281,7 @@ function M.tryNavigation()
 	for _, v in pairs(M.navigationPriorityList) do
 		for _, _v in pairs(M.navigationList) do
 			if v == _v.tag then
-				if _v.matchPos == nil or _v.noCache then
+				if (not CFG.ALLOW_CACHE) or _v.matchPos == nil or _v.noCache then
 					local pot = screen.findColor(_v.dstArea, _v.dstPos, CFG.DEFAULT_FUZZY)
 					if pot ~= Point.INVALID then
 						Log("Exsit find Navigation [".._v.tag.."], execute it!")
@@ -268,7 +289,7 @@ function M.tryNavigation()
 						sleep(200)
 						screen.keep(true)	--刷新画面，防止界面过渡时，先出现局部的导航（但getCurrentPage为nil）时直接判定为导航了
 						local currentPage = page.getCurrentPage()
-						if currentPage then 
+						if currentPage then
 							Log('exsit navigation but need refresh page: '..currentPage)
 							return
 						end
@@ -281,13 +302,13 @@ function M.tryNavigation()
 							tap(pot.x, pot.y)	--点击导航按钮
 						end
 						
-						if not _v.noCache then
+						if CFG.ALLOW_CACHE and (not _v.noCache) then
 							_v.matchPos = scale.offsetPos(_v.dstPos, pot)
 							storage.put(string.format("navigation-%s", _v.tag), _v.matchPos)
 							storage.commit()
 							Log("store "..string.format("navigation-%s", _v.tag))
 						end
-
+						
 						sleep(CFG.NAVIGATION_DELAY)
 						return true
 					else
@@ -296,7 +317,7 @@ function M.tryNavigation()
 				else
 					if screen.matchColors(_v.matchPos, CFG.DEFAULT_FUZZY) then
 						Log("Exsit match Navigation [".._v.tag.."], execute it!")
-
+						
 						if _v.actionFunc ~= nil then	--执行导航actionFunc
 							screen.keep(false)		--执行execNavigation.actionFunc可能涉及到界面变化
 							_v.actionFunc()
@@ -316,7 +337,7 @@ function M.tryNavigation()
 			end
 		end
 	end
-
+	
 	return false
 end
 function M.isExsitNavigation()
@@ -335,7 +356,7 @@ function M.isExsitNavigation()
 							storage.commit()
 							Log("store "..string.format("navigation-%s", _v.tag))
 						end
-
+						
 						sleep(CFG.NAVIGATION_DELAY)
 						return true
 					else
@@ -363,7 +384,7 @@ function M.isExsitNavigation()
 			end
 		end
 	end
-
+	
 	return false
 end
 
@@ -432,7 +453,7 @@ local function initWidgets()
 						_v.matchPos = value
 						Log("load widget matchPos: "..v.tag.."-".._v.tag)
 					end
-				end				
+				end
 			end
 		end
 	end
@@ -459,7 +480,7 @@ local function initNavigations()
 					v.matchPos = value
 					Log("load navigation matchPos: "..v.tag)
 				end
-			end				
+			end
 		end
 	end
 	
@@ -479,7 +500,7 @@ local function initNavigations()
 					v.matchPos = value
 					Log("load pageNext matchPos on: "..v.tag)
 				end
-			end			
+			end
 		end
 	end
 	

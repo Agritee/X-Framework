@@ -535,9 +535,9 @@ local _gridList = {
 	},
 	{
 		tag = "日志记录",
-		checkedList = {2},
+		checkedList = {3},
 		singleCheck = true,
-		singleBindParam = "CFG.LOG",
+		singleBindParam = "CFG.WRITE_LOG",
 		list = {
 			{title = "日志记录", disabled = true},
 			{title = "开启", value = true},
@@ -609,7 +609,7 @@ local function loadGridChecked()
 	
 	for k, v in pairs(_gridList) do
 		local storeList = cjson.decode(storage.get(v.tag, '[0]'))	--{0}表示没有数据
-
+		
 		if v.singleCheck then		--单选
 			if #storeList >= 1 and storeList[1] ~= 0 then		--有存储数据，使用存储数据，否则使用默认
 				Log("load last singleCheck selection: "..v.tag)
@@ -619,7 +619,7 @@ local function loadGridChecked()
 			for _k, _v in pairs(v.list) do	--先全部置为unchecked
 				_v.checked = false
 			end
-
+			
 			for _k, _v in pairs(v.list) do
 				for __k, __v in pairs(v.checkedList) do
 					if __v == _k then
@@ -658,7 +658,7 @@ local function submitGridChecked()
 				--prt(_v)
 				for __k, __v in pairs(v.checkedList) do
 					if __v == _k then
-						if type(_v.value) == "boolean" then  
+						if type(_v.value) == "boolean" then
 							setValueByStrKey(v.singleBindParam, _v.value)
 							Log("________commit set "..v.singleBindParam.."="..tostring(_v.value))
 						else
@@ -707,7 +707,8 @@ local rootLayout = {
 	style = {
 		width = 750,
 		['align-items'] = 'center',
-		['justify-content'] = 'flex-end',
+		--['justify-content'] = 'flex-end',
+		['justify-content'] = 'flex-start',
 	},
 	subviews = {
 	}
@@ -783,7 +784,8 @@ local pages = {
 		}
 	},
 	{
-		view = 'div',
+		view = 'scroller',
+		class = 'scroller',
 		style = {
 			width = 700 * ratio,
 			['background-color'] = '#FFFFFF',
@@ -814,8 +816,53 @@ local pages = {
 			
 			wui.GridSelect.createLayout({id = generateGridID("选择功能"), list = generateGridList("选择功能"),
 					config = {limit = #(generateGridList("选择功能")), totalWidth = 500 * ratio, gridStyle = generateGridStyle("选择功能")} }),
+			{
+				view = 'text',
+				value = ' \n',
+				style = {
+					['background-color'] = '#FFFFFF',
+					['font-size'] = 26 * ratio,
+					color = '#5f5f5f'
+				}
+			},
+			{
+				view = 'div',
+				style = {
+					width = 400 * ratio,
+					['background-color'] = '#FFFFFF',
+					['flex-direction'] = 'row',
+					['justify-content'] = 'flex-start',
+					--['justify-content'] = 'center',
+				},
+				subviews = 	{
+					{
+						view = 'text',
+						value = '抽球计时		',
+						style = {
+							['background-color'] = '#FFFFFF',
+							['font-size'] = 26 * ratio,
+							color = '#5f5f5f'
+						}
+					},
+					{
+						id = 'input_draw_ball',
+						view = 'input',
+						value = '13',
+						--['placeholder'] = '请输入抽球点击等待时间',
+						['type'] = 'number',
+						['autofocus'] = false,
+						['maxlength'] = 3,
+						style = {
+							width = 100,
+							height = 30,
+							['font-size'] = 22 * ratio,
+							color = '#5f5f5f',
+							['background-color'] = '#EEEEEE'
+						}
+					},
+				}
+			},
 		}
-		
 	},
 	{
 		view = 'div',
@@ -1198,6 +1245,12 @@ wui.Button.setOnClickedCallback(context:findView('btn_taskOk'), function (id, ac
 		
 		submitGridChecked()
 		
+		
+		local countTime = context:findView('input_draw_ball'):getAttr("value")
+		if countTime then
+			USER.DROP_STOP_TIME = tonumber(countTime)
+		end
+		
 		showwingFlag = false
 		context:close()
 		
@@ -1229,6 +1282,8 @@ function dispUI()
 		showwingFlag = false
 		submitGridChecked()
 	end
+	
+	context:findView('input_draw_ball'):setActionCallback(UI.ACTION.INPUT, function() end)
 	
 	while showwingFlag do
 		sleep(200)

@@ -42,25 +42,14 @@ end
 insertFunc("其他", fn)
 
 local fn = function()
-	for _, v in pairs(page.pageList) do
-		if v.tag == "联赛教练模式" then
-			for _, _v in pairs(v.widgetList) do
-				if _v.tag == "跳过余下比赛" then
-					if page.matchWidget(_v) then
-						page.tapWidget(v.tag, "跳过余下比赛")
-						sleep(300)
-						page.tapWidget(v.tag, "确定跳过")
-						sleep(300)
-						page.tapWidget(v.tag, "恭喜晋级")
-						sleep(300)
-						page.tapWidget(v.tag, "联赛奖励")
-						return
-					end
-					break
-				end
-			end
-			break
-		end
+	if page.matchWidget("联赛教练模式", "跳过余下比赛") then
+		Log("checked need skip league leve")
+		page.tapWidget("联赛教练模式", "跳过余下比赛")
+
+		--后边的交给导航处理
+		--page.tapWidget(v.tag, "确定跳过")
+		--page.tapWidget(v.tag, "恭喜晋级")
+		--page.tapWidget(v.tag, "联赛奖励")
 	end
 end
 insertFunc("联赛教练模式", fn)

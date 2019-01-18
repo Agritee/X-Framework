@@ -42,11 +42,6 @@ local _pageList = {
 				srcPos = "985|575|0x007aff,1016|575|0x007aff,1017|594|0x007aff,993|589|0xffffff,965|606|0xffffff,979|598|0x007aff",
 			},
 		},
-		--pageNext = {
-		--	srcPos = "",
-		--	dstPos = "",
-		--	dstArea = Rect.ZERO,
-		--	},
 	},
 	{
 		tag = "比赛",
@@ -223,27 +218,9 @@ local _pageList = {
 				enable = false,
 				noCache = true,
 				anchor = "RB",
-				srcPos = "987|719|0xcaddf0,936|725|0xcaddf0,712|700|0xcaddf0,711|722|0xcaddf0",
-			},
-			{
-				tag = "确定跳过",
-				enable = false,
-				noCache = true,
-				anchor = "A",
-				--srcPos = "794|451|0xcaddf0,961|461|0xcaddf0,667|433|0xf5f5f5,369|408|0xcaddf0,936|491|0xf5f5f5,999|433|0xf5f5f5,897|372|0xf5f5f5,332|432|0xf5f5f5",
-				srcPos = "793|446|0xcaddf0,368|410|0xcaddf0,960|461|0xcaddf0,666|432|0xf5f5f5,618|492|0xf5f5f5,721|489|0xf5f5f5,992|256|0xf5f5f5",
-			},
-			{
-				tag = "恭喜晋级",
-				enable = false,
-				anchor = "A",
-				srcPos = "617|592|0xcaddf0,376|565|0xcaddf0,959|614|0xcaddf0,673|644|0xf5f5f5,1170|209|0xf5f5f5,169|103|0xf5f5f5,1159|106|0xf5f5f5,1242|132|0x972249",
-			},
-			{
-				tag = "联赛奖励",
-				enable = false,
-				anchor = "A",
-				srcPos = "617|597|0xcaddf0,370|561|0xcaddf0,959|611|0xcaddf0,632|240|0xf05674,669|242|0xfffada,706|242|0xf05674",
+				--srcPos = "987|719|0xcaddf0,936|725|0xcaddf0,712|700|0xcaddf0,711|722|0xcaddf0",
+				srcPos = "823|694|0xc2d3e5-0x080a0b,826|685|0xc2d3e5-0x080a0b,712|690|0xc2d3e5-0x080a0b,716|703|0xc2d3e5-0x080a0b,\
+				972|689|0xc2d3e5-0x080a0b,968|703|0xc2d3e5-0x080a0b",
 			},
 		},
 	},
@@ -272,13 +249,65 @@ local _pageList = {
 		},
 	},
 	{
-		tag = "抽球-支付界面",
+		tag = "合同",
 		widgetList = {
 			{
-				tag = "综合特征",
+				tag = "经纪人",
+				enable = true,
+				anchor = "LM",
+				srcPos = "343|337|0x007aff,335|340|0xffffff,351|340|0xffffff,357|332|0xffffff,329|332|0xffffff,343|326|0x007aff,322|354|0x007aff,360|343|0x007aff",
+			},
+			{
+				tag = "拍卖",
+				enable = true,
+				anchor = "LB",
+				srcPos = "339|587|0x007aff,326|587|0xffffff,339|600|0xffffff,334|580|0x007aff,345|591|0x007aff,345|581|0x007aff,319|607|0x007aff,316|594|0xffffff",
+			},
+			{
+				tag = "球探",
+				enable = true,
+				anchor = "RM",
+				srcPos = "979|341|0x007aff,999|341|0x007aff,969|334|0xffffff,1008|333|0xffffff,983|350|0xffffff,996|350|0xffffff,965|356|0x007aff,1006|355|0x007aff",
+			},
+			{
+				tag = "主教练",
+				enable = true,
+				anchor = "RB",
+				srcPos = "990|603|0xffffff,982|607|0x007aff,973|605|0x007aff,966|597|0xffffff,966|616|0x007aff,966|625|0xffffff,980|616|0x007aff,989|616|0xffffff,1014|615|0x007aff",
+			},
+		},
+	},
+	{
+		tag = "经纪人",
+		widgetList = {
+			{
+				tag = "箱式经纪人",
 				enable = true,
 				anchor = "A",
-				srcPos = "870|498|0xcaddf0,696|464|0xcaddf0,962|508|0xcaddf0,374|465|0xcaddf0,617|508|0xcaddf0,667|489|0xf5f5f5,532|542|0xf5f5f5,778|429|0xf5f5f5,184|702|0x373737",
+				srcPos = "291|374|0x007aff,285|379|0xf8f9fb,298|379|0xf8f9fb,291|385|0x007aff,291|394|0x007aff,285|400|0xf8f9fb,298|400|0xf8f9fb,314|396|0x007aff,311|381|0x007aff,321|376|0xf8f9fb",
+			},
+		},
+	},
+	{
+		tag = "箱式经纪人",
+		widgetList = {
+			{
+				tag = "单抽",
+				enable = false,		--多抽必然存在，而单抽不一定，只要能检测到连抽就算匹配
+				anchor = "A",
+				srcPos = "291|555|0xfee580,285|547|0xcda301,291|564|0xcda301,412|614|0x007aff,257|381|0x3e3d40,328|377|0x3e3d40",
+			},
+			{
+				tag = "连抽",
+				enable = true,
+				anchor = "A",
+				srcPos = "291|555|0xfee580,285|547|0xcda301,291|564|0xcda301,412|614|0x007aff,257|381|0x3e3d40,328|377|0x3e3d40,181|128|0xe38ca8-0x195e47",
+			},
+			{
+				tag = "付款确认",
+				enable = false,
+				anchor = "A",
+				srcPos = "829|393|0xfee680,808|401|0xcea402,853|400|0xcea402,697|342|0xe6e6ed,961|482|0xe6e6ed",
 			},
 		},
 	},
@@ -416,7 +445,7 @@ local _navigationList = {
 		srcPos = "684|470|0xcaddf0,359|424|0xcaddf0,971|490|0xcaddf0,990|488|0xf5f5f5,342|433|0xf5f5f5,612|410|0xf5f5f5,638|509|0xf5f5f5,319|220|0xf5f5f5,1011|216|0xf5f5f5",
 	},
 	{
-		tag = "通知",
+		tag = "notice",
 		enable = true,
 		anchor = "RT",
 		srcPos = "1279|54|0x55a4f9-0x562b06,1269|45|0x55a4f9-0x562b06,1289|44|0x55a4f9-0x562b06,1268|65|0x55a4f9-0x562b06,1288|64|0x55a4f9-0x562b06,\

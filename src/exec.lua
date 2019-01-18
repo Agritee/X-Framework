@@ -158,10 +158,7 @@ function M.run(taskName, repeatTimes)
 					--exec next
 					if v.nextTag ~= nil then 	--有下一步事件
 						Log("start next at process page: "..v.tag)
-						
-						if v.nextTag == "pageNext" then		--页面专用next
-							page.tapPageNext(v.tag)
-						elseif v.nextTag == "next" then		--全局导航next
+						if v.nextTag == "next" then		--全局导航next
 							page.tapNext()
 						else						--点击某个控件作为next
 							page.tapWidget(v.tag, v.nextTag)

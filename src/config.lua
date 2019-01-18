@@ -9,6 +9,9 @@ CFG = {}	--脚本配置表
 CFG.VERSION = "v0.0.1"
 CFG.BIULD_TIME = "20190104"
 
+-----------------引擎属性-----------------
+CFG.ALLOW_CACHE = true
+
 -----------------调试参数-----------------
 CFG.LOG = true				--是否允许输出LOG信息
 CFG.WRITE_LOG = false		--是否将LOG写入log.txt文件, 不受CFG.LOG影响
@@ -82,3 +85,6 @@ USER.SUBSTITUTE_INDEX_LIST = {--[[{fieldIndex = 1, substituteCondition = 1},{},{
 }		--替补席对应关系表
 
 USER.DROP_CACHE = false				--清空缓存
+
+USER.DROP_BALL_SINGLE = true
+USER.DROP_STOP_TIME = 13
