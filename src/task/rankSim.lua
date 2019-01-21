@@ -78,7 +78,7 @@ local wfn = function(processIndex)
 	local timeAfterLastPlayingPage = os.time() - lastPlayingPageTime	--距离最后一个playing界面的时间间隔
 	
 	--跳过进球回放什么的,--游戏崩溃的情况下不点击
-	if timeAfterLastPlayingPage >= 3 and timeAfterLastPlayingPage <= 15 and isAppInFront() then
+	if timeAfterLastPlayingPage >= 3 and timeAfterLastPlayingPage <= 20 and isAppInFront() then
 		Log("skip replay")
 		ratioTap(10, 60)
 		sleep(500)

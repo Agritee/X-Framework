@@ -2,13 +2,63 @@
 -- Author: cndy1860
 -- Date: 2019-01-17
 -- Descrip: 转换叉叉引擎新旧api，可以在1.9引擎上使用2.0的api接口，只封装了较为常用的一些关键接口
+if not (string.sub(getEngineVersion(), 1, 3) == "1.9" and {true} or {false})[1] then
+	return
+end
+
+--比较比是否相等
+local function compareTable(srcTb, dstTb)
+	local getAbsLen = function (tb)
+		local count = 0
+		for k, _ in pairs(tb) do
+			count = count + 1
+		end
+		return count
+	end
+	
+	if srcTb == nil or dstTb == nil then
+		return false
+	end
+	
+	if getAbsLen(srcTb) ~= getAbsLen(dstTb) then
+		return false
+	end
+	
+	equalFlag = false
+	
+	for k, v in pairs(srcTb) do
+		if type(v) == "table" then
+			local exsitFlag = false
+			for _k, _v in pairs(dstTb) do
+				if _k == k and type(_v) == "table" then
+					exsitFlag = true
+					if not compareTb(v, _v) then
+						return false
+					end
+					break
+				end
+			end
+			
+			if not exsitFlag then
+				return false
+			end
+		else
+			if v ~= dstTb[k] then
+				return false
+			end
+		end
+	end
+	
+	return true
+end
+
 
 -------------伪类Point--------------
 Point = {}
 
 local eqPoint = {
 	__eq = function(o1, o2)
-		return compareTb(o1, o2)
+		return compareTable(o1, o2)
 	end
 }
 
@@ -29,7 +79,7 @@ Rect = {}
 
 local eqRect = {
 	__eq = function(o1, o2)
-		return compareTb(o1, o2)
+		return compareTable(o1, o2)
 	end
 }
 
@@ -49,7 +99,7 @@ Size = {}
 
 local eqSize = {
 	__eq = function(o1, o2)
-		return compareTb(o1, o2)
+		return compareTable(o1, o2)
 	end
 }
 
@@ -78,6 +128,18 @@ end
 -------------xmod--------------
 xmod = {}
 
+xmod.PLATFORM_IOS = 'iOS'
+xmod.PLATFORM_ANDROID ='Android'
+xmod.PLATFORM = (getOSType() == "android" and xmod.PLATFORM_ANDROID or xmod.PLATFORM_IOS)
+
+xmod.PRODUCT_CODE_DEV = 1
+xmod.PRODUCT_CODE_XXZS = 2
+xmod.PRODUCT_CODE_IPA = 3
+xmod.PRODUCT_CODE_KUWAN	= 4
+xmod.PRODUCT_CODE_SPIRIT = 5
+
+xmod.VERSION_NAME = getEngineVersion()
+
 function xmod.getPublicPath()
 	return '[public]'
 end
@@ -91,8 +153,15 @@ function xmod.restart()
 end
 
 
--------------script--------------
+-------------UI--------------
+UI = {}
 
+UI.TOAST = {}
+UI.TOAST.LENGTH_SHORT = 0
+UI.TOAST.LENGTH_LONG = 1
+function UI.toast(msg, length)
+	toast(msg)
+end
 
 
 -------------screen--------------
@@ -103,6 +172,10 @@ screen.LANDSCAPE_LEFT = 2
 
 function screen.init(orientation)
 	init("0", orientation)
+end
+
+function screen.getOrientation()
+	return getScreenDirection()
 end
 
 function screen.getSize()

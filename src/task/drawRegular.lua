@@ -39,13 +39,11 @@ end
 insertFunc("其他", fn)
 
 local fn = function()
-	local posationTag = USER.DROP_REGULAR_POSATION
+	local posationTag = USER.DRAW_REGULAR_POSATION
 	page.tapWidget("标准经纪人", posationTag)
-
-	sleep(200)
+	sleep(1000)
 	page.tapWidget("标准经纪人", "GP付款确认")
-	sleep(200)
-	
+	sleep(1000)
 end
 insertFunc("标准经纪人", fn)
 
@@ -55,9 +53,7 @@ local fn = function()
 	local lastDisp = 0
 	UI.toast("请等待计时结束", UI.TOAST.LENGTH_LONG)
 	while true do
-		currentTime = os.time()
-
-		if currentTime - startTime >= USER.DROP_STOP_TIME then
+		if os.time() - startTime >= USER.DRAW_STOP_TIME then
 			tap(50,50)
 			break
 		end

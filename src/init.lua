@@ -94,7 +94,7 @@ end
 
 --初始化环境参数
 local function initEnv()
-	screen.init(screen.LANDSCAPE_RIGHT)
+	screen.init(screen.getOrientation())
 	screen.keep(false)
 	
 	initAppID()

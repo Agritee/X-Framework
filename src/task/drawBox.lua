@@ -39,14 +39,17 @@ end
 insertFunc("其他", fn)
 
 local fn = function()
-	if USER.DROP_BALL_SINGLE then
+	if USER.DRAW_MODE == "单抽" then
 		page.tapWidget("箱式经纪人", "单抽")
-	else
+	elseif USER.DRAW_MODE == "十连" then
 		page.tapWidget("箱式经纪人", "连抽")
+	else
+		return
 	end
-	sleep(200)
+	
+	sleep(1000)
 	page.tapWidget("箱式经纪人", "金币付款确认")
-	sleep(200)
+	sleep(1000)
 end
 insertFunc("箱式经纪人", fn)
 
@@ -56,9 +59,7 @@ local fn = function()
 	local lastDisp = 0
 	UI.toast("请等待计时结束", UI.TOAST.LENGTH_LONG)
 	while true do
-		currentTime = os.time()
-
-		if currentTime - startTime >= USER.DROP_STOP_TIME then
+		if os.time() - startTime >= USER.DRAW_STOP_TIME then
 			tap(50,50)
 			break
 		end

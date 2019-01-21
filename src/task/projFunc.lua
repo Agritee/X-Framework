@@ -45,9 +45,6 @@ function chargeEnergy()
 		dialog("能量不足，请退出")
 		xmod.exit()
 	end
-	
-	--联赛教练模式执行点击后，出现等待能量的情况，需重新执行联赛教练模式流程片
-	exec.execPrevProcess()
 end
 
 --获取某个区域内某种状态的所有球员
@@ -263,9 +260,9 @@ function switchPlayer()
 					slide(v.x, v.y, fieldPlayers[v.fieldIndex].x, fieldPlayers[v.fieldIndex].y)
 				end
 			end
+			sleep(300)
 			
 			if substituteFlag then	--换人了需要再次调出替补名单
-				--sleep(200)
 				page.tapWidget("阵容展示", "替补席")
 				sleep(500)
 			end
@@ -291,9 +288,9 @@ function switchPlayer()
 					slide(v.x, v.y, fieldPlayers[v.fieldIndex].x, fieldPlayers[v.fieldIndex].y)
 				end
 			end
+			sleep(300)
 			
 			if k < #benchFirst4Players and substituteFlag then	--换人了需要再次调出替补名单, 除开最后一次
-				--sleep(200)
 				page.tapWidget("阵容展示", "替补席")
 				sleep(500)
 			end

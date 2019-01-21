@@ -2,6 +2,7 @@
 -- Author: cndy1860
 -- Date: 2018-12-25
 -- Descrip: 程序入口，注意require顺序会影响各文件的init，后续添加任务依次require
+require("api")
 require("config")
 require("global")
 require("func")
@@ -16,9 +17,10 @@ require("task/leagueSim")
 require("task/drawBox")
 require("task/drawRegular")
 require("ui")
+require("zui/base_ui")
 
 function main()
-	screen.keep(false)
+	--[[screen.keep(false)
 	IS_BREAKING_TASK = exec.isExistBreakingTask()
 
 	dispUI()
@@ -27,7 +29,8 @@ function main()
 		skipInitPage()	--先跳过未定义界面
 	end
 	
-	exec.run(USER.TASK_NAME, USER.REPEAT_TIMES)
+	exec.run(USER.TASK_NAME, USER.REPEAT_TIMES)]]
+	exec.run("自动联赛", 5)
 	xmod.exit()
 end
 
@@ -40,7 +43,7 @@ sleep(2000)
 
 prt(page.getCurrentPage(true))
 
-page.tapWidget("标准经纪人", "中场")
+--page.tapWidget("标准经纪人", "中场")
 --page.tapNavigation("next")
 
 --page.tapWidget("比赛", "联赛")

@@ -226,7 +226,7 @@ function M.tapWidget(pageTag, widgetTag)
 					while true do
 						local pot = screen.findColor(_v.dstArea, _v.dstPos, CFG.DEFAULT_FUZZY)
 						if pot ~= Point.INVALID then
-							tap(pot.x, pot.y)	--点击控件的第一个点
+							tap(pot.x, pot.y, 100)	--点击控件的第一个点
 							return true
 						end
 						

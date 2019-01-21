@@ -55,12 +55,6 @@ function M.isExistBreakingTask()
 	return false
 end
 
---是否跳过skip机制中_k == k - 1情况的标识，调用之后，会在skip机制中触发跳过当前（前一个）流程
-local skipPrevFlag = false
-function M.execPrevProcess()
-	skipPrevFlag = true
-end
-
 --执行任务，param:任务名称，任务重复次数
 function M.run(taskName, repeatTimes)
 	local reTimes = repeatTimes or CFG.DEFAULT_REPEAT_TIMES
@@ -151,7 +145,9 @@ function M.run(taskName, repeatTimes)
 						Log("process: "..v.tag.." have no actionFunc")
 					else
 						Log("------>start actionFunc")
+						sleep(200)
 						v.actionFunc()	--执行
+						sleep(200)
 						Log("------>end actionFunc")
 					end
 					
@@ -190,11 +186,11 @@ function M.run(taskName, repeatTimes)
 						if _v.tag == currentPage then	--当前界面属于某个流程片的界面
 							--按当前等待的流程界面为为k，检测到当前实际界面为_k
 							--1.当_k>k时，当前界面为在k之后的流程，直接设置当前流程剩下的skipStatus=true
-							--2.当_k==k时，当前界面即为等待界面，matchPage成功根本不会进入此skip流程
-							--3.当_k==k-1时，当前界面为等待界面的前一个界面，即为正常等待matchPage，不需skip
+							--2.当_k==k时，当前界面即为等待界面，会matchPage成功切不进入此skip流程
+							--3.当_k==k-1时，当前界面为等待界面的前一个界面，即为正常等待matchPage，如果进入skip，则作为_k<k-1处理
 							--4.当_k<k-1时，当前界面为在k之前的流程，先设置剩下流程片skipStatus=true，跳过当前流程剩余的
 							--所有流程片，然后等循环到下一个流程时，再通过1跳过_k之前的流程，实现skip至_k的功能
-							if _k > k then				--当前界面为其后的某个流程片中界面
+							if _k > k then				--当前界面为其后的某个流程片中界面，跳过期间的流程
 								Log("set skip latter process")
 								for __k, __v  in pairs(taskProcesses) do
 									if __k >= k and __k < _k then
@@ -203,18 +199,8 @@ function M.run(taskName, repeatTimes)
 									end
 								end
 								break
-							elseif _k < k - 1 then		--当前界面为之前的某个流程片中界面
+							elseif _k <= k - 1 then		--当前界面为之前的某个流程片中界面，跳过其后的流程片（下一次循环会跳过其前的）
 								Log("set skip befor process")
-								for __k, __v  in pairs(taskProcesses) do
-									if __k >= k then
-										Log("set skipStatus process: "..__v.tag)
-										__v.skipStatus = true
-									end
-								end
-								break
-							elseif _k == k - 1 and skipPrevFlag then		--当前界面为等待流程的前一个界面
-								Log("set skip pre process")
-								skipPrevFlag = false
 								for __k, __v  in pairs(taskProcesses) do
 									if __k >= k then
 										Log("set skipStatus process: "..__v.tag)

@@ -10,7 +10,8 @@ CFG.VERSION = "v0.0.1"
 CFG.BIULD_TIME = "20190104"
 
 -----------------引擎属性-----------------
-CFG.ALLOW_CACHE = true
+CFG.COMPATIBLE = (string.sub(xmod.VERSION_NAME, 1, 3) == "1.9" and {true} or {false})[1]		--兼容1.9引擎
+CFG.ALLOW_CACHE = false
 
 -----------------调试参数-----------------
 CFG.LOG = true				--是否允许输出LOG信息
@@ -61,10 +62,12 @@ CFG.TOUCH_MOVE_STEP = 50	--touchMoveTo的移动步长
 CFG.DEFAULT_TAP_TIME = 50		--默认tap时间/ms
 CFG.DEFAULT_LONG_TAP_TIME = 800	--默认longtap时间/ms
 
+CFG.DEFAULT_PAGE_CHECK_INTERVAL = 100
+
 
 USER = {}	--用户配置表，主要有UI设置
 -----------------用户设置-----------------
-USER.TASK_NAME = ""					--任务名称
+USER.TASK_NAME = "自动联赛"					--任务名称
 
 USER.ALLOW_RESTART = true			--是否允许重启脚本来解决异常
 
@@ -86,6 +89,6 @@ USER.SUBSTITUTE_INDEX_LIST = {--[[{fieldIndex = 1, substituteCondition = 1},{},{
 
 USER.DROP_CACHE = false				--清空缓存
 
-USER.DROP_STOP_TIME = 13
-USER.DROP_BALL_SINGLE = true
-USER.DROP_REGULAR_POSATION = "前锋"		--"MF", "CB"
+USER.DRAW_STOP_TIME = 13
+USER.DRAW_MODE = "单抽"				--单抽，十连
+USER.DRAW_REGULAR_POSATION = "前锋"	--"MF", "CB"

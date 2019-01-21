@@ -165,6 +165,18 @@ function M.getAnchorArea(anchorTag)
 		rect.x, rect.y = dx0, dy0
 		rect.width = math.floor(dw/2)
 		rect.height = math.floor(dh/2)
+	elseif anchorTag == "L1/3" then
+		rect.x, rect.y = x0, y0
+		rect.width = math.floor(w/3)
+		rect.height = h
+	elseif anchorTag == "M1/3" then
+		rect.x, rect.y = x0 + math.floor(w/3), y0
+		rect.width = math.floor(w/3)
+		rect.height = h
+	elseif anchorTag == "R1/3" then
+		rect.x, rect.y = x0 + math.floor(w*2/3), y0
+		rect.width = math.floor(w/3)
+		rect.height = h
 	else	--其他anchorTag按整个区域取
 		rect.x, rect.y = x0, y0
 		rect.width = w

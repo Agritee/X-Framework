@@ -1,3 +1,12 @@
+-- ui.lua
+-- Author: cndy1860
+-- Date: 2018-12-24
+-- Descrip: 基于wui的ui配置
+if CFG.COMPATIBLE then
+	return
+end
+
+
 local wui = require 'wui.wui'
 local cjson = require 'cjson'
 
@@ -99,7 +108,7 @@ local _gridList = {
 		tag = "抽球位置",
 		checkedList = {1},
 		singleCheck = true,
-		singleBindParam = "USER.DROP_REGULAR_POSATION",
+		singleBindParam = "USER.DRAW_REGULAR_POSATION",
 		list = {
 			{title = '前锋'},
 			{title = '中场'},
@@ -124,7 +133,7 @@ local _gridList = {
 		tag = "抽球类型",
 		checkedList = {1},
 		singleCheck = true,
-		singleBindParam = "USER.DROP_BALL_SINGLE",
+		singleBindParam = "USER.DRAW_BALL_SINGLE",
 		list = {
 			{title = '单抽', value = true},
 			{title = '十连', value = false},
@@ -1368,7 +1377,8 @@ wui.Button.setOnClickedCallback(context:findView('btn_taskOk'), function (id, ac
 		
 		local countTime = context:findView('input_draw_ball'):getAttr("value")
 		if countTime then
-			USER.DROP_STOP_TIME = tonumber(countTime)
+			Log("抽球即使："..tonumber(countTime))
+			USER.DRAW_STOP_TIME = tonumber(countTime)
 		end
 		
 		showwingFlag = false

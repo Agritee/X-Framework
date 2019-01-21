@@ -42,14 +42,16 @@ end
 insertFunc("其他", fn)
 
 local fn = function()
+	sleep(300)
 	if page.matchWidget("联赛教练模式", "跳过余下比赛") then
 		Log("checked need skip league leve")
 		page.tapWidget("联赛教练模式", "跳过余下比赛")
 
 		--后边的交给导航处理
-		--page.tapWidget(v.tag, "确定跳过")
-		--page.tapWidget(v.tag, "恭喜晋级")
-		--page.tapWidget(v.tag, "联赛奖励")
+		page.tapNavigation("comfirm")
+		page.tapNavigation("comfirm")
+		page.tapNavigation("comfirm")
+		sleep(300)
 	end
 end
 insertFunc("联赛教练模式", fn)
@@ -80,7 +82,7 @@ local wfn = function(processIndex)
 	local timeAfterLastPlayingPage = os.time() - lastPlayingPageTime	--距离最后一个playing界面的时间间隔
 	
 	--跳过进球回放什么的,--游戏崩溃的情况下不点击
-	if timeAfterLastPlayingPage >= 3 and isAppInFront() then
+	if timeAfterLastPlayingPage >= 3 and timeAfterLastPlayingPage <= 20 and isAppInFront() then
 		Log("skip replay")
 		ratioTap(10, 60)
 		sleep(500)

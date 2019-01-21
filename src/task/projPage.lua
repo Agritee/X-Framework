@@ -219,7 +219,7 @@ local _pageList = {
 				noCache = true,
 				anchor = "RB",
 				--srcPos = "987|719|0xcaddf0,936|725|0xcaddf0,712|700|0xcaddf0,711|722|0xcaddf0",
-				srcPos = "823|694|0xc2d3e5-0x080a0b,826|685|0xc2d3e5-0x080a0b,712|690|0xc2d3e5-0x080a0b,716|703|0xc2d3e5-0x080a0b,\
+				srcPos = "823|694|0xc2d3e5-0x080a0b,780|698|0xc2d3e5-0x080a0b,826|685|0xc2d3e5-0x080a0b,712|690|0xc2d3e5-0x080a0b,716|703|0xc2d3e5-0x080a0b,\
 				972|689|0xc2d3e5-0x080a0b,968|703|0xc2d3e5-0x080a0b",
 			},
 		},
@@ -283,12 +283,14 @@ local _pageList = {
 			{
 				tag = "箱式经纪人",
 				enable = true,
+				noCache = true,
 				anchor = "A",
 				srcPos = "291|374|0x007aff,285|379|0xf8f9fb,298|379|0xf8f9fb,291|385|0x007aff,291|394|0x007aff,285|400|0xf8f9fb,298|400|0xf8f9fb,314|396|0x007aff,311|381|0x007aff,321|376|0xf8f9fb",
 			},
 			{
 				tag = "标准经纪人",
 				enable = true,
+				noCache = true,
 				anchor = "A",
 				srcPos = "667|380|0x007aff,666|392|0x007aff,666|386|0xf8f9fb,653|378|0x007aff,644|396|0x007aff,635|396|0xf8f9fb,644|404|0xf8f9fb,667|399|0xf8f9fb,690|396|0x007aff,698|397|0xf8f9fb",
 			},
@@ -300,14 +302,16 @@ local _pageList = {
 			{
 				tag = "单抽",
 				enable = false,		--多抽必然存在，而单抽不一定，只要能检测到连抽就算匹配
+				noCache = true,
 				anchor = "A",
-				srcPos = "291|555|0xfee580,285|547|0xcda301,291|564|0xcda301,412|614|0x007aff,257|381|0x3e3d40,328|377|0x3e3d40",
+				srcPos = "291|555|0xfee580,285|547|0xcda301,291|564|0xcda301,257|381|0x3e3d40,328|377|0x3e3d40",
 			},
 			{
 				tag = "连抽",
 				enable = true,
+				noCache = true,
 				anchor = "A",
-				srcPos = "291|555|0xfee580,285|547|0xcda301,291|564|0xcda301,412|614|0x007aff,257|381|0x3e3d40,328|377|0x3e3d40,181|128|0xe38ca8-0x195e47",
+				srcPos = "291|555|0xfee580,285|547|0xcda301,291|564|0xcda301,257|381|0x3e3d40,328|377|0x3e3d40,181|128|0xe38ca8-0x195e47",
 			},
 			{
 				tag = "金币付款确认",
@@ -323,20 +327,20 @@ local _pageList = {
 			{
 				tag = "前锋",
 				enable = true,
-				anchor = "L",
-				srcPos = "291|365|0xd9b800,212|548|0x1e53b1,370|547|0xcda301,153|611|0xfdfdfd,411|614|0x007aff",
+				anchor = "L1/3",
+				srcPos = "291|365|0xd9b800,212|548|0x1e53b1,370|547|0xcda301,153|611|0xfdfdfd",
 			},
 			{
 				tag = "中场",
 				enable = true,
-				anchor = "MTB",
-				srcPos = "291|365|0xd9b800,212|548|0x1e53b1,370|547|0xcda301,153|611|0xfdfdfd,411|614|0x007aff",
+				anchor = "M1/3",
+				srcPos = "291|365|0xd9b800,212|548|0x1e53b1,370|547|0xcda301,153|611|0xfdfdfd",
 			},
 			{
 				tag = "后卫",
 				enable = true,
-				anchor = "R",
-				srcPos = "291|365|0xd9b800,212|548|0x1e53b1,370|547|0xcda301,153|611|0xfdfdfd,411|614|0x007aff",
+				anchor = "R1/3",
+				srcPos = "291|365|0xd9b800,212|548|0x1e53b1,370|547|0xcda301,153|611|0xfdfdfd",
 			},
 			{
 				tag = "GP付款确认",
