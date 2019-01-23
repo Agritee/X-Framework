@@ -18,14 +18,16 @@ function switchMainPage(pageName)
 	else
 		catchError(ERR_PARAM, "swich a wrong page")
 	end
+	sleep(200)
 end
 
 --处理能量不足
 function chargeEnergy()
 	if USER.BUY_ENERGY then
 		page.tapNavigation("能量不足", 2)
-		sleep(200)
+		sleep(1000)
 		page.tapNavigation("恢复100")
+		sleep(600)
 	elseif USER.RESTORED_ENERGY then
 		dialog("能量不足100分钟内后继续，请勿操作", 5)
 		page.tapNavigation("能量不足")		--点击取消
@@ -33,7 +35,6 @@ function chargeEnergy()
 		local startTime = os.time()
 		while true do
 			if os.time() - startTime > 110 * 60 then
-			--if os.time() - startTime > 5 then
 				dialog("已续足能量，即将继续任务", 5)
 				startTime = os.time()	--重置startTime
 				break
@@ -50,17 +51,22 @@ end
 --获取某个区域内某种状态的所有球员
 local function getFixStatusPlayers(area, status)
 	local statusStr = ""
-
+	
 	if status == "excellent" then	--状态极好
-		statusStr = "667|646|0x00cf9e-0x003024,667|655|0x00cf9e-0x003024,661|646|0x00cf9e-0x003024,672|646|0x00cf9e-0x003024,667|639|0x00cf9e-0x003024"
+		statusStr = "667|646|0x00F0B6-0x000F0C,667|655|0x00F0B6-0x000F0C,661|646|0x00F0B6-0x000F0C,672|646|0x00F0B6-0x000F0C,667|639|0x00F0B6-0x000F0C,\
+		638|645|0xededed-0x0f0f0f,700|645|0xededed-0x0f0f0f,667|637|0x00F0B6-0x000F0C,659|655|0x0f3b28-0x0f1e1b,674|655|0x0f3b28-0x0f1e1b"
 	elseif status == "good" then	--状态较好
-		statusStr = "667|646|0x74aa00-0x233200,661|652|0x74aa00-0x233200,664|641|0x74aa00-0x233200,672|650|0x74aa00-0x233200,673|640|0x74aa00-0x233200"
-	elseif status == "bad" then		--状态较差
-		statusStr = "668|646|0x925300-0x211300,661|639|0x925300-0x211300,664|650|0x925300-0x211300,672|642|0x925300-0x211300,673|652|0x925300-0x211300"
-	elseif status == "worse" then	--状态极差
-		statusStr = "666|646|0x8f0505-0x2a0505,667|636|0x8f0505-0x2a0505,660|644|0x8f0505-0x2a0505,672|645|0x8f0505-0x2a0505,667|651|0x8f0505-0x2a0505"
+		statusStr = "667|646|0x8CCD00-0x0B0F00,661|652|0x8CCD00-0x0B0F00,664|641|0x8CCD00-0x0B0F00,672|650|0x8CCD00-0x0B0F00,673|640|0x8CCD00-0x0B0F00,\
+		638|645|0xededed-0x0f0f0f,700|645|0xededed-0x0f0f0f,675|638|0x8CCD00-0x0B0F00,657|646|0x27390f-0x161e0f,667|655|0x27390f-0x161e0f"
 	elseif status == "normal" then	--状态一般
-		statusStr = "666|646|0xb6ae00-0x0e0e00,656|646|0xb6ae00-0x0e0e00,673|646|0xb6ae00-0x0e0e00,665|639|0xb6ae00-0x0e0e00,665|652|0xb6ae00-0x0e0e00"
+		statusStr = "666|646|0xB5AD0B-0x0F0F0B,656|646|0xB5AD0B-0x0F0F0B,673|646|0xB5AD0B-0x0F0F0B,665|639|0xB5AD0B-0x0F0F0B,665|652|0xB5AD0B-0x0F0F0B,\
+		638|645|0xededed-0x0f0f0f,700|645|0xededed-0x0f0f0f,675|645|0xB5AD0B-0x0F0F0B,658|639|0x36300f-0x1e1e0f,657|653|0x36300f-0x1e1e0f"
+	elseif status == "bad" then		--状态较差
+		statusStr = "668|646|0xA45D00-0x0F0900,661|639|0xA45D00-0x0F0900,664|650|0xA45D00-0x0F0900,672|642|0xA45D00-0x0F0900,673|652|0xA45D00-0x0F0900,\
+		638|645|0xededed-0x0f0f0f,700|645|0xededed-0x0f0f0f,675|654,0xA45D00-0x0F0900,667|636|0x3b2f0f-0x1e110f,658|646|0x3b2f0f-0x1e110f"
+	elseif status == "worse" then	--状态极差
+		statusStr = "666|646|0xAA0202-0x0F0202,667|636|0xAA0202-0x0F0202,660|644|0xAA0202-0x0F0202,672|645|0xAA0202-0x0F0202,667|651|0xAA0202-0x0F0202,\
+		638|645|0xededed-0x0f0f0f,700|645|0xededed-0x0f0f0f,667|654|0xAA0202-0x0F0202,674|636|0x3c1b1a-0x1e1112,659|637|0x3c1b1a-0x1e1112"
 	else
 		catchError(ERR_PARAM, "get a worong status in getFixStatusPlayers")
 	end
@@ -70,17 +76,20 @@ local function getFixStatusPlayers(area, status)
 		scale.scalePos(statusStr),
 		CFG.DEFAULT_FUZZY,
 		screen.PRIORITY_DEFAULT,
-		999)
-
+		1999)
+	if posTb == nil then	--兼容1.9
+		catchError(ERR_PARAM, "more than 99 point, 请将出错的界面截图给作者")
+	end
+	
 	if #posTb == 0 then
 		Log("cant find point on: "..status)
 		return posTb
 	end
 	
-	if #posTb >= 999 then	--超过points最大容量999个点意味着可能没有找完所有位置的状态
+	if #posTb >= 1999 then	--超过points最大容量1999个点意味着可能没有找完所有位置的状态
 		prt(posTb)
 		dialog("get more than 999 point, maybe not cath all posation")
-		catchError(ERR_PARAM, "get more than 999 point, maybe not cath all posation")
+		catchError(ERR_PARAM, "get more than 1999 point, maybe not cath all posation")
 		return nil
 	end
 	
@@ -89,7 +98,7 @@ local function getFixStatusPlayers(area, status)
 	for k, v in pairs(posTb) do
 		local exsitFlag = false
 		--同样位置会有多个点，x、y坐标同时小于offset时判定为同位置的坐标，以20像素/短边750为基准
-		local offset = (CFG.EFFECTIVE_AREA[4] - CFG.EFFECTIVE_AREA[2]) / 750 * 20 
+		local offset = (CFG.EFFECTIVE_AREA[4] - CFG.EFFECTIVE_AREA[2]) / 750 * 20
 		for _k, _v in pairs(validPlayers) do
 			if math.abs(v.x - _v.x) < offset and math.abs(v.y - _v.y) < offset then
 				exsitFlag = true
@@ -112,11 +121,11 @@ local function getPlayerStatusInfo(seats)
 	local players = {}	--球员的坐标及状态
 	local searchArea = {}
 	if seats == "field" then	--场上球员分4块，防止findColors的点超过99炸了
-		searchArea = Rect(CFG.EFFECTIVE_AREA[1], CFG.EFFECTIVE_AREA[2], 
-		CFG.EFFECTIVE_AREA[3] - CFG.EFFECTIVE_AREA[1], CFG.EFFECTIVE_AREA[4] - CFG.EFFECTIVE_AREA[2])
+		searchArea = Rect(CFG.EFFECTIVE_AREA[1], CFG.EFFECTIVE_AREA[2],
+			CFG.EFFECTIVE_AREA[3] - CFG.EFFECTIVE_AREA[1], CFG.EFFECTIVE_AREA[4] - CFG.EFFECTIVE_AREA[2])
 	elseif seats == "bench" then		--替补席前半部分
-		searchArea = Rect(0, 0, 
-		CFG.DEV_RESOLUTION.width/4, CFG.EFFECTIVE_AREA[4] - CFG.EFFECTIVE_AREA[2])
+		searchArea = Rect(0, 0,
+			CFG.DEV_RESOLUTION.width/4, CFG.EFFECTIVE_AREA[4] - CFG.EFFECTIVE_AREA[2])
 	else
 		catchError(ERR_PARAM, "get a worong seats in getPlayerStatusInfo")
 	end
@@ -162,8 +171,10 @@ local function getPlayerStatusInfo(seats)
 			bad = bad + 1
 		elseif v.status == 3 then
 			mormal = mormal + 1
+			prt(v)
 		elseif v.status == 4 then
 			good = good + 1
+			
 		elseif v.status == 5 then
 			excellent = excellent + 1
 		end
@@ -184,7 +195,11 @@ end
 --换人
 function switchPlayer()
 	page.tapWidget("阵容展示", "切换状态")
-	sleep(1200)		--点击切换状态之后，会弹出“状态”提示，需等待淡出
+	if USER.TASK_NAME == "自动巡回" then		--跳过巡回赛声望
+		sleep(1200)
+		page.tapWidget("阵容展示", "切换状态")
+	end
+	sleep(1400)		--点击切换状态之后，会弹出“状态”提示，需等待淡出
 	
 	--取场上球员状态
 	local fieldPlayers = getPlayerStatusInfo("field")
@@ -193,9 +208,9 @@ function switchPlayer()
 		dialog("cant get 11 players in field, abort switchPlayer!", 5)
 		return
 	end
-
+	
 	page.tapWidget("阵容展示", "替补席")
-	sleep(200)
+	sleep(500)
 	
 	local benchFirst4Players = {}
 	local benchLatter3Players = {}
@@ -206,7 +221,7 @@ function switchPlayer()
 		catchError(ERR_PARAM, "cant get 4 players in benchFirst, abort switchPlayer!")
 		dialog("cant get 4 players in benchFirst, abort switchPlayer!", 5)
 		return
-	end	
+	end
 	for k, v in pairs(tmp) do
 		if k <= 4 then
 			table.insert(benchFirst4Players, v)
@@ -223,7 +238,7 @@ function switchPlayer()
 		catchError(ERR_PARAM, "cant get 3 players in benchLattere, abort switchPlayer!")
 		dialog("cant get 3 players in benchLattere, abort switchPlayer!", 5)
 		return
-	end		
+	end
 	for k, v in pairs(tmp) do
 		if k > #tmp - 3 then
 			table.insert(benchLatter3Players, v)
@@ -234,17 +249,17 @@ function switchPlayer()
 	if #USER.SUBSTITUTE_INDEX_LIST > 0 then
 		for k, v in pairs(benchFirst4Players) do
 			v.fieldIndex = USER.SUBSTITUTE_INDEX_LIST[k].fieldIndex
-			v.substituteCondition = USER.SUBSTITUTE_INDEX_LIST[k].substituteCondition			
+			v.substituteCondition = USER.SUBSTITUTE_INDEX_LIST[k].substituteCondition
 		end
 		for k, v in pairs(benchLatter3Players) do
 			v.fieldIndex = USER.SUBSTITUTE_INDEX_LIST[4 + k].fieldIndex
-			v.substituteCondition = USER.SUBSTITUTE_INDEX_LIST[4 + k].substituteCondition			
+			v.substituteCondition = USER.SUBSTITUTE_INDEX_LIST[4 + k].substituteCondition
 		end
 	else
 		catchError(ERR_WARNING, "CFG.SUBSTITUTE_INDEX_LIST is nil")
 		return
-	end	
-
+	end
+	
 	for k, v in pairs(benchLatter3Players) do	--先换下半部分的
 		local substituteFlag = false	--是否换过人标志
 		if v.fieldIndex ~= 0 then
@@ -315,10 +330,13 @@ local function selectExpiredPlayer()
 		scale.scalePos("78|242|0xffffff,89|254|0xffffff,245|190|0xffffff,245|182|0xff3b2f,233|196|0xff3b2f,258|195|0xff3b2f,245|214|0xff3b2f"),
 		CFG.DEFAULT_FUZZY,
 		screen.PRIORITY_DEFAULT,
-		999)
+		1999)
+	if posTb == nil then	--兼容1.9
+		catchError(ERR_PARAM, "more than 99 point, cant find all point")
+	end
 	
-	if #posTb >= 999 then
-		catchError(ERR_PARAM, "more than 999 point, cant find all point")
+	if #posTb >= 1999 then
+		catchError(ERR_PARAM, "more than 1999 point, cant find all point")
 	end
 	
 	for _, v in pairs(posTb) do
@@ -333,15 +351,15 @@ local function selectExpiredPlayer()
 		if exsitFlag == false then
 			table.insert(expiredPlayerFirstHalf, v)
 			tap(v.x, v.y)
-			sleep(400)				
+			sleep(400)
 		end
 	end
 	prt(expiredPlayerFirstHalf)
 	
 	if #expiredPlayerFirstHalf == 3 or #expiredPlayerFirstHalf == 6 then
 		ratioSlide(20, 620, 20, 120) --滑动替补至下半部分
-		Log("slede LatterHalf")
-		sleep(200)
+		Log("slide LatterHalf")
+		sleep(1200)
 		local posTb = screen.findColors(
 			scale.getAnchorArea("ABS"),
 			--"245|190|0xffffff,230|194|0xff3b2f,245|180|0xff3b2f,261|197|0xff3b2f,245|214|0xff3b2f",
@@ -365,7 +383,7 @@ local function selectExpiredPlayer()
 			if exsitFlag == false then
 				table.insert(expiredPlayerLatterHalf, v)
 				tap(v.x, v.y)
-				sleep(200)	
+				sleep(200)
 			end
 		end
 		prt(expiredPlayerLatterHalf)
@@ -378,7 +396,7 @@ function refreshContract()
 	page.tapNavigation("球员续约-点击签约")
 	sleep(400)
 	page.tapNavigation("球员续约-续约")
-	sleep(400)
+	sleep(1000)
 	page.tapNavigation("球员续约-付款确认")
 	sleep(400)
 	--page.tapNavigation("球员续约-支付确认")		--支付确认由next处理

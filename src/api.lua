@@ -3,6 +3,7 @@
 -- Date: 2019-01-17
 -- Descrip: 转换叉叉引擎新旧api，可以在1.9引擎上使用2.0的api接口，只封装了较为常用的一些关键接口
 if not (string.sub(getEngineVersion(), 1, 3) == "1.9" and {true} or {false})[1] then
+	print(string.sub(getEngineVersion(), 1, 3))
 	return
 end
 
@@ -243,10 +244,13 @@ end
 ----丢掉不常用的priority,需要的话可自行分离，当limit>99时，分区进行查找，以解决1.9只能返回最多99点的问题
 function screen.findColors(rect, color, globalFuzz, priority, limit)
 	if limit ~= nil and limit > 99 then	--超过99点，进行分区findColors再汇总
-		local split = 4		--分区阶数，将把rect分为split*rect个区域分开扫描
+		local split = 6		--分区阶数，将把rect分为split^2个区域分开扫描
 		local x0, y0 = rect.x, rect.y
 		local stepX, stepY = rect.width / split, rect.height / split
-		
+		prt(x0)
+		prt(y0)
+		prt(stepX)
+		prt(stepY)
 		--findColors结果汇总表
 		local totalTb = {}
 		
@@ -260,6 +264,10 @@ function screen.findColors(rect, color, globalFuzz, priority, limit)
 				}
 				local tmpTb = findColors(tmpArea, color, globalFuzz or CFG.DEFAULT_FUZZY)
 				if #tmpTb >= 99 then
+					prt(tmpArea)
+					prt(color)
+					prt(globalFuzz or CFG.DEFAULT_FUZZY)
+					prt(tmpTb)
 					Log("get more then 99 point, please increase split !")
 					return nil
 				end

@@ -55,6 +55,7 @@ CFG.DEFAULT_TIMEOUT = 40		--/s
 CFG.NAVIGATION_DELAY = 200		--/ms
 
 CFG.WAIT_CHECK_SKIP = 3		--/s
+CFG.WAIT_CHECK_SKIP_NEXT = 10
 CFG.WAIT_CHECK_NAVIGATION = 1 	--/s
 
 -----------------touch参数-----------------

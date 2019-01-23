@@ -27,10 +27,10 @@ local _gridList = {
 		list = {
 			{title = '自动联赛'},
 			{title = '自动天梯'},
-			{title = '自动巡回', disabled = true},
-			{title = '箱式抽球'},
+			{title = '自动巡回'},
+			{title = '特殊抽球'},
 			{title = '标准抽球'},
-			{title = '在线签到', disabled = true},
+			{title = '箱式抽球'},
 		},
 		style = {
 			lineSpacing = 14 * ratio,
@@ -573,6 +573,31 @@ local _gridList = {
 		singleBindParam = "USER.DROP_CACHE",
 		list = {
 			{title = "清空缓存", disabled = true},
+			{title = "开启", value = true},
+			{title = "关闭", value = false},
+		},
+		style = {
+			lineSpacing = 1 * ratio,
+			width = 80 * ratio,
+			height = 40 * ratio,
+			fontSize = 16 * ratio,
+			color = '#333333',
+			checkedColor = '#333333',
+			disabledColor = '#ffb200',
+			borderColor = '#F6F6F6',
+			checkedBorderColor = '#ffb200',
+			backgroundColor = '#F6F6F6',
+			checkedBackgroundColor = '#ffb200',
+			icon = ''
+		}
+	},
+	{
+		tag = "缓存模式",
+		checkedList = {3},
+		singleCheck = true,
+		singleBindParam = "CFG.ALLOW_CACHE",
+		list = {
+			{title = "缓存模式", disabled = true},
 			{title = "开启", value = true},
 			{title = "关闭", value = false},
 		},
@@ -1282,10 +1307,47 @@ local pages = {
 				subviews = {
 					wui.GridSelect.createLayout({id = generateGridID("清空缓存"), list = generateGridList("清空缓存"),
 							config = {single = true, totalWidth = 250 * ratio, gridStyle = generateGridStyle("清空缓存")}}),
-					
-					wui.GridSelect.createLayout({id = generateGridID("日志记录"), list = generateGridList("日志记录"),
-							config = {single = true, totalWidth = 250 * ratio, gridStyle = generateGridStyle("日志记录")}}),
+					{
+						view = 'text',
+						value = ' \n',
+						style = {
+							['font-size'] = 18 * ratio,
+							color = '#5f5f5f'
+						}
+					},
+					wui.GridSelect.createLayout({id = generateGridID("缓存模式"), list = generateGridList("缓存模式"),
+							config = {single = true, totalWidth = 250 * ratio, gridStyle = generateGridStyle("缓存模式")}}),
 				},
+			},
+			{
+				view = 'text',
+				value = ' \n',
+				style = {
+					['font-size'] = 10 * ratio,
+					color = '#5f5f5f'
+				}
+			},
+			{
+				view = 'div',
+				style = {
+					width = 700 * ratio,
+					['background-color'] = '#FFFFFF',
+					['flex-direction'] = 'row',
+					--['justify-content'] = 'space-start',
+					['padding-left'] = 30 * ratio,
+				},
+				subviews = {
+					wui.GridSelect.createLayout({id = generateGridID("日志记录"), list = generateGridList("日志记录"),
+					config = {single = true, totalWidth = 250 * ratio, gridStyle = generateGridStyle("日志记录")}}),
+				},
+			},
+			{
+				view = 'text',
+				value = ' \n\n\n',
+				style = {
+					['font-size'] = 18 * ratio,
+					color = '#5f5f5f'
+				}
 			},
 		}
 	},

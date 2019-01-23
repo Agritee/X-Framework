@@ -96,6 +96,23 @@ local _pageList = {
 		},
 	},
 	{
+		tag = "活动模式",	--巡回赛
+		widgetList = {
+			{
+				tag = "控制球员",
+				enable = true,
+				anchor = "L1/3",
+				srcPos = "292|393|0x444444,292|378|0x444444,280|367|0x444444,268|366|0xf8f9fb,303|367|0x444444,314|365|0xf8f9fb,308|386|0xf8f9fb,276|386|0xf8f9fb",
+			},
+			{
+				tag = "自动比赛",
+				enable = true,
+				anchor = "M1/3",
+				srcPos = "292|393|0x444444,292|378|0x444444,280|367|0x444444,268|366|0xf8f9fb,303|367|0x444444,314|365|0xf8f9fb,308|386|0xf8f9fb,276|386|0xf8f9fb",
+			},
+		},
+	},
+	{
 		tag = "天梯教练模式",
 		widgetList = {
 			{
@@ -115,6 +132,23 @@ local _pageList = {
 				enable = true,
 				anchor = "R",
 				srcPos = "958|103|0x1f1f1f,1286|102|0x1f1f1f,958|623|0x1f1f1f,1283|621|0x1f1f1f,980|261|0x363636,1261|134|0x363636",
+			},
+		},
+	},
+	{
+		tag = "天梯巡回模式",
+		widgetList = {
+			{
+				tag = "球队管理",
+				enable = true,
+				anchor = "LT",
+				srcPos = "123|175|0x12a42b,123|167|0xffffff,102|168|0x0079fd,67|169|0x0079fd,75|133|0x0079fd,110|132|0x0079fd,94|180|0xffffff",
+			},
+			{
+				tag = "巡回信息",
+				enable = true,
+				anchor = "A",
+				srcPos = "515|142|0xffffff,504|108|0x153351,1270|121|0x153250,487|619|0x1f1f1f,1265|621|0x1f1f1f,1222|400|0x363636",
 			},
 		},
 	},
@@ -144,8 +178,8 @@ local _pageList = {
 				enable = true,
 				anchor = "RB",
 				srcPos = "840|697|0xDDE0C3-0x221F3C,805|684|0xDDE0C3-0x221F3C,886|679|0xDDE0C3-0x221F3C",
-				dstArea = Rect(
-					math.floor(CFG.EFFECTIVE_AREA[1] + (CFG.EFFECTIVE_AREA[3] - CFG.EFFECTIVE_AREA[1]) * 1 / 2),
+				dstArea = Rect(		--要规避巡回赛切到声望时，对判定有干扰
+					math.floor(CFG.EFFECTIVE_AREA[1] + (CFG.EFFECTIVE_AREA[3] - CFG.EFFECTIVE_AREA[1]) * 1 / 2 + 50 * (CFG.EFFECTIVE_AREA[4] - CFG.EFFECTIVE_AREA[2])/750),
 					math.floor(CFG.EFFECTIVE_AREA[2] + (CFG.EFFECTIVE_AREA[4] - CFG.EFFECTIVE_AREA[2]) * 5 / 6),
 					math.floor((CFG.EFFECTIVE_AREA[3] - CFG.EFFECTIVE_AREA[1]) / 4),
 					math.floor((CFG.EFFECTIVE_AREA[4] - CFG.EFFECTIVE_AREA[2]) / 6)
@@ -281,8 +315,8 @@ local _pageList = {
 		tag = "经纪人",
 		widgetList = {
 			{
-				tag = "箱式经纪人",
-				enable = true,
+				tag = "特殊经纪人",
+				enable = false,		--不总出现
 				noCache = true,
 				anchor = "A",
 				srcPos = "291|374|0x007aff,285|379|0xf8f9fb,298|379|0xf8f9fb,291|385|0x007aff,291|394|0x007aff,285|400|0xf8f9fb,298|400|0xf8f9fb,314|396|0x007aff,311|381|0x007aff,321|376|0xf8f9fb",
@@ -294,6 +328,14 @@ local _pageList = {
 				anchor = "A",
 				srcPos = "667|380|0x007aff,666|392|0x007aff,666|386|0xf8f9fb,653|378|0x007aff,644|396|0x007aff,635|396|0xf8f9fb,644|404|0xf8f9fb,667|399|0xf8f9fb,690|396|0x007aff,698|397|0xf8f9fb",
 			},
+			{
+				tag = "箱式经纪人",
+				enable = false,	--不总出现
+				noCache = true,
+				anchor = "A",
+				srcPos = "287|376|0x007aff,297|375|0x007aff,291|382|0xf8f9fb,291|388|0xf8f9fb,278|368|0xf8f9fb,306|368|0xf8f9fb,268|396|0x007aff,313|382|0x007aff,320|378|0xf8f9fb,299|396|0x007aff",
+			},
+			
 		},
 	},
 	{
@@ -388,12 +430,6 @@ local _navigationList = {
 		srcPos = "864|497|0xcaddf0,861|467|0xcaddf0,415|475|0xcaddf0,554|499|0xcaddf0,329|486|0xf5f5f5,997|481|0xf5f5f5,502|549|0xf5f5f5,831|427|0xf5f5f5",
 	},
 	{
-		tag = "确定-合约过期",
-		enable = true,
-		anchor = "A",
-		srcPos = "608|584|0xcaddf0,399|545|0xcaddf0,855|584|0xcaddf0,665|240|0xffa0a9-0x000202,685|231|0xffffff,664|197|0xfe5343-0x010807",
-	},
-	{
 		tag = "球员续约-球员列表",
 		enable = true,
 		anchor = "A",
@@ -420,32 +456,6 @@ local _navigationList = {
 		srcPos = "500|392|0x1e54b2,517|393|0x9ec2ff,812|398|0xcea402,830|394|0xfee680,376|346|0xe6e6ed,625|485|0xe6e6ed,626|528|0xf5f5f5,565|589|0xcaddf0",
 	},
 	{
-		tag = "球员续约-支付确定",
-		enable = true,
-		anchor = "A",
-		srcPos = "783|449|0xcaddf0,954|461|0xcaddf0,377|408|0xcaddf0,666|436|0xf5f5f5,336|260|0xf5f5f5,995|262|0xf5f5f5,155|131|0x13304d,1163|121|0x13304d",
-	},
-	{
-		tag = "球员续约-已续约",
-		enable = true,
-		anchor = "A",
-		--srcPos = "618|533|0xcaddf0,373|495|0xcaddf0,952|543|0xcaddf0,416|581|0xf5f5f5,664|240|0x21c43d-0x0d090c,666|320|0x70ef85-0x1a0617,386|182|0xf5f5f5,414|121|0x13304d",
-		srcPos = "666|543|0xcaddf0,366|495|0xcaddf0,964|546|0xcaddf0,484|473|0xf5f5f5,835|568|0xf5f5f5,330|519|0xf5f5f5,997|524|0xf5f5f5,321|158|0xf5f5f5,\
-		1003|165|0xf5f5f5,1042|144|0x13304d,291|141|0x13304d"
-	},
-	{
-		tag = "教练续约定额",
-		enable = true,
-		anchor = "A",
-		srcPos = "617|483|0xcaddf0,377|445|0xcaddf0,935|488|0xcaddf0,477|270|0x4cd964,489|286|0x4cd964,641|524|0xf5f5f5,335|463|0xf5f5f5,1000|463|0xf5f5f5",
-	},
-	{
-		tag = "教练续约确定",
-		enable = true,
-		anchor = "A",
-		srcPos = "619|462|0xcaddf0,372|433|0xcaddf0,952|483|0xcaddf0,606|512|0xf5f5f5,607|397|0xf5f5f5,1108|294|0x2e823c,434|130|0x13304d",
-	},
-	{
 		tag = "能量不足",
 		enable = true,
 		anchor = "A",
@@ -459,68 +469,16 @@ local _navigationList = {
 		srcPos = "1117|219|0xebf7e6,1064|218|0xebf7e6,1024|218|0xebf7e6,992|217|0x97d880,967|218|0x2fb100,1007|379|0x2bb544,1038|373|0xffffff,1072|380|0x2bb544",
 	},
 	{
-		tag = "联赛奖励",		--在显示积分变化的界面弹出的作为导航控件处理
-		enable = true,
-		anchor = "A",
-		srcPos = "715|601|0xcaddf0,378|567|0xcaddf0,946|616|0xcaddf0,621|648|0xf5f5f5,621|527|0xf5f5f5,326|588|0xf5f5f5,1003|592|0xf5f5f5,251|366|0x2c813b",
-	},
-	{
-		tag = "恭喜晋级",
-		enable = true,
-		anchor = "A",
-		srcPos = "721|596|0xcaddf0,382|569|0xcaddf0,947|604|0xcaddf0,585|705|0x767677,736|708|0x767677,92|169|0x004998,109|539|0x004998,650|649|0xf5f5f5",
-	},
-	{
-		tag = "恢复比赛",
-		enable = true,
-		anchor = "A",
-		srcPos = "829|481|0xcaddf0,691|453|0xcaddf0,964|507|0xcaddf0,642|457|0xcaddf0,366|511|0xcaddf0,666|477|0xf5f5f5,391|435|0xf5f5f5,859|530|0xf5f5f5,\
-		326|203|0xf5f5f5,1004|201|0xf5f5f5",
-	},
-	{
-		tag = "天梯判负",
-		enable = true,
-		anchor = "A",
-		srcPos = "684|470|0xcaddf0,359|424|0xcaddf0,971|490|0xcaddf0,990|488|0xf5f5f5,342|433|0xf5f5f5,612|410|0xf5f5f5,638|509|0xf5f5f5,319|220|0xf5f5f5,1011|216|0xf5f5f5",
-	},
-	{
 		tag = "notice",
 		enable = true,
 		anchor = "RT",
 		srcPos = "1279|54|0x55a4f9-0x562b06,1269|45|0x55a4f9-0x562b06,1289|44|0x55a4f9-0x562b06,1268|65|0x55a4f9-0x562b06,1288|64|0x55a4f9-0x562b06,\
 		1268|55|0xccdff2,1278|44|0xccdff2,1289|54|0xccdff2,1198|66|0xffffff",
 	},
-	{
-		tag = "已成功替换球员",
-		enable = true,
-		anchor = "A",
-		srcPos = "617|444|0xcaddf0,378|412|0xcaddf0,939|454|0xcaddf0,568|491|0xf5f5f5,331|423|0xf5f5f5,415|99|0x99231c,439|105|0x99231c,112|539|0x004998",
-	},
 	
 }
 
 --全局导航优先级，一般next在最后
-local _navigationPriorityList0 = {
-	"确定-合约过期",
-	"球员续约-球员列表",
-	"球员续约-点击签约",
-	"球员续约-续约",
-	"球员续约-付款确认",
-	"球员续约-支付确定",
-	"球员续约-已续约",
-	"教练续约定额",
-	"教练续约确定",
-	"能量不足",
-	"联赛奖励",		--在显示积分变化的界面弹出的作为导航控件处理/48级联赛
-	"恭喜晋级",		--在显示积分变化的界面弹出的作为导航控件处理/48级联赛
-	"恢复比赛",
-	"天梯判负",
-	"notice",
-	"已成功替换球员",
-	"next",
-	--"comfirm",
-}
-
 local _navigationPriorityList = {
 	"球员续约-球员列表",
 	"comfirm",

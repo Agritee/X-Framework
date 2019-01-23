@@ -15,7 +15,7 @@
 	竹UI使用说明/API
 	
 	创建一个新UI界面
-	UI名=UI:new(DevScreen,Parm)
+	UI名=ZUI:new(DevScreen,Parm)
 	参数:
 		DevScreen={Width=开发分辨率width,Height=开发分辨率height}
 		Parm={
@@ -34,7 +34,7 @@
 		}
 	
 	创建一个新TAB页面
-	页面名=Page:new(UI,Parm)
+	页面名=Page:new(ZUI,Parm)
 	参数:
 		UI名=UI名>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>该Page挂载在哪个UI上,就把哪个UI传进来
 		Parm={
@@ -329,10 +329,10 @@ local function tableTojson(t)
 	return serialize(t)
 end
 
-UI={
+ZUI={
 }
 
-function UI:new(DevScreen,Parm)--align="left",w=90,h=90,size=40,calcelname="取消",okname="OK",countdown=0,config="1.dat"
+function ZUI:new(DevScreen,Parm)--align="left",w=90,h=90,size=40,calcelname="取消",okname="OK",countdown=0,config="1.dat"
 	
 	local _width,_height = getScreenSize()--当前设备分辨率
 	if _width<_height then _width,_height=_height,_width end
@@ -359,7 +359,7 @@ function UI:new(DevScreen,Parm)--align="left",w=90,h=90,size=40,calcelname="取�
 	local RowSpace=math.floor((Parm.rowSpace or 2)/100*(tmp.h))
 	
 	local o = {
-		type="UI",
+		type="ZUI",
 		Width=tmp.w,
 		Height=tmp.h,
 		Scale=Scale,
@@ -397,50 +397,50 @@ function UI:new(DevScreen,Parm)--align="left",w=90,h=90,size=40,calcelname="取�
 	return o
 end
 
-function UI:xper2pix(per)
+function ZUI:xper2pix(per)
 	return math.floor(per/100*self.realwidth)
 end
-function UI:yper2pix(per)
+function ZUI:yper2pix(per)
 	return math.floor(per/100*self.realheight)
 end
 
 Page={
 }
 
-function Page:new(UI,Parm)
+function Page:new(ZUI,Parm)
 	
 	local fsize,Xpos,RowSpace
 	
 	if Parm.size then
-		fsize=math.floor((Parm.size or 25)*UI.Scale)
+		fsize=math.floor((Parm.size or 25)*ZUI.Scale)
 	else
-		fsize=UI.DefaultFrontSize
+		fsize=ZUI.DefaultFrontSize
 	end
 	if Parm.xpos then
-		Xpos=math.floor((Parm.xpos)/100*(UI.con.width))
+		Xpos=math.floor((Parm.xpos)/100*(ZUI.con.width))
 	else
-		Xpos=UI.Xpos
+		Xpos=ZUI.Xpos
 	end
 	if Parm.RowSpace then
-		RowSpace=math.floor((Parm.rowSpace)/100*(UI.con.height))
+		RowSpace=math.floor((Parm.rowSpace)/100*(ZUI.con.height))
 	else
-		RowSpace=UI.RowSpace
+		RowSpace=ZUI.RowSpace
 	end
 	
 	local o={
-		UI=UI,
+		ZUI=ZUI,
 		type="Page",
 		CurX=Xpos,
 		CurY=0,
 		LastLineFrontSize=0,
-		Scale=UI.Scale,
+		Scale=ZUI.Scale,
 		
 		RowSpace=RowSpace,
 		Xpos=Xpos,
 		DefaultFrontSize=fsize,
-		DefaultAlign=Parm.align or UI.DefaultAlign,
+		DefaultAlign=Parm.align or ZUI.DefaultAlign,
 		
-		DefaultFrontColor=Parm.color or UI.DefaultFrontColor,
+		DefaultFrontColor=Parm.color or ZUI.DefaultFrontColor,
 		
 		con={
 			style="custom",
@@ -455,7 +455,7 @@ function Page:new(UI,Parm)
 	}
 	setmetatable(o,{__index = self} )
 	
-	table.insert(UI.con.views,o.con)
+	table.insert(ZUI.con.views,o.con)
 	return o
 end
 
@@ -474,12 +474,12 @@ function Page:addLabel(Parm)
 		fsize=self.DefaultFrontSize
 	end
 	if Parm.xpos then
-		Xpos=math.floor((Parm.xpos)/100*self.UI.realwidth)
+		Xpos=math.floor((Parm.xpos)/100*self.ZUI.realwidth)
 	else
 		Xpos=0
 	end
 	if Parm.ypos then
-		Ypos=math.floor((Parm.ypos)/100*self.UI.realheight)
+		Ypos=math.floor((Parm.ypos)/100*self.ZUI.realheight)
 	else
 		Ypos=0
 	end
@@ -494,11 +494,11 @@ function Page:addLabel(Parm)
 	
 	local StrWidth=math.ceil(getStrWidth(con.text)*(fsize+sizediff))
 	local rect={self.CurX+Xpos,self.CurY+Ypos,
-		Parm.w and self.UI:xper2pix(Parm.w) or StrWidth,Parm.h and self.UI:yper2pix(Parm.h) or (self.RowSpace+fsize)}
+		Parm.w and self.ZUI:xper2pix(Parm.w) or StrWidth,Parm.h and self.ZUI:yper2pix(Parm.h) or (self.RowSpace+fsize)}
 	con.rect=table.concat(rect,",")
-	self.CurX=self.CurX+Xpos+(Parm.w and self.UI:xper2pix(Parm.w) or StrWidth)
-	if (Parm.h and self.UI:xper2pix(Parm.w) or fsize)>self.LastLineFrontSize and not Parm.ypos then
-		self.LastLineFrontSize=(Parm.h and self.UI:yper2pix(Parm.h) or fsize)
+	self.CurX=self.CurX+Xpos+(Parm.w and self.ZUI:xper2pix(Parm.w) or StrWidth)
+	if (Parm.h and self.ZUI:xper2pix(Parm.w) or fsize)>self.LastLineFrontSize and not Parm.ypos then
+		self.LastLineFrontSize=(Parm.h and self.ZUI:yper2pix(Parm.h) or fsize)
 	end
 	table.insert(self.con.views,con)
 end
@@ -511,12 +511,12 @@ function Page:addQQ(Parm)
 		fsize=self.DefaultFrontSize
 	end
 	if Parm.xpos then
-		Xpos=math.floor((Parm.xpos)/100*self.UI.realwidth)
+		Xpos=math.floor((Parm.xpos)/100*self.ZUI.realwidth)
 	else
 		Xpos=0
 	end
 	if Parm.ypos then
-		Ypos=math.floor((Parm.ypos)/100*self.UI.realheight)
+		Ypos=math.floor((Parm.ypos)/100*self.ZUI.realheight)
 	else
 		Ypos=0
 	end
@@ -537,11 +537,11 @@ function Page:addQQ(Parm)
 	
 	local StrWidth=math.ceil(getStrWidth(con.text)*(fsize+sizediff))
 	local rect={self.CurX+Xpos,self.CurY+Ypos,
-		Parm.w and self.UI:xper2pix(Parm.w) or StrWidth,Parm.h and self.UI:yper2pix(Parm.h) or (self.RowSpace+fsize)}
+		Parm.w and self.ZUI:xper2pix(Parm.w) or StrWidth,Parm.h and self.ZUI:yper2pix(Parm.h) or (self.RowSpace+fsize)}
 	con.rect=table.concat(rect,",")
-	self.CurX=self.CurX+Xpos+(Parm.w and self.UI:xper2pix(Parm.w) or StrWidth)
-	if (Parm.h and self.UI:xper2pix(Parm.w) or fsize)>self.LastLineFrontSize and not Parm.ypos then
-		self.LastLineFrontSize=(Parm.h and self.UI:yper2pix(Parm.h) or fsize)
+	self.CurX=self.CurX+Xpos+(Parm.w and self.ZUI:xper2pix(Parm.w) or StrWidth)
+	if (Parm.h and self.ZUI:xper2pix(Parm.w) or fsize)>self.LastLineFrontSize and not Parm.ypos then
+		self.LastLineFrontSize=(Parm.h and self.ZUI:yper2pix(Parm.h) or fsize)
 	end
 	table.insert(self.con.views,con)
 end
@@ -554,12 +554,12 @@ function Page:addUrl(Parm)
 		fsize=self.DefaultFrontSize
 	end
 	if Parm.xpos then
-		Xpos=math.floor((Parm.xpos)/100*self.UI.realwidth)
+		Xpos=math.floor((Parm.xpos)/100*self.ZUI.realwidth)
 	else
 		Xpos=0
 	end
 	if Parm.ypos then
-		Ypos=math.floor((Parm.ypos)/100*self.UI.realheight)
+		Ypos=math.floor((Parm.ypos)/100*self.ZUI.realheight)
 	else
 		Ypos=0
 	end
@@ -588,11 +588,11 @@ function Page:addUrl(Parm)
 	
 	local StrWidth=math.ceil(getStrWidth(con.text)*(fsize+sizediff))
 	local rect={self.CurX+Xpos,self.CurY+Ypos,
-		Parm.w and self.UI:xper2pix(Parm.w) or StrWidth,Parm.h and self.UI:yper2pix(Parm.h) or (self.RowSpace+fsize)}
+		Parm.w and self.ZUI:xper2pix(Parm.w) or StrWidth,Parm.h and self.ZUI:yper2pix(Parm.h) or (self.RowSpace+fsize)}
 	con.rect=table.concat(rect,",")
-	self.CurX=self.CurX+Xpos+(Parm.w and self.UI:xper2pix(Parm.w) or StrWidth)
-	if (Parm.h and self.UI:xper2pix(Parm.w) or fsize)>self.LastLineFrontSize and not Parm.ypos then
-		self.LastLineFrontSize=(Parm.h and self.UI:yper2pix(Parm.h) or fsize)
+	self.CurX=self.CurX+Xpos+(Parm.w and self.ZUI:xper2pix(Parm.w) or StrWidth)
+	if (Parm.h and self.ZUI:xper2pix(Parm.w) or fsize)>self.LastLineFrontSize and not Parm.ypos then
+		self.LastLineFrontSize=(Parm.h and self.ZUI:yper2pix(Parm.h) or fsize)
 	end
 	table.insert(self.con.views,con)
 end
@@ -600,12 +600,12 @@ end
 function Page:addImage(Parm)
 	local Xpos,Ypos
 	if Parm.xpos then
-		Xpos=math.floor((Parm.xpos)/100*self.UI.realwidth)
+		Xpos=math.floor((Parm.xpos)/100*self.ZUI.realwidth)
 	else
 		Xpos=0
 	end
 	if Parm.ypos then
-		Ypos=math.floor((Parm.ypos)/100*self.UI.realheight)
+		Ypos=math.floor((Parm.ypos)/100*self.ZUI.realheight)
 	else
 		Ypos=0
 	end
@@ -616,15 +616,15 @@ function Page:addImage(Parm)
 	local con={
 		type="Image",
 		src=Parm.src or Parm[1] or "",
-		width=self.UI:xper2pix(Parm.w)
+		width=self.ZUI:xper2pix(Parm.w)
 	}
 	
 	local rect={self.CurX+Xpos,self.CurY+Ypos,
-		con.width,self.RowSpace+self.UI:yper2pix(Parm.h)}
+		con.width,self.RowSpace+self.ZUI:yper2pix(Parm.h)}
 	con.rect=table.concat(rect,",")
 	self.CurX=self.CurX+Xpos+con.width
-	if self.UI:yper2pix(Parm.h)>self.LastLineFrontSize and not Parm.ypos then
-		self.LastLineFrontSize=self.UI:yper2pix(Parm.h)
+	if self.ZUI:yper2pix(Parm.h)>self.LastLineFrontSize and not Parm.ypos then
+		self.LastLineFrontSize=self.ZUI:yper2pix(Parm.h)
 	end
 	table.insert(self.con.views,con)
 end
@@ -632,12 +632,12 @@ end
 function Page:addWeb(Parm)
 	local Xpos,Ypos
 	if Parm.xpos then
-		Xpos=math.floor((Parm.xpos)/100*self.UI.realwidth)
+		Xpos=math.floor((Parm.xpos)/100*self.ZUI.realwidth)
 	else
 		Xpos=0
 	end
 	if Parm.ypos then
-		Ypos=math.floor((Parm.ypos)/100*self.UI.realheight)
+		Ypos=math.floor((Parm.ypos)/100*self.ZUI.realheight)
 	else
 		Ypos=0
 	end
@@ -659,16 +659,16 @@ function Page:addWeb(Parm)
 		type="WebView",
 		id=Parm.id,
 		url=url,
-		width=self.UI:xper2pix(Parm.w),
-		height=self.UI:yper2pix(Parm.h)
+		width=self.ZUI:xper2pix(Parm.w),
+		height=self.ZUI:yper2pix(Parm.h)
 	}
 	
 	local rect={self.CurX+Xpos,self.CurY+Ypos,
-		con.width,self.RowSpace+self.UI:yper2pix(Parm.h)}
+		con.width,self.RowSpace+self.ZUI:yper2pix(Parm.h)}
 	con.rect=table.concat(rect,",")
 	self.CurX=self.CurX+Xpos+con.width
-	if self.UI:yper2pix(Parm.h)>self.LastLineFrontSize and not Parm.ypos then
-		self.LastLineFrontSize=self.UI:yper2pix(Parm.h)
+	if self.ZUI:yper2pix(Parm.h)>self.LastLineFrontSize and not Parm.ypos then
+		self.LastLineFrontSize=self.ZUI:yper2pix(Parm.h)
 	end
 	table.insert(self.con.views,con)
 end
@@ -692,8 +692,8 @@ function Page:addWebOnDefault(Parm)
 		type="WebView",
 		id=Parm.id,
 		url=url,
-		width=self.UI:xper2pix(Parm.w),
-		height=self.UI:yper2pix(Parm.h)
+		width=self.ZUI:xper2pix(Parm.w),
+		height=self.ZUI:yper2pix(Parm.h)
 	}
 	
 	table.insert(self.con.views,con)
@@ -702,12 +702,12 @@ end
 function Page:addLine(Parm)
 	local Xpos,Ypos
 	if Parm.xpos then
-		Xpos=math.floor((Parm.xpos)/100*self.UI.realwidth)
+		Xpos=math.floor((Parm.xpos)/100*self.ZUI.realwidth)
 	else
 		Xpos=0
 	end
 	if Parm.ypos then
-		Ypos=math.floor((Parm.ypos)/100*self.UI.realheight)
+		Ypos=math.floor((Parm.ypos)/100*self.ZUI.realheight)
 	else
 		Ypos=0
 	end
@@ -723,8 +723,8 @@ function Page:addLine(Parm)
 		type="Line",
 		id=Parm.id,
 		color=Parm.color or self.DefaultFrontColor,
-		width=self.UI:xper2pix(Parm.w),
-		height=self.UI:yper2pix(Parm.h)
+		width=self.ZUI:xper2pix(Parm.w),
+		height=self.ZUI:yper2pix(Parm.h)
 	}
 	local rect={self.CurX+Xpos,self.CurY+Ypos,
 		con.width,con.height}
@@ -739,12 +739,12 @@ end
 function Page:addRadioGroup(Parm)
 	local Xpos,Ypos
 	if Parm.xpos then
-		Xpos=math.floor((Parm.xpos)/100*self.UI.realwidth)
+		Xpos=math.floor((Parm.xpos)/100*self.ZUI.realwidth)
 	else
 		Xpos=0
 	end
 	if Parm.ypos then
-		Ypos=math.floor((Parm.ypos)/100*self.UI.realheight)
+		Ypos=math.floor((Parm.ypos)/100*self.ZUI.realheight)
 	else
 		Ypos=0
 	end
@@ -757,8 +757,8 @@ function Page:addRadioGroup(Parm)
 		fsize=self.DefaultFrontSize*__dip
 	end
 	if not Parm.w or not Parm.h then errorReport("请指定RadioGroup控件的width和height",true) end
-	local width=self.UI:xper2pix(Parm.w)
-	local height=self.UI:yper2pix(Parm.h)
+	local width=self.ZUI:xper2pix(Parm.w)
+	local height=self.ZUI:yper2pix(Parm.h)
 	
 	local con={
 		type="RadioGroup",
@@ -780,19 +780,19 @@ function Page:addRadioGroup(Parm)
 	end
 	table.insert(self.con.views,con)
 	
-	self.UI.ret[Parm.id]=split(Parm.list,",")
-	self.UI.ret[Parm.id].type="RadioGroup"
+	self.ZUI.ret[Parm.id]=split(Parm.list,",")
+	self.ZUI.ret[Parm.id].type="RadioGroup"
 end
 
 function Page:addCheckBoxGroup(Parm)
 	local Xpos,Ypos
 	if Parm.xpos then
-		Xpos=math.floor((Parm.xpos)/100*self.UI.realwidth)
+		Xpos=math.floor((Parm.xpos)/100*self.ZUI.realwidth)
 	else
 		Xpos=0
 	end
 	if Parm.ypos then
-		Ypos=math.floor((Parm.ypos)/100*self.UI.realheight)
+		Ypos=math.floor((Parm.ypos)/100*self.ZUI.realheight)
 	else
 		Ypos=0
 	end
@@ -805,8 +805,8 @@ function Page:addCheckBoxGroup(Parm)
 		fsize=self.DefaultFrontSize*__dip
 	end
 	if not Parm.w or not Parm.h then errorReport("请指定CheckBoxGroup控件的width和height",true) end
-	local width=self.UI:xper2pix(Parm.w)
-	local height=self.UI:yper2pix(Parm.h)
+	local width=self.ZUI:xper2pix(Parm.w)
+	local height=self.ZUI:yper2pix(Parm.h)
 	
 	local con={
 		type="CheckBoxGroup",
@@ -828,19 +828,19 @@ function Page:addCheckBoxGroup(Parm)
 	end
 	table.insert(self.con.views,con)
 	
-	self.UI.ret[Parm.id]=split(Parm.list,",")
-	self.UI.ret[Parm.id].type=Parm.a and "CheckBoxGroupOne" or "CheckBoxGroup"
+	self.ZUI.ret[Parm.id]=split(Parm.list,",")
+	self.ZUI.ret[Parm.id].type=Parm.a and "CheckBoxGroupOne" or "CheckBoxGroup"
 end
 
 function Page:addEdit(Parm)
 	local Xpos,Ypos
 	if Parm.xpos then
-		Xpos=math.floor((Parm.xpos)/100*self.UI.realwidth)
+		Xpos=math.floor((Parm.xpos)/100*self.ZUI.realwidth)
 	else
 		Xpos=0
 	end
 	if Parm.ypos then
-		Ypos=math.floor((Parm.ypos)/100*self.UI.realheight)
+		Ypos=math.floor((Parm.ypos)/100*self.ZUI.realheight)
 	else
 		Ypos=0
 	end
@@ -853,8 +853,8 @@ function Page:addEdit(Parm)
 		fsize=self.DefaultFrontSize
 	end
 	if not Parm.w or not Parm.h then errorReport("请指定Edit控件的width和height",true) end
-	local width=self.UI:xper2pix(Parm.w)
-	local height=self.UI:yper2pix(Parm.h)
+	local width=self.ZUI:xper2pix(Parm.w)
+	local height=self.ZUI:yper2pix(Parm.h)
 	
 	local con={
 		type="Edit",
@@ -877,19 +877,19 @@ function Page:addEdit(Parm)
 	end
 	table.insert(self.con.views,con)
 	
-	self.UI.ret[Parm.id]={}
-	self.UI.ret[Parm.id].type="Edit"
+	self.ZUI.ret[Parm.id]={}
+	self.ZUI.ret[Parm.id].type="Edit"
 end
 
 function Page:addComboBox(Parm)
 	local Xpos,Ypos
 	if Parm.xpos then
-		Xpos=math.floor((Parm.xpos)/100*self.UI.realwidth)
+		Xpos=math.floor((Parm.xpos)/100*self.ZUI.realwidth)
 	else
 		Xpos=0
 	end
 	if Parm.ypos then
-		Ypos=math.floor((Parm.ypos)/100*self.UI.realheight)
+		Ypos=math.floor((Parm.ypos)/100*self.ZUI.realheight)
 	else
 		Ypos=0
 	end
@@ -902,8 +902,8 @@ function Page:addComboBox(Parm)
 		fsize=self.DefaultFrontSize
 	end
 	if not Parm.w or not Parm.h then errorReport("请指定ComboBox控件的width和height",true) end
-	local width=self.UI:xper2pix(Parm.w)
-	local height=self.UI:yper2pix(Parm.h)
+	local width=self.ZUI:xper2pix(Parm.w)
+	local height=self.ZUI:yper2pix(Parm.h)
 	
 	local con={
 		type="ComboBox",
@@ -922,11 +922,11 @@ function Page:addComboBox(Parm)
 	end
 	table.insert(self.con.views,con)
 	
-	self.UI.ret[Parm.id]=split(Parm.list,",")
-	self.UI.ret[Parm.id].type="ComboBox"
+	self.ZUI.ret[Parm.id]=split(Parm.list,",")
+	self.ZUI.ret[Parm.id].type="ComboBox"
 end
 
-function UI:show(ReturnType)
+function ZUI:show(ReturnType)
 	--print(tableTojson(self.con))
 	ReturnType=ReturnType or 3
 	local ret,results=showUI(tableTojson(self.con))

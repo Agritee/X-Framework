@@ -1,7 +1,7 @@
 -- config.lua
 -- Author: cndy1860
 -- Date: 2018-12-24
--- Descrip: 界面特征判定相关 
+-- Descrip: 界面特征判定相关
 
 local modName = "page"
 local M = {}
@@ -81,7 +81,7 @@ local function matchWidgets(pageTag, widgetList)
 					--Log("cant find widget: "..v.tag)
 					return false
 				else
-					--Log("----find widget: "..v.tag)
+					--Log("----find widget: "..v.tag.."on page: "..pageTag)
 					if CFG.ALLOW_CACHE and (not v.noCache) then
 						table.insert(storeItems, {string.format("widget-%s-%s", pageTag, v.tag), scale.offsetPos(v.dstPos, pot)})
 					end
@@ -193,7 +193,7 @@ function M.tapNext()
 				local pot = screen.findColor(v.dstArea, v.dstPos, v.fuzzy or CFG.DEFAULT_FUZZY)	--高分辨率下有偏色
 				--prt(v)
 				if pot ~= Point.INVALID then
-					Log("found next")
+					Log("found next");
 					tap(pot.x, pot.y)
 					return
 				end
@@ -289,7 +289,7 @@ function M.tryNavigation()
 						local currentPage = page.getCurrentPage()
 						if currentPage then
 							Log('exsit navigation but need refresh page: '..currentPage)
-							return
+							return false
 						end
 						
 						if _v.actionFunc ~= nil then	--执行导航actionFunc
@@ -338,48 +338,18 @@ function M.tryNavigation()
 	
 	return false
 end
-function M.isExsitNavigation()
-	for _, v in pairs(M.navigationPriorityList) do
-		for _, _v in pairs(M.navigationList) do
-			if v == _v.tag then
-				if _v.matchPos == nil or _v.noCache then
-					local pot = screen.findColor(_v.dstArea, _v.dstPos, CFG.DEFAULT_FUZZY)
-					if pot ~= Point.INVALID then
-						Log("Exsit find Navigation [".._v.tag.."], execute it!")
-						Log(M.getCurrentPage())
-						
-						if not _v.noCache then
-							_v.matchPos = scale.offsetPos(_v.dstPos, pot)
-							storage.put(string.format("navigation-%s", _v.tag), _v.matchPos)
-							storage.commit()
-							Log("store "..string.format("navigation-%s", _v.tag))
-						end
-						
-						sleep(CFG.NAVIGATION_DELAY)
-						return true
-					else
-						break
-					end
-				else
-					if screen.matchColors(_v.matchPos, CFG.DEFAULT_FUZZY) then
-						Log("Exsit match Navigation [".._v.tag.."], execute it!")
-						if _v.actionFunc ~= nil then	--执行导航actionFunc
-							screen.keep(false)		--执行execNavigation.actionFunc可能涉及到界面变化
-							_v.actionFunc()
-							screen.keep(true)
-						else
-							local tmpTb = scale.toPointsTable(_v.matchPos)
-							tap(tmpTb[1][1], tmpTb[1][2])	--点击导航按钮
-						end
-						
-						sleep(CFG.NAVIGATION_DELAY)
-						return true
-					else
-						break
-					end
-				end
+
+function M.isExsitNavigation(navigationTag)
+	for _, v in pairs(M.navigationList) do
+		if v.tag == navigationTag then
+			local pot = screen.findColor(v.dstArea, v.dstPos, CFG.DEFAULT_FUZZY)
+			if pot ~= Point.INVALID then
+				Log("isExsit Navigation ["..v.tag.."] here")
 				
-			end
+				return true
+			else
+				break
+			end	
 		end
 	end
 	
@@ -442,10 +412,10 @@ local function initWidgets()
 				if _v.dstArea == nil then
 					_v.dstArea = scale.getAnchorArea(_v.anchor)
 				end
-				if _v.matchPos == nil then
+				if CFG.ALLOW_CACHE and _v.matchPos == nil then
 					local key = string.format("widget-%s-%s", v.tag, _v.tag)
-					local value = storage.get(key, "")
-					if value ~= "" then
+					local value = storage.get(key, "NULL")
+					if value ~= "NULL" then
 						prt(key)
 						prt(value)
 						_v.matchPos = value
@@ -471,10 +441,10 @@ local function initNavigations()
 			if v.dstArea == nil then
 				v.dstArea = scale.getAnchorArea(v.anchor)
 			end
-			if v.matchPos == nil then
+			if CFG.ALLOW_CACHE and v.matchPos == nil then
 				local key = string.format("navigation-%s", v.tag)
-				local value = storage.get(key, "")
-				if value ~= "" then
+				local value = storage.get(key, "NULL")
+				if value ~= "NULL" then
 					v.matchPos = value
 					Log("load navigation matchPos: "..v.tag)
 				end
@@ -482,27 +452,25 @@ local function initNavigations()
 		end
 	end
 	
-	--页面专用导航控件
-	for _, v in pairs(M.pageList) do
-		if v.pageNext ~= nil and v.srcPos ~= nil and string.len(v.srcPos) > 0 then
-			if v.dstPos == nil then
-				v.dstPos = scale.scalePos(v.srcPos)
-			end
-			if v.dstArea == nil then
-				v.dstArea = scale.getAnchorArea(v.anchor)
-			end
-			if v.matchPos == nil then
-				local key = string.format("pageNext-%s", v.tag)
-				local value = storage.get(key, "")
-				if value ~= "" then
-					v.matchPos = value
-					Log("load pageNext matchPos on: "..v.tag)
-				end
-			end
+	Log("-----------------initNavigations done-----------------")
+end
+
+function M.dropPageCache()
+	for k, v in pairs(M.pageList) do
+		for _k, _v in pairs(v.widgetList) do
+			_v.matchPos = nil
+			local key = string.format("widget-%s-%s", v.tag, _v.tag)
+			storage.put(key, "NULL")
 		end
 	end
 	
-	Log("-----------------initNavigations done-----------------")
+	for k, v in pairs(M.navigationList) do
+		v.matchPos = nil
+		local key = string.format("navigation-%s", v.tag)
+		storage.put(key, "NULL")
+	end
+	
+	storage.commit()
 end
 
 --将pageList、navigationList和navigationPriorityList数据插入page对应表中并初始化（缩放坐标），在projPage中调用

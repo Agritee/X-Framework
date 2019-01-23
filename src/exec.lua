@@ -116,6 +116,7 @@ function M.run(taskName, repeatTimes)
 		for k, v in pairs(taskProcesses) do
 			local checkInterval = v.checkInterval or CFG.DEFAULT_PAGE_CHECK_INTERVAL
 			local timeout = v.timeout or CFG.DEFAULT_TIMEOUT
+			local execNavgFlag = false
 			
 			--监听和执行流程片
 			local startTime = os.time()
@@ -154,12 +155,13 @@ function M.run(taskName, repeatTimes)
 					--exec next
 					if v.nextTag ~= nil then 	--有下一步事件
 						Log("start next at process page: "..v.tag)
+						sleep(200)
 						if v.nextTag == "next" then		--全局导航next
 							page.tapNext()
 						else						--点击某个控件作为next
 							page.tapWidget(v.tag, v.nextTag)
 						end
-						
+						sleep(200)
 						Log("end next")
 					end
 					
@@ -187,7 +189,7 @@ function M.run(taskName, repeatTimes)
 							--按当前等待的流程界面为为k，检测到当前实际界面为_k
 							--1.当_k>k时，当前界面为在k之后的流程，直接设置当前流程剩下的skipStatus=true
 							--2.当_k==k时，当前界面即为等待界面，会matchPage成功切不进入此skip流程
-							--3.当_k==k-1时，当前界面为等待界面的前一个界面，即为正常等待matchPage，如果进入skip，则作为_k<k-1处理
+							--3.当_k==k-1时，当前界面为等待界面的前一个界面，即为正常等待matchPage，个别情况才会需要skip
 							--4.当_k<k-1时，当前界面为在k之前的流程，先设置剩下流程片skipStatus=true，跳过当前流程剩余的
 							--所有流程片，然后等循环到下一个流程时，再通过1跳过_k之前的流程，实现skip至_k的功能
 							if _k > k then				--当前界面为其后的某个流程片中界面，跳过期间的流程
@@ -199,7 +201,7 @@ function M.run(taskName, repeatTimes)
 									end
 								end
 								break
-							elseif _k <= k - 1 then		--当前界面为之前的某个流程片中界面，跳过其后的流程片（下一次循环会跳过其前的）
+							elseif _k < k - 1 then		--当前界面为之前的某个流程片中界面，跳过其后的流程片（下一次循环会跳过其前的）
 								Log("set skip befor process")
 								for __k, __v  in pairs(taskProcesses) do
 									if __k >= k then
@@ -208,6 +210,13 @@ function M.run(taskName, repeatTimes)
 									end
 								end
 								break
+							elseif _k == k - 1 then
+								--在等在当前流程片界面的过程中若执行过导航，可能致使上一个流程片的next未生效（此处currentPage ~= nil）
+								if execNavgFlag and os.time() - startTime > CFG.WAIT_CHECK_SKIP_NEXT then
+									if page.isExsitNavigation("next") then
+										page.tapNext()	--尝试执行上一个流程的全局next的导航
+									end
+								end
 							end
 						end
 					end
@@ -217,6 +226,7 @@ function M.run(taskName, repeatTimes)
 				if currentPage == nil and os.time() - startTime >= CFG.WAIT_CHECK_NAVIGATION then
 					if page.tryNavigation() then
 						sleep(200)
+						execNavgFlag = true
 						startTime = os.time()	--防止因执行Navigation.actionFunc超时
 					end
 				end
