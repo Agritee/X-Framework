@@ -122,6 +122,9 @@ end
 
 function sleep(ms)
 	mSleep(ms)
+	if CFG.LOW_CONFIGURATION then	--云手机等低配反应缓慢，延长sleep间隔
+		mSleep(ms)
+	end
 end
 
 
@@ -263,10 +266,6 @@ function screen.findColors(rect, color, globalFuzz, priority, limit)
 				}
 				local tmpTb = findColors(tmpArea, color, globalFuzz or CFG.DEFAULT_FUZZY)
 				if #tmpTb >= 99 then
-					prt(tmpArea)
-					prt(color)
-					prt(globalFuzz or CFG.DEFAULT_FUZZY)
-					prt(tmpTb)
 					Log("get more then 99 point, please increase split !")
 					return nil
 				end
@@ -302,15 +301,27 @@ end
 touch = {}
 
 function touch.down(index, x, y)
-	touchDown(1, x, y)
+	if type(x) == "number" then
+		touchDown(index, x, y)
+	elseif type(x) == "table" then
+		touchDown(index, x.x, x.y)
+	end
 end
 
 function touch.move(index, x, y)
-	touchMove(1, x, y)
+	if type(x) == "number" then
+		touchMove(index, x, y)
+	elseif type(x) == "table" then
+		touchMove(index, x.x, x.y)
+	end
 end
 
 function touch.up(index, x, y)
-	touchUp(1, x, y)
+	if type(x) == "number" then
+		touchUp(index, x, y)
+	elseif type(x) == "table" then
+		touchUp(index, x.x, x.y)
+	end
 end
 
 

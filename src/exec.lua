@@ -75,34 +75,27 @@ function M.run(taskName, repeatTimes)
 	for i = 1, reTimes, 1 do
 		Log("-----------------------START RUN A ROUND OF TASK: "..taskName.."-----------------------")
 		local taskProcesses = M.getTaskProcesses(taskName)	--重新获取流程，如果发生了回溯流程片改变了taskProcesses，在此处恢复
-		
-		for k, v in pairs(taskProcesses) do	
-			if v.mode == "firstRun" then				--仅首次运行
-				if IS_BREAKING_TASK then		
-					if i <= 2 then		--有断点时，前两次都可能不需要跳过，因为恢复可能是从中间的流程片插入的，因而在第二遍流程还是可能返回首个流程片
-						v.skipStatus = false
-					else
+
+		--设置默认需要跳过的流程片
+		for k, v in pairs(taskProcesses) do
+			v.skipStatus = false
+		end
+		for k, v in pairs(taskProcesses) do
+			if IS_BREAKING_TASK then		--发生断点
+				if i > 2 then
+					if v.mode == "firstRun" or v.mode == "breakingRun" then
 						v.skipStatus = true
 					end
-				else	--从主界面开始，仅第一次不跳过
-					if i <= 1 then
-						v.skipStatus = false
-					else
-						v.skipStatus = true
-					end					
 				end
-			elseif v.mode == "breakingRun" then			--仅发生断点时运行
-				if IS_BREAKING_TASK then
-					if i <= 1 then		--发生断点时，有且仅有第一遍流程会触发breaking process
-						v.skipStatus = false
-					else
-						v.skipStatus = true
-					end
-				else
+			else
+				if v.mode == "breakingRun" then
 					v.skipStatus = true
 				end
-			else		--普通流程片默认不跳过
-				v.skipStatus = false
+				if i > 1 then
+					if v.mode == "firstRun" then
+						v.skipStatus = true
+					end
+				end
 			end
 		end
 		

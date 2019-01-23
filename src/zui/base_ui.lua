@@ -4,6 +4,7 @@ if not CFG.COMPATIBLE then
 	return
 end
 
+
 local feildPositionStr = "不换,位置1,位置2,位置3,位置4,位置5,位置6,位置7,位置8,位置9,位置10,位置11"
 local feildPositionSubstituteCondition = "主力红才换,好一档就换,好两档才换"
 
@@ -13,7 +14,7 @@ local DevScreen={--开发设备的参数
 	Height=CFG.DEV_RESOLUTION.height --注意Width要大于Height,开发机分辨率是啥就填啥
 }
 
-local myui=ZUI:new(DevScreen,{align="left",w=90,h=90,size=40,cancelname="取消",okname="OK",countdown=0,config="zui.dat",bg="bk.png"})--在page中传入的size会成为所有page中所有控件的默认字体大小,同时也会成为所有page控件的最小行距
+local myui=ZUI:new(DevScreen,{align="left",w=90,h=90,size=40,cancelname="取消",okname="OK",countdown=(IS_BREAKING_TASK == true and 3 or 0),config="zui.dat",bg="bk.png"})--在page中传入的size会成为所有page中所有控件的默认字体大小,同时也会成为所有page控件的最小行距
 local pageBaseSet = Page:new(myui,{text = "基本设置", size = 24})
 pageBaseSet:nextLine()
 pageBaseSet:nextLine()
@@ -133,12 +134,16 @@ pageProSet:addLabel({text="先尝试运行一次清空缓存数据（下次运�
 pageProSet:nextLine()
 pageProSet:nextLine()
 
+pageProSet:addLabel({text="缓存模式",size=30})
+pageProSet:addRadioGroup({id="radioAllowCache",list="开启,关闭",select=1,w=25,h=12})
+
+pageProSet:nextLine()
 pageProSet:addLabel({text="清空缓存",size=30})
 pageProSet:addRadioGroup({id="radioDropCache",list="开启,关闭",select=1,w=25,h=12})
 
 pageProSet:nextLine()
-pageProSet:addLabel({text="缓存模式",size=30})
-pageProSet:addRadioGroup({id="radioAllowCache",list="开启,关闭",select=0,w=25,h=12})
+pageProSet:addLabel({text="低配兼容",size=30})
+pageProSet:addRadioGroup({id="radioLowConfiguration",list="开启,关闭",select=1,w=25,h=12})
 
 --将位置*转换成对应的数字
 local function _convertIndex(posation)
@@ -225,8 +230,10 @@ function dispUI()
 	end
 	--prt(USER)
 	
-	USER.DROP_CACHE = uiRet.radioDropCache.开启
+	
 	CFG.ALLOW_CACHE = uiRet.radioAllowCache.开启
+	USER.DROP_CACHE = uiRet.radioDropCache.开启
+	CFG.LOW_CONFIGURATION = uiRet.radioLowConfiguration.开启
 	
 	for i = 1, 7, 1 do
 		USER.SUBSTITUTE_INDEX_LIST[i].fieldIndex = _convertIndex(uiRet[string.format("comboBoxBench%d",i)])

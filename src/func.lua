@@ -85,16 +85,16 @@ end
 function skipInitPage()
 	local startTime = os.time()
 	while true do
-		local currentPage = page.getCurrentPage()
+		local currentPage = page.getCurrentPage(true)
 		prt(currentPage)
 		if currentPage == "初始化界面" then
 			Log("catch init page")
 			local _startTime = os.time()
 			while true do
-				local _currentPage = page.getCurrentPage()
+				local _currentPage = page.getCurrentPage(true)
 				if _currentPage ~= "初始化界面" then
 					sleep(2000)
-					if page.getCurrentPage() ~= "初始化界面" then
+					if page.getCurrentPage(true) ~= "初始化界面" then
 						Log("skiped init page")
 						return
 					end

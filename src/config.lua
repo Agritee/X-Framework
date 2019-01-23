@@ -12,6 +12,7 @@ CFG.BIULD_TIME = "20190104"
 -----------------引擎属性-----------------
 CFG.COMPATIBLE = (string.sub(xmod.VERSION_NAME, 1, 3) == "1.9" and {true} or {false})[1]		--兼容1.9引擎
 CFG.ALLOW_CACHE = false
+CFG.LOW_CONFIGURATION = false		--低配硬件兼容
 
 -----------------调试参数-----------------
 CFG.LOG = true				--是否允许输出LOG信息

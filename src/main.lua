@@ -2,7 +2,6 @@
 -- Author: cndy1860
 -- Date: 2018-12-25
 -- Descrip: 程序入口，注意require顺序会影响各文件的init，后续添加任务依次require
-require("func")
 require("api")
 require("config")
 require("global")
@@ -19,13 +18,12 @@ require("task/tourSim")
 require("task/drawBox")
 require("task/drawSpecial")
 require("task/drawRegular")
+IS_BREAKING_TASK = exec.isExistBreakingTask()
 require("ui")
 require("zui/base_ui")
 
 function main()
 	screen.keep(false)
-	IS_BREAKING_TASK = exec.isExistBreakingTask()
-
 	dispUI()
 	
 	if USER.DROP_CACHE then
@@ -45,17 +43,26 @@ end
 --storage.commit()
 
 main()
+
 screen.init(screen.LANDSCAPE_RIGHT)
-sleep(2000)
+--sleep(2000)
 
 prt(page.getCurrentPage(true))
+ver = isPrivateMode()
+if ver == 0 then
+  Log("当前为免越狱/免ROOT环境")
+elseif ver == 1 then 
+  Log("当前为越狱/root环境")
+else
+	Log(tostring(ver))
+end
 
 --page.tapWidget("标准经纪人", "中场")
 --page.tapNavigation("next")
 
 --page.tapWidget("比赛", "联赛")
 
-page.tryNavigation()
+--page.tryNavigation()
 
 --获取一个区域内某种状态的所有球员位置信息
 --sleep(2000)

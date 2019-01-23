@@ -87,8 +87,7 @@ local function getFixStatusPlayers(area, status)
 	end
 	
 	if #posTb >= 1999 then	--超过points最大容量1999个点意味着可能没有找完所有位置的状态
-		prt(posTb)
-		dialog("get more than 999 point, maybe not cath all posation")
+		--prt(posTb)
 		catchError(ERR_PARAM, "get more than 1999 point, maybe not cath all posation")
 		return nil
 	end
@@ -171,10 +170,8 @@ local function getPlayerStatusInfo(seats)
 			bad = bad + 1
 		elseif v.status == 3 then
 			mormal = mormal + 1
-			prt(v)
 		elseif v.status == 4 then
 			good = good + 1
-			
 		elseif v.status == 5 then
 			excellent = excellent + 1
 		end
@@ -219,7 +216,6 @@ function switchPlayer()
 	local tmp = getPlayerStatusInfo("bench")
 	if #tmp < 4 then
 		catchError(ERR_PARAM, "cant get 4 players in benchFirst, abort switchPlayer!")
-		dialog("cant get 4 players in benchFirst, abort switchPlayer!", 5)
 		return
 	end
 	for k, v in pairs(tmp) do
@@ -236,7 +232,6 @@ function switchPlayer()
 	local tmp = getPlayerStatusInfo("bench")
 	if #tmp < 3 then
 		catchError(ERR_PARAM, "cant get 3 players in benchLattere, abort switchPlayer!")
-		dialog("cant get 3 players in benchLattere, abort switchPlayer!", 5)
 		return
 	end
 	for k, v in pairs(tmp) do
