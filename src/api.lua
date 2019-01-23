@@ -3,7 +3,6 @@
 -- Date: 2019-01-17
 -- Descrip: 转换叉叉引擎新旧api，可以在1.9引擎上使用2.0的api接口，只封装了较为常用的一些关键接口
 if not (string.sub(getEngineVersion(), 1, 3) == "1.9" and {true} or {false})[1] then
-	print(string.sub(getEngineVersion(), 1, 3))
 	return
 end
 

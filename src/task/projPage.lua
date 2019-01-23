@@ -430,6 +430,13 @@ local _navigationList = {
 		srcPos = "864|497|0xcaddf0,861|467|0xcaddf0,415|475|0xcaddf0,554|499|0xcaddf0,329|486|0xf5f5f5,997|481|0xf5f5f5,502|549|0xf5f5f5,831|427|0xf5f5f5",
 	},
 	{
+		tag = "notice",
+		enable = true,
+		anchor = "RT",
+		srcPos = "1279|54|0x55a4f9-0x562b06,1269|45|0x55a4f9-0x562b06,1289|44|0x55a4f9-0x562b06,1268|65|0x55a4f9-0x562b06,1288|64|0x55a4f9-0x562b06,\
+		1268|55|0xccdff2,1278|44|0xccdff2,1289|54|0xccdff2,1198|66|0xffffff",
+	},
+	{
 		tag = "球员续约-球员列表",
 		enable = true,
 		anchor = "A",
@@ -469,22 +476,22 @@ local _navigationList = {
 		srcPos = "1117|219|0xebf7e6,1064|218|0xebf7e6,1024|218|0xebf7e6,992|217|0x97d880,967|218|0x2fb100,1007|379|0x2bb544,1038|373|0xffffff,1072|380|0x2bb544",
 	},
 	{
-		tag = "notice",
+		tag = "教练续约-合同用完",
 		enable = true,
-		anchor = "RT",
-		srcPos = "1279|54|0x55a4f9-0x562b06,1269|45|0x55a4f9-0x562b06,1289|44|0x55a4f9-0x562b06,1268|65|0x55a4f9-0x562b06,1288|64|0x55a4f9-0x562b06,\
-		1268|55|0xccdff2,1278|44|0xccdff2,1289|54|0xccdff2,1198|66|0xffffff",
+		anchor = "A",
+		srcPos = "699|703|0xcaddf0,521|688|0xcaddf0,809|707|0xcaddf0,1154|690|0x5c5c5c,1101|290|0x4cd964,1106|132|0x205080,943|290|0x4cd964,202|135|0x205080",
 	},
-	
+
 }
 
---全局导航优先级，一般next在最后
+--全局导航优先级
 local _navigationPriorityList = {
 	"球员续约-球员列表",
 	"comfirm",
 	"next",
 	"notice",
 	"能量不足",
+	"教练续约-合同用完",
 }
 
 

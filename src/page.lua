@@ -198,6 +198,13 @@ function M.tapNext()
 					return
 				end
 				
+				--当在tapNext中找不到next的时候，可能是由于弹出了其他导航
+				if os.time() - startTime >= 5 then
+					if not M.isExsitNavigation("next") then
+						M.tryNavigation()
+					end
+				end
+				
 				if os.time() - startTime > CFG.DEFAULT_TIMEOUT then
 					catchError(ERR_TIMEOUT, "timeout in tapNext")
 				end
