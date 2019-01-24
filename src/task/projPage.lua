@@ -136,7 +136,7 @@ local _pageList = {
 		},
 	},
 	{
-		tag = "天梯巡回模式",
+		tag = "天梯巡回模式",		--教练和手动都一样
 		widgetList = {
 			{
 				tag = "球队管理",
@@ -149,6 +149,23 @@ local _pageList = {
 				enable = true,
 				anchor = "A",
 				srcPos = "515|142|0xffffff,504|108|0x153351,1270|121|0x153250,487|619|0x1f1f1f,1265|621|0x1f1f1f,1222|400|0x363636",
+			},
+			{
+				tag = "选择电脑级别",
+				enable = false,
+				anchor = "B",
+				srcPos = "385|607|0xff9500,366|610|0xffffff,347|607|0xff9500,322|610|0xffffff,307|609|0xff9500,187|609|0xff9500",
+			},
+		},
+	},
+	{
+		tag = "选择电脑级别",		--教练和手动都一样
+		widgetList = {
+			{
+				tag = "超巨",
+				enable = true,
+				anchor = "B",
+				srcPos = "385|607|0xff9500,307|606|0xff9500,248|613|0xffffff,187|608|0xff9500,187|210|0xff9500,386|214|0xb2b2b2,387|370|0xb2b2b2",
 			},
 		},
 	},
@@ -196,7 +213,13 @@ local _pageList = {
 				noCache = true,
 				anchor = "dLT",
 				srcPos = "39|64|0x1ce0dc-0x171f23,186|68|0x1ce0dc-0x171f23,223|83|0xf1fcf9-0x0c0306,237|84|0xf1fcf9-0x0c0306,275|65|0x1bd194-0x172e2a,420|67|0x1bd194-0x172e2a",
-				--srcPos = "45|64|0x1CC8C8-0x173737,186|68|0x1CC8C8-0x173737,223|83|0xD9E5E0-0x241A1F,237|84|0xD9E5E0-0x241A1F,275|65|0x1BC189-0x173E35,420|67|0x1BC189-0x173E35",
+			},
+			{
+				tag = "门球",
+				enable = false,
+				noCache = true,
+				anchor = "RT",
+				srcPos = "1086|138|0xffffff,1086|168|0xffffff,1084|245|0xffffff,1087|273|0xffffff,1173|127|0xffffff,1175|285|0xffffff",
 			},
 		},
 	},

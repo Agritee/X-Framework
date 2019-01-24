@@ -19,7 +19,7 @@ local pageBaseSet = Page:new(myui,{text = "基本设置", size = 24})
 pageBaseSet:nextLine()
 pageBaseSet:nextLine()
 pageBaseSet:addLabel({text="任务选择",size=32})
-pageBaseSet:addComboBox({id="comboBoxTask",list="自动联赛,自动天梯,自动巡回,特殊抽球,标准抽球,箱式抽球",select=0,w=30,h=12, size = 28})
+pageBaseSet:addComboBox({id="comboBoxTask",list="自动联赛,自动天梯,自动巡回,手动巡回,特殊抽球,标准抽球,箱式抽球",select=0,w=30,h=12, size = 28})
 
 pageBaseSet:nextLine()
 pageBaseSet:nextLine()

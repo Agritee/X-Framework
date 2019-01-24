@@ -192,7 +192,7 @@ end
 --换人
 function switchPlayer()
 	page.tapWidget("阵容展示", "切换状态")
-	if USER.TASK_NAME == "自动巡回" then		--跳过巡回赛声望
+	if USER.TASK_NAME == "自动巡回" or USER.TASK_NAME == "手动巡回" then		--跳过巡回赛声望
 		sleep(1200)
 		page.tapWidget("阵容展示", "切换状态")
 	end

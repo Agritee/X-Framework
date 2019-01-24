@@ -15,6 +15,7 @@ require("task/projPage")
 require("task/rankSim")
 require("task/leagueSim")
 require("task/tourSim")
+require("task/tourManuel")
 require("task/drawBox")
 require("task/drawSpecial")
 require("task/drawRegular")
@@ -52,14 +53,7 @@ screen.init(screen.LANDSCAPE_RIGHT)
 --sleep(2000)
 
 prt(page.getCurrentPage(true))
-ver = getRuntimeMode()
 
-if ver == 0 or ver == 1 then
-  Log("当前为通用")
-elseif ver == 2 then 
-  Log("当前为极客")
-
-end
 
 --page.tapWidget("标准经纪人", "中场")
 --page.tapNavigation("next")

@@ -42,18 +42,18 @@ function M.matchWidget(pageTag, widgetTag)
 					if (not CFG.ALLOW_CACHE) or _v.matchPos == nil or _v.noCache then
 						local pos = screen.findColor(_v.dstArea, _v.dstPos, _v.fuzzy or CFG.DEFAULT_FUZZY)
 						if pos ~= Point.INVALID then
-							Log("match widget: [".._v.tag.."] success!")
+							--Log("match widget: [".._v.tag.."] success!")
 							return true
 						else
-							Log("match widget: [".._v.tag.."] fail!")
+							--Log("match widget: [".._v.tag.."] fail!")
 							return false
 						end
 					else
 						if screen.matchColors(_v.matchPos, _v.fuzzy or CFG.DEFAULT_FUZZY) then
-							Log("matchPos widget: [".._v.tag.."] success!")
+							--Log("matchPos widget: [".._v.tag.."] success!")
 							return true
 						else
-							Log("matchPos widget: [".._v.tag.."] fail!")
+							--Log("matchPos widget: [".._v.tag.."] fail!")
 							return false
 						end
 					end
