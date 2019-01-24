@@ -32,6 +32,10 @@ function main()
 	CFG.ALLOW_CACHE = false
 
 	if IS_BREAKING_TASK then
+		if xmod.PROCESS_MODE == xmod.PROCESS_MODE_STANDALONE then	--通用模式的延时只能放在重启时
+			sleep(CFG.WAIT_RESTART * 1000)
+		end
+		
 		skipInitPage()	--先跳过未定义界面
 	end
 
@@ -48,13 +52,13 @@ screen.init(screen.LANDSCAPE_RIGHT)
 --sleep(2000)
 
 prt(page.getCurrentPage(true))
-ver = isPrivateMode()
-if ver == 0 then
-  Log("当前为免越狱/免ROOT环境")
-elseif ver == 1 then 
-  Log("当前为越狱/root环境")
-else
-	Log(tostring(ver))
+ver = getRuntimeMode()
+
+if ver == 0 or ver == 1 then
+  Log("当前为通用")
+elseif ver == 2 then 
+  Log("当前为极客")
+
 end
 
 --page.tapWidget("标准经纪人", "中场")

@@ -122,9 +122,6 @@ end
 
 function sleep(ms)
 	mSleep(ms)
-	if CFG.LOW_CONFIGURATION then	--云手机等低配反应缓慢，延长sleep间隔
-		mSleep(ms)
-	end
 end
 
 
@@ -142,6 +139,10 @@ xmod.PRODUCT_CODE_KUWAN	= 4
 xmod.PRODUCT_CODE_SPIRIT = 5
 
 xmod.VERSION_NAME = getEngineVersion()
+
+xmod.PROCESS_MODE_EMBEDDED = 0
+xmod.PROCESS_MODE_STANDALONE = 2
+xmod.PROCESS_MODE = (getRuntimeMode() == 2 and xmod.PROCESS_MODE_STANDALONE or xmod.PROCESS_MODE_EMBEDDED)
 
 function xmod.getPublicPath()
 	return '[public]'
@@ -249,10 +250,7 @@ function screen.findColors(rect, color, globalFuzz, priority, limit)
 		local split = 6		--分区阶数，将把rect分为split^2个区域分开扫描
 		local x0, y0 = rect.x, rect.y
 		local stepX, stepY = rect.width / split, rect.height / split
-		prt(x0)
-		prt(y0)
-		prt(stepX)
-		prt(stepY)
+		
 		--findColors结果汇总表
 		local totalTb = {}
 		

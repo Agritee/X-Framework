@@ -247,26 +247,39 @@ function catchError(errType, errMsg, forceContinueFlag)
 		LogError("!!!maybe some err in here, care it!!!")
 	elseif etype == ERR_TIMEOUT then		--超时错误允许exit，restart
 		if USER.ALLOW_RESTART then	--允许重启
-			dialog(errMsg.."\r\n等待超时，即将重启", 5)
-			if frontAppName() == CFG.APP_ID then
+			dialog(errMsg.."\r\n等待超时，即将重启", 3)
+			if runtime.getForegroundApp() == CFG.APP_ID then
 				LogError("TIME OUT BUT APP STILL RUNNING！")
 			else
 				LogError("TIME OUT AND APP NOT RUNNING YET！")
 			end
 			
-			LogError("!!!its will close app!!!")
-			runtime.killApp(CFG.APP_ID);
-			sleep(1000)
-			LogError("!!!its will restart app!!!")
-			if runApp(CFG.APP_ID) then
-				LogError("!!!its will restart script 15s later after restart app!!!")
+			if xmod.PROCESS_MODE == xmod.PROCESS_MODE_STANDALONE then	--极客模式需要重启应用
+				LogError("!!!its will close app!!!")
+				runtime.killApp(CFG.APP_ID);
+				sleep(1000)
+				LogError("!!!try restart app!!!")
+				runtime.launchApp(CFG.APP_ID)
+				LogError("!!!try restart script 15s later after restart app!!!")
 				--记录重启状态，重启之后会直接读取上一次保存的设置信息和相关变量，并不会弹出UI以实现自动续接任务
 				exec.setExecStatus("BREAKING")
-				sleep(15000)
+				local startTime = os.time()
+				while true do
+					if runtime.getForegroundApp() == CFG.APP_ID then	--重启应用成功
+						sleep(CFG.WAIT_RESTART * 1000)
+						break
+					end
+					
+					if os.time() - startTime > CFG.DEFAULT_TIMEOUT then
+						dialog("重启失败，即将退出")
+						xmod.exit()
+					end
+				end
 				xmod.restart()
-			else
-				LogError("!!!restart app faild, script will exit!!!")
-				xmod.exit()
+			else		--通用模式只需关闭应用，会自动重启应用和脚本
+				LogError("!!!its will close app!!!")
+				exec.setExecStatus("BREAKING")
+				runtime.killApp(CFG.APP_ID);	--沙盒模式下，killApp会强行结束掉脚本，因此不能在此后做任何操作，延时放到重启中
 			end
 		else	--不允许重启直接退出
 			dialog(errMsg.."\r\n等待超时，即将退出")
