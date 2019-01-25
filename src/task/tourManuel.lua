@@ -44,6 +44,11 @@ insertFunc("其他", fn)
 
 
 local fn = function()
+	if page.matchWidget("阵容展示", "身价溢出") then
+		dialog("身价溢出，精神低迷\r\n即将退出")
+		xmod.exit()
+	end
+	
 	if USER.ALLOW_SUBSTITUTE then
 		switchPlayer()
 	end
@@ -51,74 +56,74 @@ end
 insertFunc("阵容展示", fn)
 
 local lastPlayingPageTime = 0
-local lastProcessIndex = 0
-local wfn = function(processIndex)
-	local posTb = screen.findColors(scale.getAnchorArea("RB"), 
-	scale.scalePos("1059|440|0xfafcfa,987|434|0x335a26-0x232117,1123|475|0x335a26-0x232117,1016|500|0x335a26-0x232117,1098|379|0x335a26-0x232117"),
-	95)
-
-	local buttonPot = {}
-	--同样位置会有多个点，x、y坐标同时小于offset时判定为同位置的坐标，以20像素/短边750为基准
-	local offset = (CFG.EFFECTIVE_AREA[4] - CFG.EFFECTIVE_AREA[2]) / 750 * 20
-	for k, v in pairs(posTb) do
-		local exsitFlag = false
-		for _k, _v in pairs(buttonPot) do
-			if math.abs(v.x - _v.x) < offset and math.abs(v.y - _v.y) < offset then
-				exsitFlag = true
-				break
+local lastTaskIndex = 0
+local wfn = function(taskIndex)
+	if lastPlayingPageTime ~= 0 then
+		local posTb = screen.findColors(scale.getAnchorArea("RB"),
+			scale.scalePos("1059|440|0xfafcfa,987|434|0x335a26-0x232117,1123|475|0x335a26-0x232117,1016|500|0x335a26-0x232117,1098|379|0x335a26-0x232117"),
+			95)
+		
+		local buttonPot = {}
+		--同样位置会有多个点，x、y坐标同时小于offset时判定为同位置的坐标，以20像素/短边750为基准
+		local offset = (CFG.EFFECTIVE_AREA[4] - CFG.EFFECTIVE_AREA[2]) / 750 * 20
+		for k, v in pairs(posTb) do
+			local exsitFlag = false
+			for _k, _v in pairs(buttonPot) do
+				if math.abs(v.x - _v.x) < offset and math.abs(v.y - _v.y) < offset then
+					exsitFlag = true
+					break
+				end
+			end
+			
+			if not exsitFlag then
+				table.insert(buttonPot, {x = v.x, y = v.y})
 			end
 		end
 		
-		if not exsitFlag then
-			table.insert(buttonPot, {x = v.x, y = v.y})
-		end
-	end
-	
-	local sortMethod = function(a, b)
-		if a.x == nil or a.y == nil or b.x == nil or b.y == nil then
-			return
-		end
-		
-		if a.y == b.y then
-			return a.x < b.x
-		else
-			return a.y < b.y
-		end
-	end
-	
-	sortMethod(buttonPot)
-	--prt(buttonPot)
-	
-	if #buttonPot > 0 then
-		--补足三个按钮
-		if #buttonPot == 1 then
-			table.insert(buttonPot, buttonPot[1])
-			table.insert(buttonPot, buttonPot[1])
-		elseif #buttonPot == 2 then
-			table.insert(buttonPot, buttonPot[1])
+		local sortMethod = function(a, b)
+			if a.x == nil or a.y == nil or b.x == nil or b.y == nil then
+				return
+			end
+			
+			if a.y == b.y then
+				return a.x < b.x
+			else
+				return a.y < b.y
+			end
 		end
 		
-		local tmp = os.time() % 10
-		if tmp == 0 or tmp == 2 or tmp == 5 or tmp == 7 or tmp == 8 then
-			tap(buttonPot[2].x, buttonPot[2].y)
-		else
-			tap(buttonPot[3].x, buttonPot[3].y)
+		sortMethod(buttonPot)
+		--prt(buttonPot)
+		
+		if #buttonPot > 0 then
+			--补足三个按钮
+			if #buttonPot == 1 then
+				table.insert(buttonPot, buttonPot[1])
+				table.insert(buttonPot, buttonPot[1])
+			elseif #buttonPot == 2 then
+				table.insert(buttonPot, buttonPot[1])
+			end
+			
+			local tmp = os.time() % 10
+			if tmp == 0 or tmp == 2 or tmp == 5 or tmp == 7 or tmp == 8 then
+				tap(buttonPot[2].x, buttonPot[2].y)
+			else
+				tap(buttonPot[3].x, buttonPot[3].y)
+			end
+		end
+		
+		if page.matchWidget("比赛中", "门球") then
+			ratioSlide(800,700,850,500)
 		end
 	end
 	
-	if page.matchWidget("比赛中", "门球") then
-		ratioSlide(800,700,850,500)
-	end
-
-	if processIndex ~= lastProcessIndex then	--当切换流程片时更新
+	if taskIndex ~= lastTaskIndex then
+		lastTaskIndex = taskIndex
 		lastPlayingPageTime = 0
-		lastProcessIndex = processIndex
 	end
 	
 	if page.matchPage("比赛中") then
 		lastPlayingPageTime = os.time()
-	else
-	
 	end
 	
 	if lastPlayingPageTime == 0 then	--未检测到起始playing界面，跳过

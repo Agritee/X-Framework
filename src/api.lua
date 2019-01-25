@@ -142,7 +142,7 @@ xmod.VERSION_NAME = getEngineVersion()
 
 xmod.PROCESS_MODE_EMBEDDED = 0
 xmod.PROCESS_MODE_STANDALONE = 2
-xmod.PROCESS_MODE = (getRuntimeMode() == 2 and xmod.PROCESS_MODE_STANDALONE or xmod.PROCESS_MODE_EMBEDDED)
+xmod.PROCESS_MODE = ((xmod.PLATFORM == xmod.PLATFORM_ANDROID and  getRuntimeMode() == 2) and xmod.PROCESS_MODE_STANDALONE or xmod.PROCESS_MODE_EMBEDDED)
 
 function xmod.getPublicPath()
 	return '[public]'

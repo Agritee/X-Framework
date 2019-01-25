@@ -202,6 +202,12 @@ local _pageList = {
 					math.floor((CFG.EFFECTIVE_AREA[4] - CFG.EFFECTIVE_AREA[2]) / 6)
 				)
 			},
+			{
+				tag = "身价溢出",	--用于判断是否身价溢出而精神低迷
+				enable = false,
+				anchor = "R1/3",
+				srcPos = "1161|514|0xfd3830,1087|514|0xfd3830,1220|514|0xfd3830,1093|497|0x1f1f1f,1267|610|0x1f1f1f,1080|603|0x1f1f1f,1079|201|0x1f1f1f,1259|219|0x1f1f1f",
+			},
 		},
 	},
 	{

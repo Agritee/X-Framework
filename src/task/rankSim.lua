@@ -42,29 +42,36 @@ end
 insertFunc("其他", fn)
 
 local fn = function()
+	if page.matchWidget("阵容展示", "身价溢出") then
+		dialog("身价溢出，精神低迷\r\n即将退出")
+		xmod.exit()
+	end
+	
 	if USER.ALLOW_SUBSTITUTE then
 		switchPlayer()
 	end
 end
 insertFunc("阵容展示", fn)
 
+local lastTaskIndex = 0
 local lastPlayingPageTime = 0
-local lastProcessIndex = 0
-local skipPenalty = false
-local wfn = function(processIndex)
-	if processIndex ~= lastProcessIndex then	--当切换流程片时重置
+local lastPenaltyPageTime = 0
+local wfn = function(taskIndex)
+	if taskIndex ~= lastTaskIndex then	--当切换任务（流程）时重置
+		lastTaskIndex = taskIndex
 		lastPlayingPageTime = 0
-		lastProcessIndex = processIndex
-		skipWaitFunc = false
+		lastPenaltyPageTime = 0
 	end
 	
-	if skipPenalty then
-		return
-	end
-	
-	if page.matchPage("点球") then	--有点球时不检测
-		skipPenalty = true
-		return
+	if lastPlayingPageTime ~= 0 then
+		if page.matchPage("点球") then	--有点球时跳过skipReplay
+			lastPenaltyPageTime = os.time()
+			return
+		else		--5秒以内检测到过点球界面都当做是点球处理
+			if lastPenaltyPageTime ~= 0 and os.time() - lastPenaltyPageTime <= 5 then
+				return
+			end
+		end
 	end
 	
 	if page.matchPage("比赛中") then

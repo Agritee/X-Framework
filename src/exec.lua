@@ -170,7 +170,7 @@ function M.run(taskName, repeatTimes)
 				
 				--等待期间执行的process的等待函数
 				if v.waitFunc ~= nil then
-					v.waitFunc(k)
+					v.waitFunc(i)
 				end
 				
 				--检测是否需要跳过当前流程片

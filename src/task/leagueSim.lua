@@ -57,18 +57,23 @@ end
 insertFunc("联赛教练模式", fn)
 
 local fn = function()
+	if page.matchWidget("阵容展示", "身价溢出") then
+		dialog("身价溢出，精神低迷\r\n即将退出")
+		xmod.exit()
+	end
+	
 	if USER.ALLOW_SUBSTITUTE then
 		switchPlayer()
 	end
 end
 insertFunc("阵容展示", fn)
 
+local lastTaskIndex = 0
 local lastPlayingPageTime = 0
-local lastProcessIndex = 0
-local wfn = function(processIndex)
-	if processIndex ~= lastProcessIndex then	--当切换流程片时更新
+local wfn = function(taskIndex)
+	if taskIndex ~= lastTaskIndex then	--当切换任务（流程）时重置
+		lastTaskIndex = taskIndex
 		lastPlayingPageTime = 0
-		lastProcessIndex = processIndex
 	end
 	
 	if page.matchPage("比赛中") then
