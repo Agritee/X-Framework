@@ -95,7 +95,7 @@ local wfn = function(taskIndex)
 	
 	if lastPlayingPageTime > 0 then Log("timeAfterLastPlayingPage = "..timeAfterLastPlayingPage.."s yet")	 end
 	
-	--因为半场为超长时间等待，如果长时间不在playing判定为异常,因为有精彩回放所以超时为两倍(还有点球)
+	--因为半场为超长时间等待，如果长时间不在playing判定为异常
 	if timeAfterLastPlayingPage > CFG.DEFAULT_TIMEOUT + 10 then
 		catchError(ERR_TIMEOUT, "cant check playing at wait PAGE_INTERVAL")
 	end

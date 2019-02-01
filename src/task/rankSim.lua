@@ -66,7 +66,7 @@ local wfn = function(taskIndex)
 	if lastPlayingPageTime ~= 0 then
 		if page.matchPage("点球") then	--有点球时跳过skipReplay
 			lastPenaltyPageTime = os.time()
-			lastPlayingPageTime = lastPenaltyPageTime
+			lastPlayingPageTime = os.time()
 			return
 		else		--5秒以内检测到过点球界面都当做是点球处理
 			if lastPenaltyPageTime ~= 0 and os.time() - lastPenaltyPageTime <= 5 then

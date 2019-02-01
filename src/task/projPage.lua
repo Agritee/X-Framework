@@ -14,7 +14,7 @@
 local _pageList = {
 	{
 		tag = "其他",
-		widgetList = {
+		--[[widgetList = {
 			{
 				tag = "玩家信息",
 				enable = true,
@@ -41,11 +41,37 @@ local _pageList = {
 				anchor = "RB",
 				srcPos = "985|575|0x007aff,1016|575|0x007aff,1017|594|0x007aff,993|589|0xffffff,965|606|0xffffff,979|598|0x007aff",
 			},
+		},]]
+		widgetList = {
+			{
+				tag = "玩家信息",
+				enable = true,
+				anchor = "LM",
+				srcPos = "343|308|0xf7e7ca,343|315|0xbe913b,324|312|0xbe913b,363|313|0xbe913b,324|355|0xbe913b,362|355|0xbe913b",
+			},
+			{
+				tag = "游戏帮助",
+				enable = true,
+				anchor = "LB",
+				srcPos = "343|308|0xf7e7ca,343|315|0xbe913b,324|312|0xbe913b,363|313|0xbe913b,324|355|0xbe913b,362|355|0xbe913b",
+			},
+			{
+				tag = "设置",
+				enable = true,
+				anchor = "RM",
+				srcPos = "962|334|0xbe913b,1009|352|0xbe913b,1008|315|0xbe913b,989|318|0xf7e7ca,974|334|0xf7e7ca,989|348|0xf7e7ca",
+			},
+			{
+				tag = "支持",
+				enable = true,
+				anchor = "RB",
+				srcPos = "985|575|0xbe913b,1016|575|0xbe913b,1017|594|0xbe913b,993|589|0xf7e7ca,965|606|0xf7e7ca,979|598|0xbe913b",
+			},
 		},
 	},
 	{
 		tag = "比赛",
-		widgetList = {
+		--[[widgetList = {
 			{
 				tag = "活动模式",
 				enable = true,
@@ -69,6 +95,32 @@ local _pageList = {
 				enable = true,
 				anchor = "RB",
 				srcPos = "979|581|0xffffff,991|571|0x007aff,1007|601|0xffffff,1003|614|0x007aff,989|611|0xffffff,977|614|0x007aff,992|595|0x007aff",
+			},
+		},]]
+		widgetList = {
+			{
+				tag = "活动模式",
+				enable = true,
+				anchor = "LM",
+				srcPos = "331|312|0xbe913b,356|311|0xbe913b,326|323|0xf7e7ca,361|322|0xf7e7ca,343|348|0xbe913b,338|354|0xf7e7ca,350|354|0xf7e7ca,344|362|0xbe913b",
+			},
+			{
+				tag = "联赛",
+				enable = true,
+				anchor = "LB",
+				srcPos = "327|579|0xbe913b,316|569|0xf7e7ca,358|579|0xbe913b,368|569|0xf7e7ca,336|611|0xbe913b,327|619|0xf7e7ca,361|617|0xf7e7ca,353|609|0xbe913b",
+			},
+			{
+				tag = "线上对战",
+				enable = true,
+				anchor = "RM",
+				srcPos = "985|310|0xbe913b,987|302|0xf7e7ca,1005|324|0xf7e7ca,997|334|0xbe913b,982|332|0xbe913b,974|343|0xf7e7ca",
+			},
+			{
+				tag = "本地比赛",
+				enable = true,
+				anchor = "RB",
+				srcPos = "979|581|0xf7e7ca,991|571|0xbe913b,1007|601|0xf7e7ca,1003|614|0xbe913b,989|611|0xf7e7ca,977|614|0xbe913b,992|595|0xbe913b",
 			},
 		},
 	},
@@ -313,7 +365,7 @@ local _pageList = {
 	},
 	{
 		tag = "合同",
-		widgetList = {
+		--[[widgetList = {
 			{
 				tag = "经纪人",
 				enable = true,
@@ -337,6 +389,32 @@ local _pageList = {
 				enable = true,
 				anchor = "RB",
 				srcPos = "990|603|0xffffff,982|607|0x007aff,973|605|0x007aff,966|597|0xffffff,966|616|0x007aff,966|625|0xffffff,980|616|0x007aff,989|616|0xffffff,1014|615|0x007aff",
+			},
+		},]]
+		widgetList = {
+			{
+				tag = "经纪人",
+				enable = true,
+				anchor = "LM",
+				srcPos = "343|337|0xbe913b,335|340|0xf7e7ca,351|340|0xf7e7ca,357|332|0xf7e7ca,329|332|0xf7e7ca,343|326|0xbe913b,322|354|0xbe913b,360|343|0xbe913b",
+			},
+			{
+				tag = "拍卖",
+				enable = true,
+				anchor = "LB",
+				srcPos = "339|587|0xbe913b,326|587|0xf7e7ca,339|600|0xf7e7ca,334|580|0xbe913b,345|591|0xbe913b,345|581|0xbe913b,319|607|0xbe913b,316|594|0xf7e7ca",
+			},
+			{
+				tag = "球探",
+				enable = true,
+				anchor = "RM",
+				srcPos = "979|341|0xbe913b,999|341|0xbe913b,969|334|0xf7e7ca,1008|333|0xf7e7ca,983|350|0xf7e7ca,996|350|0xf7e7ca,965|356|0xbe913b,1006|355|0xbe913b",
+			},
+			{
+				tag = "主教练",
+				enable = true,
+				anchor = "RB",
+				srcPos = "990|603|0xf7e7ca,982|607|0xbe913b,973|605|0xbe913b,966|597|0xf7e7ca,966|616|0xbe913b,966|625|0xf7e7ca,980|616|0xbe913b,989|616|0xf7e7ca,1014|615|0xbe913b",
 			},
 		},
 	},

@@ -1,4 +1,4 @@
--- init.lua
+-- main.lua
 -- Author: cndy1860
 -- Date: 2018-12-25
 -- Descrip: 程序入口，注意require顺序会影响各文件的init，后续添加任务依次require
@@ -76,7 +76,4 @@ prt(page.getCurrentPage(true))
 --ratioSlide(30, 700, 30, 153, 200)
 
 --switchPlayer()
-
-
-
 

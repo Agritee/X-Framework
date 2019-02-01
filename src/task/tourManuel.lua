@@ -55,14 +55,11 @@ local fn = function()
 end
 insertFunc("阵容展示", fn)
 
-local lastPlayingPageTime = 0
-local lastTaskIndex = 0
 local wfn = function(taskIndex)
-	if lastPlayingPageTime ~= 0 then
-		local posTb = screen.findColors(scale.getAnchorArea("RB"),
-			scale.scalePos("1059|440|0xfafcfa,987|434|0x335a26-0x232117,1123|475|0x335a26-0x232117,1016|500|0x335a26-0x232117,1098|379|0x335a26-0x232117"),
-			95)
-		
+	local posTb = screen.findColors(scale.getAnchorArea("RB"),
+		scale.scalePos("1059|440|0xfafcfa,987|434|0x335a26-0x232117,1123|475|0x335a26-0x232117,1016|500|0x335a26-0x232117,1098|379|0x335a26-0x232117"),
+		95)
+	if #posTb ~= 0 then	
 		local buttonPot = {}
 		--同样位置会有多个点，x、y坐标同时小于offset时判定为同位置的坐标，以20像素/短边750为基准
 		local offset = (CFG.EFFECTIVE_AREA[4] - CFG.EFFECTIVE_AREA[2]) / 750 * 20
@@ -111,10 +108,70 @@ local wfn = function(taskIndex)
 				tap(buttonPot[3].x, buttonPot[3].y)
 			end
 		end
-		
-		if page.matchWidget("比赛中", "门球") then
-			ratioSlide(800,700,850,500)
+	end
+end
+insertWaitFunc("比赛中", wfn)
+
+
+local lastPlayingPageTime = 0
+local lastTaskIndex = 0
+local wfn = function(taskIndex)
+	local posTb = screen.findColors(scale.getAnchorArea("RB"),
+		scale.scalePos("1059|440|0xfafcfa,987|434|0x335a26-0x232117,1123|475|0x335a26-0x232117,1016|500|0x335a26-0x232117,1098|379|0x335a26-0x232117"),
+		95)
+	if #posTb ~= 0 then	
+		local buttonPot = {}
+		--同样位置会有多个点，x、y坐标同时小于offset时判定为同位置的坐标，以20像素/短边750为基准
+		local offset = (CFG.EFFECTIVE_AREA[4] - CFG.EFFECTIVE_AREA[2]) / 750 * 20
+		for k, v in pairs(posTb) do
+			local exsitFlag = false
+			for _k, _v in pairs(buttonPot) do
+				if math.abs(v.x - _v.x) < offset and math.abs(v.y - _v.y) < offset then
+					exsitFlag = true
+					break
+				end
+			end
+			
+			if not exsitFlag then
+				table.insert(buttonPot, {x = v.x, y = v.y})
+			end
 		end
+		
+		local sortMethod = function(a, b)
+			if a.x == nil or a.y == nil or b.x == nil or b.y == nil then
+				return
+			end
+			
+			if a.y == b.y then
+				return a.x < b.x
+			else
+				return a.y < b.y
+			end
+		end
+		
+		sortMethod(buttonPot)
+		--prt(buttonPot)
+		
+		if #buttonPot > 0 then
+			--补足三个按钮
+			if #buttonPot == 1 then
+				table.insert(buttonPot, buttonPot[1])
+				table.insert(buttonPot, buttonPot[1])
+			elseif #buttonPot == 2 then
+				table.insert(buttonPot, buttonPot[1])
+			end
+			
+			local tmp = os.time() % 10
+			if tmp == 0 or tmp == 2 or tmp == 5 or tmp == 7 or tmp == 8 then
+				tap(buttonPot[2].x, buttonPot[2].y)
+			else
+				tap(buttonPot[3].x, buttonPot[3].y)
+			end
+		end
+	end
+	
+	if page.matchWidget("比赛中", "门球") then
+		ratioSlide(800,700,850,500)
 	end
 	
 	if taskIndex ~= lastTaskIndex then
@@ -141,8 +198,8 @@ local wfn = function(taskIndex)
 	
 	if lastPlayingPageTime > 0 then Log("timeAfterLastPlayingPage = "..timeAfterLastPlayingPage.."s yet")	 end
 	
-	--因为半场为超长时间等待，如果长时间不在playing判定为异常,因为有精彩回放所以超时为两倍(还有点球)
-	if timeAfterLastPlayingPage > math.floor(CFG.DEFAULT_TIMEOUT * 1.5) then
+	--因为半场为超长时间等待，如果长时间不在playing判定为异常
+	if timeAfterLastPlayingPage > CFG.DEFAULT_TIMEOUT + 10 then
 		catchError(ERR_TIMEOUT, "cant check playing at wait PAGE_INTERVAL")
 	end
 end
